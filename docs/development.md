@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document explains how to work inside the AzadBazar frontend monorepo during day-to-day development.
+This document explains how to work inside the Shopland frontend monorepo during day-to-day development.
 
 ## Prerequisites
 

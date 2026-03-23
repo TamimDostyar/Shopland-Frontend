@@ -1,6 +1,6 @@
-# AzadBazar Frontend
+# Shopland Frontend
 
-AzadBazar Frontend is a cross-platform TypeScript monorepo designed to support:
+Shopland Frontend is a cross-platform TypeScript monorepo designed to support:
 
 - Web in the browser with React, Vite, HTML, and CSS
 - Desktop with Electron, React, and TypeScript
@@ -16,7 +16,7 @@ The repository is organized as a monorepo so product logic, UI direction, typing
 - Web: `React` + `Vite` + `TypeScript`
 - Desktop: `Electron` + `electron-vite` + `React` + `TypeScript`
 - Mobile: `Expo` + `React Native` + `TypeScript`
-- Shared package: `@azadbazar/shared`
+- Shared package: `@shopland/shared`
 
 ## Repository Layout
 
@@ -185,9 +185,9 @@ The long-term design is to keep business rules and platform-neutral frontend cod
 
 Today:
 
-- `apps/web` consumes `@azadbazar/shared`
-- `apps/desktop` consumes `@azadbazar/shared`
-- `apps/mobile` is scaffolded and functional, but not yet wired to import `@azadbazar/shared` directly
+- `apps/web` consumes `@shopland/shared`
+- `apps/desktop` consumes `@shopland/shared`
+- `apps/mobile` is scaffolded and functional, but not yet wired to import `@shopland/shared` directly
 
 That mobile limitation is normal for an early monorepo scaffold. Expo and Metro usually need explicit workspace configuration before shared package imports are fully reliable.
 

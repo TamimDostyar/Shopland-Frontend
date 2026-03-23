@@ -1,5 +1,5 @@
-import { APP_NAME, APP_VERSION, formatPrice, formatDate } from "@azadbazar/shared";
-import type { Product } from "@azadbazar/shared";
+import { APP_NAME, APP_VERSION, formatPrice, formatDate } from "@shopland/shared";
+import type { Product } from "@shopland/shared";
 import "./App.css";
 
 const DEMO_PRODUCTS: Product[] = [

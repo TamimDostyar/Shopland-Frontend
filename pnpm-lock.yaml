@@ -14,7 +14,7 @@ importers:
 
   apps/desktop:
     dependencies:
-      '@azadbazar/shared':
+      '@shopland/shared':
         specifier: workspace:^
         version: link:../../packages/shared
       '@electron-toolkit/preload':
@@ -109,7 +109,7 @@ importers:
 
   apps/web:
     dependencies:
-      '@azadbazar/shared':
+      '@shopland/shared':
         specifier: workspace:^
         version: link:../../packages/shared
       react:
