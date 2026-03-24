@@ -1,7 +1,11 @@
 export const APP_NAME = "Shopland";
 export const APP_VERSION = "1.0.0";
 
-export const API_BASE_URL = "http://localhost:3000/api";
+const DEV_API_URL = "http://localhost:8000/api";
+
+export const API_BASE_URL: string =
+  // @ts-expect-error Vite replaces import.meta.env at build time
+  import.meta.env?.VITE_API_BASE_URL || DEV_API_URL;
 
 export const PAGINATION = {
   DEFAULT_PAGE: 1,
