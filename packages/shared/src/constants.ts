@@ -3,11 +3,13 @@ export const APP_VERSION = "1.0.0";
 
 const _meta = import.meta as unknown as { env?: Record<string, string> };
 
+
 export const PRODUCTION: boolean = _meta.env?.MODE === "production";
 
 export const API_BASE_URL: string =
-  _meta.env?.VITE_API_BASE_URL ?? "http://localhost:8080";
-
+  _meta.env?.MODE === "LOCAL"
+    ? "http://localhost:8080"
+    : (_meta.env?.VITE_API_BASE_URL ?? "http://localhost:8080");
 
     
 export const PAGINATION = {
