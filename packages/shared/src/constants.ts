@@ -23,3 +23,15 @@ export const ROUTES = {
   LOGIN: "/login",
   REGISTER: "/register",
 } as const;
+
+import type { Locale, LocaleMeta } from "./types";
+
+export const LOCALES: Record<Locale, LocaleMeta> = {
+  en: { label: "English", dir: "ltr" },
+  fa: { label: "دری", dir: "rtl" },
+  ps: { label: "پښتو", dir: "rtl" },
+} as const;
+
+export const DEFAULT_LOCALE: Locale = "fa";
+
+export { COMING_SOON, COMING_SOON_FALLBACK } from "./content/coming-soon";
