@@ -1,12 +1,10 @@
 export const APP_NAME = "Shopland";
 export const APP_VERSION = "1.0.0";
 
-const _meta = import.meta as unknown as { env?: Record<string, string> };
-
 export const API_BASE_URL: string =
-  _meta.env?.MODE === "LOCAL"
+  import.meta.env.MODE === "LOCAL"
     ? "http://localhost:8000"
-    : (_meta.env?.VITE_API_BASE_URL ?? "http://localhost:8000");
+    : import.meta.env.VITE_API_BASE_URL;
 
 import type { Locale, LocaleMeta } from "./types";
 
