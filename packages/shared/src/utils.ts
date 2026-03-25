@@ -1,12 +1,3 @@
-import type { Product } from "./types";
-
-export function formatPrice(price: number, currency: string = "USD"): string {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency,
-  }).format(price);
-}
-
 export function formatDate(dateString: string): string {
   return new Intl.DateTimeFormat("en-US", {
     year: "numeric",
@@ -24,20 +15,4 @@ export function slugify(text: string): string {
     .toLowerCase()
     .replace(/\s+/g, "-")
     .replace(/[^\w-]+/g, "");
-}
-
-export function sortProducts(
-  products: Product[],
-  by: "price" | "date" | "title" = "date",
-  order: "asc" | "desc" = "desc"
-): Product[] {
-  return [...products].sort((a, b) => {
-    let comparison = 0;
-    if (by === "price") comparison = a.price - b.price;
-    else if (by === "date")
-      comparison =
-        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-    else if (by === "title") comparison = a.title.localeCompare(b.title);
-    return order === "asc" ? comparison : -comparison;
-  });
 }

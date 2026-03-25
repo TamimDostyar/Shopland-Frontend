@@ -14,7 +14,8 @@ type SubmitState = "idle" | "loading" | "success" | "duplicate" | "error";
 
 export default function App() {
   const [locale, setLocale] = useState<Locale>(DEFAULT_LOCALE);
-  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
 
   const content = COMING_SOON[locale];
@@ -26,18 +27,24 @@ export default function App() {
 
   async function submitWaitlist(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const trimmed = email.trim().toLowerCase();
-    if (!trimmed) return;
+    const trimmedName = name.trim();
+    const trimmedUsername = username.trim().toLowerCase();
+    if (!trimmedName || !trimmedUsername) return;
 
     setSubmitState("loading");
 
     try {
-      const data = await joinWaitlist(trimmed);
+      const data = await joinWaitlist(trimmedName, trimmedUsername);
       setSubmitState(data.already_joined ? "duplicate" : "success");
-      setEmail("");
+      setName("");
+      setUsername("");
     } catch {
       setSubmitState("error");
     }
+  }
+
+  function resetState() {
+    if (submitState !== "idle") setSubmitState("idle");
   }
 
   const feedback =
@@ -95,19 +102,32 @@ export default function App() {
             <p className="waitlist-title">{content.formTitle}</p>
 
             <div className="input-row">
-              <label className="sr-only" htmlFor="email">
-                Email
+              <label className="sr-only" htmlFor="name">
+                Name
               </label>
               <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  if (submitState !== "idle") setSubmitState("idle");
-                }}
-                placeholder={content.emailPlaceholder}
-                autoComplete="email"
+                id="name"
+                type="text"
+                value={name}
+                onChange={(e) => { setName(e.target.value); resetState(); }}
+                placeholder={content.namePlaceholder}
+                autoComplete="name"
+                required
+                disabled={submitState === "loading"}
+              />
+            </div>
+
+            <div className="input-row">
+              <label className="sr-only" htmlFor="username">
+                Username
+              </label>
+              <input
+                id="username"
+                type="text"
+                value={username}
+                onChange={(e) => { setUsername(e.target.value); resetState(); }}
+                placeholder={content.usernamePlaceholder}
+                autoComplete="username"
                 required
                 disabled={submitState === "loading"}
               />
