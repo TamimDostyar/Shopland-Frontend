@@ -267,7 +267,11 @@
 }
 
 .feedback.ok {
-  color: #ffd8cc;
+  color: #6ee7b7;
+}
+
+.feedback.warn {
+  color: #fde68a;
 }
 
 .feedback.err {

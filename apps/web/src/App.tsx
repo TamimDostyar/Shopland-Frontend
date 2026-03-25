@@ -145,7 +145,11 @@ export default function App() {
             {feedback && (
               <p
                 className={
-                  submitState === "error" ? "feedback err" : "feedback ok"
+                  submitState === "success"
+                    ? "feedback ok"
+                    : submitState === "duplicate"
+                      ? "feedback warn"
+                      : "feedback err"
                 }
                 role="status"
               >
