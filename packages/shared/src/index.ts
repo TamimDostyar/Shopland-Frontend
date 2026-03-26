@@ -5,6 +5,7 @@ export * from "./http";
 export * from "./utils/tokens";
 export * from "./apis/waitlist";
 export * from "./apis/auth";
+export * from "./apis/social_auth";
 export * from "./apis/registration";
 export * from "./apis/verification";
 export * from "./apis/profile";

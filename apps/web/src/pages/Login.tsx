@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ApiError } from "@shopland/shared";
+import { GoogleLogin } from "@react-oauth/google";
+import { ApiError, googleAuth } from "@shopland/shared";
 import AuthLayout from "../components/layout/AuthLayout";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
@@ -8,7 +9,7 @@ import Alert from "../components/ui/Alert";
 import { useAuth } from "../hooks/useAuth";
 
 export default function Login() {
-  const { login, isAuthenticated } = useAuth();
+  const { login, setTokensAndUser, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -29,6 +30,21 @@ export default function Login() {
       navigate("/", { replace: true });
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "Login failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleGoogleSuccess(credentialResponse: { credential?: string }) {
+    if (!credentialResponse.credential) return;
+    setError("");
+    setLoading(true);
+    try {
+      const res = await googleAuth(credentialResponse.credential);
+      await setTokensAndUser(res.access, res.refresh, res.user);
+      navigate("/", { replace: true });
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : "Google sign-in failed.");
     } finally {
       setLoading(false);
     }
@@ -60,6 +76,22 @@ export default function Login() {
         <Button type="submit" loading={loading} className="w-full mt-2">
           Sign in
         </Button>
+
+        <div className="flex items-center gap-3">
+          <div className="flex-1 border-t border-[color:var(--border)]" />
+          <span className="text-xs text-[color:var(--text-soft)]">or</span>
+          <div className="flex-1 border-t border-[color:var(--border)]" />
+        </div>
+
+        <div className="flex justify-center">
+          <GoogleLogin
+            onSuccess={(resp) => { void handleGoogleSuccess(resp); }}
+            onError={() => setError("Google sign-in failed.")}
+            useOneTap={false}
+            shape="pill"
+            text="signin_with"
+          />
+        </div>
 
         <div className="rounded-[1.4rem] bg-[var(--surface-muted)] px-4 py-3 text-xs text-[color:var(--text-soft)]">
           Use the same account across shopping, seller tools, and admin access when permitted.

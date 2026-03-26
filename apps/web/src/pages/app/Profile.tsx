@@ -1,4 +1,7 @@
+import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
+import { GoogleLogin } from "@react-oauth/google";
+import { googleAuth, ApiError } from "@shopland/shared";
 import MainLayout from "../../components/layout/MainLayout";
 import Alert from "../../components/ui/Alert";
 import Button from "../../components/ui/Button";
@@ -6,13 +9,27 @@ import BackButton from "../../components/ui/BackButton";
 import { useAuth } from "../../hooks/useAuth";
 
 export default function Profile() {
-  const { user } = useAuth();
+  const { user, setTokensAndUser, refreshUser } = useAuth();
   const navigate = useNavigate();
+  const [emailVerifyError, setEmailVerifyError] = useState("");
+  const [emailVerifySuccess, setEmailVerifySuccess] = useState(false);
 
   if (!user) return null;
   if (user.role === "admin") return <Navigate to="/admin" replace />;
 
   const { verification_status: vs } = user;
+
+  async function handleGoogleVerify(credential: string) {
+    setEmailVerifyError("");
+    try {
+      const res = await googleAuth(credential);
+      await setTokensAndUser(res.access, res.refresh, res.user);
+      await refreshUser();
+      setEmailVerifySuccess(true);
+    } catch (err) {
+      setEmailVerifyError(err instanceof ApiError ? err.message : "Google verification failed.");
+    }
+  }
 
   return (
     <MainLayout>
@@ -28,11 +45,11 @@ export default function Profile() {
 
         {/* Verification banners */}
         <div className="flex flex-col gap-3 mb-6">
-          {!vs.phone && (
+          {!vs.phone && user.phone_number && (
             <Alert kind="warning">
               Phone not verified.{" "}
               <button
-                onClick={() => navigate("/verify-phone", { state: { phone_number: user.phone_number ?? "" } })}
+                onClick={() => navigate("/verify-telegram", { state: { phone_number: user.phone_number ?? "" } })}
                 className="underline font-medium"
               >
                 Verify now
@@ -40,15 +57,30 @@ export default function Profile() {
             </Alert>
           )}
           {!vs.email && (
-            <Alert kind="warning">
-              Email not verified.{" "}
-              <button
-                onClick={() => navigate("/verify-email")}
-                className="underline font-medium"
-              >
-                Verify / resend email
-              </button>
-            </Alert>
+            <div className="rounded-2xl border border-yellow-400/30 bg-yellow-400/8 px-4 py-3 text-sm" style={{ color: "var(--text)" }}>
+              <p className="font-semibold mb-2" style={{ color: "var(--text-h)" }}>
+                Email not verified
+              </p>
+              {emailVerifySuccess ? (
+                <p className="text-green-400 font-medium">Email verified!</p>
+              ) : (
+                <>
+                  <p className="mb-3" style={{ color: "var(--text-soft)" }}>
+                    Sign in with Google using <strong>{user.email}</strong> to verify your email instantly.
+                  </p>
+                  {emailVerifyError && (
+                    <p className="mb-2 text-red-400 text-xs">{emailVerifyError}</p>
+                  )}
+                  <GoogleLogin
+                    onSuccess={(resp) => { if (resp.credential) void handleGoogleVerify(resp.credential); }}
+                    onError={() => setEmailVerifyError("Google sign-in failed.")}
+                    text="signin_with"
+                    shape="pill"
+                    size="medium"
+                  />
+                </>
+              )}
+            </div>
           )}
           {!vs.id && (
             <Alert kind="info">

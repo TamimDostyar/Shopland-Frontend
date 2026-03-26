@@ -1,10 +1,9 @@
 import type { ReactNode } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import {
   ArrowLeftIcon,
   CheckCircleIcon,
-  ClipboardIcon,
   ClockIcon,
   PackageIcon,
   ShieldIcon,
@@ -76,6 +75,13 @@ export default function AdminLayout({ children }: Props) {
         <div className="mt-auto rounded-[1.5rem] border border-[color:var(--border)] bg-white p-4 shadow-[0_16px_40px_rgba(23,32,51,0.05)]">
           <div className="mb-3 text-sm font-semibold text-[color:var(--text-h)]">Signed in as admin</div>
           <p className="mb-3 truncate text-xs text-[color:var(--text-soft)]">{user?.email}</p>
+          <Link
+            to="/"
+            className="mb-2 flex w-full items-center gap-2 rounded-xl border border-[color:var(--border)] bg-white px-3 py-2 text-left text-sm font-semibold text-[color:var(--text-h)] transition-colors hover:bg-[var(--surface-muted)]"
+          >
+            <ArrowLeftIcon size={14} />
+            Back to Home
+          </Link>
           <button
             onClick={() => { void handleLogout(); }}
             className="w-full rounded-xl bg-[var(--danger-soft)] px-3 py-2 text-left text-sm font-semibold text-[color:var(--error)] transition-colors hover:bg-[#fde3e3]"
@@ -87,21 +93,6 @@ export default function AdminLayout({ children }: Props) {
 
       <main className="min-h-screen flex-1 overflow-y-auto px-4 py-5 lg:px-8 lg:py-8">
         <div className="mx-auto max-w-6xl">
-          <div className="mb-6 rounded-[1.75rem] border border-[color:var(--border)] bg-white px-6 py-4 shadow-[0_18px_50px_rgba(23,32,51,0.05)]">
-            <div className="flex items-center gap-3">
-              <div className="flex size-12 items-center justify-center rounded-2xl bg-[var(--surface-accent)] text-[color:var(--accent)]">
-                <ClipboardIcon size={20} />
-              </div>
-              <div>
-                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--text-soft)]">
-                  Moderation workspace
-                </div>
-                <div className="text-xl font-bold text-[color:var(--text-h)]" style={{ fontFamily: "var(--font-heading)" }}>
-                  Review activity with a calmer, brighter console
-                </div>
-              </div>
-            </div>
-          </div>
           {children}
         </div>
       </main>

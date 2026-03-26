@@ -184,12 +184,18 @@ function SellerCard({
             src={user.profile_photo}
             alt="selfie"
             className="size-14 rounded-xl object-cover"
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).style.display = "none";
+              (e.currentTarget.nextElementSibling as HTMLElement | null)?.style.setProperty("display", "flex");
+            }}
           />
-        ) : (
-          <div className="size-14 rounded-xl bg-accent/10 flex items-center justify-center text-xl font-bold text-accent">
-            {user.first_name?.[0]?.toUpperCase() ?? "?"}
-          </div>
-        )}
+        ) : null}
+        <div
+          className="size-14 rounded-xl bg-accent/10 items-center justify-center text-xl font-bold text-accent"
+          style={{ display: user.profile_photo ? "none" : "flex" }}
+        >
+          {user.first_name?.[0]?.toUpperCase() ?? "?"}
+        </div>
       </div>
 
       {/* Info */}

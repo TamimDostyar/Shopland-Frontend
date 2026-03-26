@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import {
+  ApiError,
   getProduct,
   addToCart,
   getProducts,
@@ -15,7 +16,6 @@ import { useCart } from "../hooks/useCart";
 import {
   ImageIcon,
   LocationIcon,
-  ShieldIcon,
   StarIcon,
   StoreIcon,
   TruckIcon,
@@ -23,7 +23,7 @@ import {
 
 export default function ProductDetail() {
   const { slug } = useParams<{ slug: string }>();
-  const { accessToken, isAuthenticated } = useAuth();
+  const { accessToken, isAuthenticated, user } = useAuth();
   const { refreshCart } = useCart();
   const navigate = useNavigate();
   const [qty, setQty] = useState(1);
@@ -48,14 +48,22 @@ export default function ProductDetail() {
       navigate("/login");
       return;
     }
+    if (user?.role !== "buyer") {
+      toast.error("Only buyer accounts can add items to the cart.");
+      return;
+    }
     if (!accessToken || !product) return;
     setAdding(true);
     try {
       await addToCart(accessToken, product.id, qty);
       await refreshCart();
       toast.success("Added to cart!");
-    } catch {
-      toast.error("Failed to add to cart");
+    } catch (err) {
+      if (err instanceof ApiError) {
+        toast.error(err.message);
+      } else {
+        toast.error("Failed to add to cart");
+      }
     } finally {
       setAdding(false);
     }
@@ -86,6 +94,7 @@ export default function ProductDetail() {
   const images = product.images ?? [];
   const allImages = images.length > 0 ? images : product.primary_image ? [{ image: product.primary_image, id: "p", is_primary: true }] : [];
   const maxQty = product.available_quantity ?? 99;
+  const canAddToCart = isAuthenticated && user?.role === "buyer" && product.in_stock !== false;
 
   return (
     <MainLayout>
@@ -267,15 +276,21 @@ export default function ProductDetail() {
 
                 <button
                   onClick={() => { void handleAddToCart(); }}
-                  disabled={adding}
+                  disabled={adding || !canAddToCart}
                   className="flex flex-1 items-center justify-center gap-2 rounded-full bg-[var(--accent)] py-3 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(255,106,61,0.22)] transition-opacity hover:opacity-90 disabled:opacity-50"
                 >
                   {adding ? (
                     <span className="size-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   ) : null}
-                  Add to Cart
+                  {user && user.role !== "buyer" ? "Buyer Account Required" : "Add to Cart"}
                 </button>
               </div>
+            )}
+
+            {user && user.role !== "buyer" && (
+              <p className="text-sm" style={{ color: "var(--text-soft)" }}>
+                You are signed in as `{user.role}`. Only buyer accounts can add products to the cart and place orders.
+              </p>
             )}
 
             <div
@@ -321,13 +336,6 @@ export default function ProductDetail() {
               </p>
             </div>
 
-            <div className="rounded-[1.5rem] border border-[color:var(--border)] bg-[var(--surface-muted)] p-4 text-sm text-[color:var(--text-soft)]">
-              <div className="mb-1 flex items-center gap-2 font-semibold text-[color:var(--text-h)]">
-                <ShieldIcon size={16} className="text-[color:var(--accent)]" />
-                Why this layout works better
-              </div>
-              Cleaner spacing, stronger pricing hierarchy, and easier product scanning across desktop and mobile.
-            </div>
           </div>
         </div>
 

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { getCart, listAddresses, checkout } from "@shopland/shared";
+import { getCart, listAddresses, checkout, ApiError } from "@shopland/shared";
 import MainLayout from "../components/layout/MainLayout";
 import BackButton from "../components/ui/BackButton";
 import { useAuth } from "../hooks/useAuth";
@@ -59,7 +59,25 @@ export default function Checkout() {
       await refreshCart();
       navigate(`/order-confirmed/${order.order_number}`);
     },
-    onError: (err: Error) => toast.error(err.message || "Checkout failed"),
+    onError: (err: unknown) => {
+      if (err instanceof ApiError && Array.isArray(err.data.item_errors)) {
+        const reasons: Record<string, string> = {
+          no_stock_record: "no stock record set up",
+          insufficient_stock: "not enough stock",
+          product_inactive: "product is inactive",
+          product_not_approved: "product not yet approved",
+        };
+        const lines = (err.data.item_errors as Array<{ reason: string }>)
+          .map((e) => reasons[e.reason] ?? e.reason)
+          .join(", ");
+        toast.error(`Cannot checkout: ${lines}`);
+      } else {
+        const msg = err instanceof ApiError
+          ? (err.data.error as string) || err.message
+          : "Checkout failed";
+        toast.error(msg);
+      }
+    },
   });
 
   if (!user) return null;

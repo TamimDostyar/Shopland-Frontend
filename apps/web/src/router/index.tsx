@@ -7,8 +7,7 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import RegisterBuyer from "../pages/RegisterBuyer";
 import RegisterSeller from "../pages/RegisterSeller";
-import VerifyPhone from "../pages/VerifyPhone";
-import VerifyEmail from "../pages/VerifyEmail";
+import VerifyTelegram from "../pages/VerifyTelegram";
 
 // Public pages
 import Home from "../pages/Home";
@@ -94,8 +93,7 @@ export const router = createBrowserRouter([
   { path: "/register", element: <Register /> },
   { path: "/register/buyer", element: <RegisterBuyer /> },
   { path: "/register/seller", element: <RegisterSeller /> },
-  { path: "/verify-phone", element: <VerifyPhone /> },
-  { path: "/verify-email", element: <VerifyEmail /> },
+  { path: "/verify-telegram", element: <VerifyTelegram /> },
 
   // Cart & Checkout (protected)
   {

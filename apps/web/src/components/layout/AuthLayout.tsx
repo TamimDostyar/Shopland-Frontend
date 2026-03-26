@@ -52,30 +52,16 @@ export default function AuthLayout({ title, subtitle, children, backTo, backLabe
               Create an account, verify your identity, and move straight into buying or selling with a cleaner interface built for commerce.
             </p>
 
-            <div className="mt-10 grid gap-4 sm:grid-cols-2">
-              {[
-                {
-                  title: "Trusted onboarding",
-                  text: "Verification-first flows help buyers and sellers move safely.",
-                  icon: <ShieldIcon size={18} />,
-                },
-                {
-                  title: "Bright marketplace feel",
-                  text: "A lighter visual system keeps forms clearer and easier to scan.",
-                  icon: <SparklesIcon size={18} />,
-                },
-              ].map((item) => (
-                <div
-                  key={item.title}
-                  className="rounded-[1.75rem] border border-[color:var(--border)] bg-white/80 p-5 shadow-[0_18px_46px_rgba(23,32,51,0.06)]"
-                >
-                  <div className="mb-4 flex size-11 items-center justify-center rounded-2xl bg-[var(--surface-accent)] text-[color:var(--accent)]">
-                    {item.icon}
-                  </div>
-                  <div className="text-base font-semibold text-[color:var(--text-h)]">{item.title}</div>
-                  <p className="mt-2 text-sm text-[color:var(--text-soft)]">{item.text}</p>
+            <div className="mt-10">
+              <div
+                className="rounded-[1.75rem] border border-[color:var(--border)] bg-white/80 p-5 shadow-[0_18px_46px_rgba(23,32,51,0.06)]"
+              >
+                <div className="mb-4 flex size-11 items-center justify-center rounded-2xl bg-[var(--surface-accent)] text-[color:var(--accent)]">
+                  <ShieldIcon size={18} />
                 </div>
-              ))}
+                <div className="text-base font-semibold text-[color:var(--text-h)]">Trusted onboarding</div>
+                <p className="mt-2 text-sm text-[color:var(--text-soft)]">Verification-first flows help buyers and sellers move safely.</p>
+              </div>
             </div>
           </div>
         </div>

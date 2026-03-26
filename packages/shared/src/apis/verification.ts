@@ -6,7 +6,7 @@ type VerifyPhoneResponse = {
   verification_status: VerificationStatus;
 };
 
-type DetailResponse = { detail: string };
+type ResendResponse = { detail: string; telegram_link?: string };
 
 export function verifyPhone(
   phone_number: string,
@@ -19,27 +19,7 @@ export function verifyPhone(
 }
 
 export function resendPhoneCode(
-  phone_number: string,
-): Promise<DetailResponse> {
-  return http.post<DetailResponse>("/api/users/verify-phone/resend/", {
-    phone_number,
-  });
-}
-
-export function verifyEmail(
-  token: string,
-): Promise<VerifyPhoneResponse> {
-  return http.get<VerifyPhoneResponse>(
-    `/api/users/verify-email/?token=${encodeURIComponent(token)}`,
-  );
-}
-
-export function resendEmailVerification(
   accessToken: string,
-): Promise<DetailResponse> {
-  return http.post<DetailResponse>(
-    "/api/users/verify-email/resend/",
-    {},
-    accessToken,
-  );
+): Promise<ResendResponse> {
+  return http.post<ResendResponse>("/api/users/verify-phone/resend/", {}, accessToken);
 }
