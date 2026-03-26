@@ -1,18 +1,75 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
-import { googleAuth, ApiError } from "@shopland/shared";
+import { googleAuth, getTelegramLink, verifyPhone, resendPhoneCode, ApiError } from "@shopland/shared";
 import MainLayout from "../../components/layout/MainLayout";
 import Alert from "../../components/ui/Alert";
 import Button from "../../components/ui/Button";
 import BackButton from "../../components/ui/BackButton";
+import OtpInput from "../../components/forms/OtpInput";
 import { useAuth } from "../../hooks/useAuth";
 
 export default function Profile() {
-  const { user, setTokensAndUser, refreshUser } = useAuth();
+  const { user, accessToken, setTokensAndUser, refreshUser } = useAuth();
   const navigate = useNavigate();
   const [emailVerifyError, setEmailVerifyError] = useState("");
   const [emailVerifySuccess, setEmailVerifySuccess] = useState(false);
+
+  // Phone verification state
+  const [phoneStep, setPhoneStep] = useState<"link" | "otp">("link");
+  const [phoneCode, setPhoneCode] = useState("");
+  const [phoneLoading, setPhoneLoading] = useState(false);
+  const [phoneError, setPhoneError] = useState("");
+  const [phoneVerifySuccess, setPhoneVerifySuccess] = useState(false);
+  const [phoneCooldown, setPhoneCooldown] = useState(0);
+
+  useEffect(() => {
+    if (phoneCooldown <= 0) return;
+    const t = setTimeout(() => setPhoneCooldown((c) => c - 1), 1000);
+    return () => clearTimeout(t);
+  }, [phoneCooldown]);
+
+  async function handleGetTelegramLink() {
+    setPhoneLoading(true);
+    setPhoneError("");
+    try {
+      const res = await getTelegramLink(accessToken!);
+      window.open(res.link, "_blank");
+      setPhoneStep("otp");
+    } catch (err) {
+      setPhoneError(err instanceof ApiError ? err.message : "Failed to get Telegram link.");
+    } finally {
+      setPhoneLoading(false);
+    }
+  }
+
+  async function handleVerifyPhone() {
+    setPhoneLoading(true);
+    setPhoneError("");
+    try {
+      await verifyPhone(user!.phone_number!, phoneCode);
+      await refreshUser();
+      setPhoneVerifySuccess(true);
+    } catch (err) {
+      setPhoneError(err instanceof ApiError ? err.message : "Invalid or expired code.");
+    } finally {
+      setPhoneLoading(false);
+    }
+  }
+
+  async function handleResendPhone() {
+    setPhoneLoading(true);
+    setPhoneError("");
+    try {
+      const res = await resendPhoneCode(accessToken!);
+      if (res.telegram_link) window.open(res.telegram_link, "_blank");
+      setPhoneCooldown(60);
+    } catch (err) {
+      setPhoneError(err instanceof ApiError ? err.message : "Failed to resend code.");
+    } finally {
+      setPhoneLoading(false);
+    }
+  }
 
   if (!user) return null;
   if (user.role === "admin") return <Navigate to="/admin" replace />;
@@ -46,15 +103,52 @@ export default function Profile() {
         {/* Verification banners */}
         <div className="flex flex-col gap-3 mb-6">
           {!vs.phone && user.phone_number && (
-            <Alert kind="warning">
-              Phone not verified.{" "}
-              <button
-                onClick={() => navigate("/verify-telegram", { state: { phone_number: user.phone_number ?? "" } })}
-                className="underline font-medium"
-              >
-                Verify now
-              </button>
-            </Alert>
+            <div className="rounded-2xl border border-orange-400/30 bg-orange-400/8 px-4 py-3 text-sm" style={{ color: "var(--text)" }}>
+              <p className="font-semibold mb-2" style={{ color: "var(--text-h)" }}>Phone not verified</p>
+              {phoneVerifySuccess ? (
+                <p className="text-green-400 font-medium">Phone verified!</p>
+              ) : phoneStep === "link" ? (
+                <>
+                  <p className="mb-3" style={{ color: "var(--text-soft)" }}>
+                    Verify <strong>{user.phone_number}</strong> by receiving a code on Telegram.
+                  </p>
+                  {phoneError && <p className="mb-2 text-red-400 text-xs">{phoneError}</p>}
+                  <Button size="sm" loading={phoneLoading} onClick={() => void handleGetTelegramLink()}>
+                    Get code via Telegram
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <p className="mb-3" style={{ color: "var(--text-soft)" }}>
+                    Enter the 6-digit code sent to your Telegram.
+                  </p>
+                  <OtpInput value={phoneCode} onChange={setPhoneCode} error={phoneError} />
+                  <div className="mt-3 flex items-center gap-3 flex-wrap">
+                    <Button
+                      size="sm"
+                      loading={phoneLoading}
+                      disabled={phoneCode.length < 6}
+                      onClick={() => void handleVerifyPhone()}
+                    >
+                      Verify
+                    </Button>
+                    {phoneCooldown > 0 ? (
+                      <span className="text-xs" style={{ color: "var(--text-soft)" }}>
+                        Resend in {phoneCooldown}s
+                      </span>
+                    ) : (
+                      <button
+                        className="text-xs underline"
+                        style={{ color: "var(--text-soft)" }}
+                        onClick={() => void handleResendPhone()}
+                      >
+                        Resend code
+                      </button>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
           )}
           {!vs.email && (
             <div className="rounded-2xl border border-yellow-400/30 bg-yellow-400/8 px-4 py-3 text-sm" style={{ color: "var(--text)" }}>

@@ -430,7 +430,7 @@ export type SellerRegistrationData = {
   date_of_birth: string;
   // Shop
   shop_name: string;
-  shop_category: string;
+  shop_category?: string;
   business_description?: string;
   business_phone: string;
   shop_address_street: string;

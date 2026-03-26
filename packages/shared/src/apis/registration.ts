@@ -44,7 +44,7 @@ function buildSellerForm(data: SellerRegistrationData): FormData {
   fd.append("profile_photo", data.profile_photo);
   fd.append("date_of_birth", data.date_of_birth);
   fd.append("shop_name", data.shop_name);
-  fd.append("shop_category", data.shop_category);
+  fd.append("shop_category", data.shop_category?.trim() || "Any");
   if (data.business_description)
     fd.append("business_description", data.business_description);
   fd.append("business_phone", data.business_phone);

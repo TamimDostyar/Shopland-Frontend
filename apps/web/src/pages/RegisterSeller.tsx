@@ -75,7 +75,6 @@ export default function RegisterSeller() {
     }
     if (step === 2) {
       if (!form.shop_name) e.shop_name = "Required";
-      if (!form.shop_category) e.shop_category = "Required";
       if (!form.business_phone) e.business_phone = "Required";
     }
     if (step === 3) {
@@ -145,7 +144,7 @@ export default function RegisterSeller() {
         {step === 2 && (
           <>
             <Input label="Shop name" value={form.shop_name} onChange={(e) => set("shop_name", e.target.value)} error={errors.shop_name} required />
-            <Input label="Shop category" value={form.shop_category} onChange={(e) => set("shop_category", e.target.value)} error={errors.shop_category} required />
+            <Input label="Shop category (optional)" value={form.shop_category} onChange={(e) => set("shop_category", e.target.value)} error={errors.shop_category} placeholder="Any" />
             <Input label="Business description (optional)" value={form.business_description} onChange={(e) => set("business_description", e.target.value)} />
             <Input label="Business phone" type="tel" value={form.business_phone} onChange={(e) => set("business_phone", e.target.value)} error={errors.business_phone} required />
           </>
@@ -170,7 +169,7 @@ export default function RegisterSeller() {
               <Row label="Email" value={form.email} />
               <Row label="Phone" value={form.phone_number} />
               <Row label="Shop" value={form.shop_name} />
-              <Row label="Category" value={form.shop_category} />
+              <Row label="Category" value={form.shop_category || "Any"} />
               <Row label="City" value={form.shop_address_city} />
             </div>
             <Alert kind="info" className="mt-2">
