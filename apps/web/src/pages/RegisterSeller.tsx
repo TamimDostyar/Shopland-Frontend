@@ -7,6 +7,7 @@ import Input from "../components/ui/Input";
 import ImageUpload from "../components/forms/ImageUpload";
 import Alert from "../components/ui/Alert";
 import { useAuth } from "../hooks/useAuth";
+import { isGmailAddress } from "../utils/email";
 
 const STEPS = ["Personal", "Identity", "Shop Info", "Shop Address", "Review"];
 
@@ -60,6 +61,7 @@ export default function RegisterSeller() {
       if (!form.first_name) e.first_name = "Required";
       if (!form.last_name) e.last_name = "Required";
       if (!form.email) e.email = "Required";
+      else if (!isGmailAddress(form.email)) e.email = "Use a Gmail address ending in @gmail.com";
       if (!form.phone_number) e.phone_number = "Required";
       if (!form.date_of_birth) e.date_of_birth = "Required";
       if (!form.password) e.password = "Required";
@@ -121,7 +123,7 @@ export default function RegisterSeller() {
               <Input label="First name" value={form.first_name} onChange={(e) => set("first_name", e.target.value)} error={errors.first_name} required />
               <Input label="Last name" value={form.last_name} onChange={(e) => set("last_name", e.target.value)} error={errors.last_name} required />
             </div>
-            <Input label="Email" type="email" value={form.email} onChange={(e) => set("email", e.target.value)} error={errors.email} autoComplete="email" required />
+            <Input label="Email" type="email" value={form.email} onChange={(e) => set("email", e.target.value)} error={errors.email} autoComplete="email" placeholder="yourname@gmail.com" required />
             <Input label="Phone number" type="tel" value={form.phone_number} onChange={(e) => set("phone_number", e.target.value)} error={errors.phone_number} required />
             <Input label="Date of birth" type="date" value={form.date_of_birth} onChange={(e) => set("date_of_birth", e.target.value)} error={errors.date_of_birth} required />
             <Input label="Password" type="password" value={form.password} onChange={(e) => set("password", e.target.value)} error={errors.password} autoComplete="new-password" required />

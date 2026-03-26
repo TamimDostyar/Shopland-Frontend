@@ -7,6 +7,7 @@ import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import Alert from "../components/ui/Alert";
 import { useAuth } from "../hooks/useAuth";
+import { isGmailAddress } from "../utils/email";
 
 export default function Login() {
   const { login, setTokensAndUser, isAuthenticated } = useAuth();
@@ -24,6 +25,10 @@ export default function Login() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
+    if (!isGmailAddress(email)) {
+      setError("Please use a Gmail address ending in @gmail.com.");
+      return;
+    }
     setLoading(true);
     try {
       await login(email, password);
@@ -61,6 +66,7 @@ export default function Login() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           autoComplete="email"
+          placeholder="yourname@gmail.com"
           required
         />
 
@@ -94,7 +100,7 @@ export default function Login() {
         </div>
 
         <div className="rounded-[1.4rem] bg-[var(--surface-muted)] px-4 py-3 text-xs text-[color:var(--text-soft)]">
-          Use the same account across shopping, seller tools, and admin access when permitted.
+          Use a Gmail address for Shopland sign-in and registration. Other email providers are not accepted.
         </div>
 
         <p className="text-center text-sm text-muted">
