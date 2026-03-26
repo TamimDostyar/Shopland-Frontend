@@ -180,7 +180,6 @@ export default function SellerDetail() {
             <Row label="Shop name" value={seller.shop_name} />
             <Row label="Category" value={seller.shop_category} />
             <Row label="Business phone" value={seller.business_phone} />
-            <Row label="License no." value={seller.business_license_no} />
             <Row label="Address" value={`${seller.shop_address_street}, ${seller.shop_address_district}`} />
             <Row label="City / Province" value={`${seller.shop_address_city}, ${seller.shop_address_province}`} />
             {seller.business_description && (
@@ -195,7 +194,6 @@ export default function SellerDetail() {
           <div className="grid grid-cols-3 gap-4">
             <DocImage label="Selfie / Profile photo" src={user.profile_photo} />
             <DocImage label="National ID" src={user.national_id_photo} />
-            <DocImage label="Business license" src={seller.business_license_photo} />
           </div>
         </div>
       </div>

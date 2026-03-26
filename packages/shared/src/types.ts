@@ -401,8 +401,6 @@ export type AdminSeller = {
   business_description: string;
   logo: string | null;
   business_phone: string;
-  business_license_no: string;
-  business_license_photo: string | null;
   shop_address_street: string;
   shop_address_district: string;
   shop_address_city: string;
@@ -435,8 +433,6 @@ export type SellerRegistrationData = {
   shop_category: string;
   business_description?: string;
   business_phone: string;
-  business_license_no?: string;
-  business_license_photo?: File;
   shop_address_street: string;
   shop_address_district: string;
   shop_address_city: string;

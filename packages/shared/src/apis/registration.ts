@@ -48,8 +48,6 @@ function buildSellerForm(data: SellerRegistrationData): FormData {
   if (data.business_description)
     fd.append("business_description", data.business_description);
   fd.append("business_phone", data.business_phone);
-  fd.append("business_license_no", data.business_license_no);
-  fd.append("business_license_photo", data.business_license_photo);
   fd.append("shop_address_street", data.shop_address_street);
   fd.append("shop_address_district", data.shop_address_district);
   fd.append("shop_address_city", data.shop_address_city);
