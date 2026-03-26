@@ -16,7 +16,6 @@ type FormState = {
   confirm_password: string;
   first_name: string;
   last_name: string;
-  father_name: string;
   phone_number: string;
   date_of_birth: string;
   national_id: string;
@@ -26,8 +25,6 @@ type FormState = {
   shop_category: string;
   business_description: string;
   business_phone: string;
-  business_license_no: string;
-  business_license_photo: File | null;
   shop_address_street: string;
   shop_address_district: string;
   shop_address_city: string;
@@ -36,11 +33,11 @@ type FormState = {
 
 const INITIAL: FormState = {
   email: "", password: "", confirm_password: "",
-  first_name: "", last_name: "", father_name: "",
+  first_name: "", last_name: "",
   phone_number: "", date_of_birth: "",
   national_id: "", national_id_photo: null, profile_photo: null,
   shop_name: "", shop_category: "", business_description: "",
-  business_phone: "", business_license_no: "", business_license_photo: null,
+  business_phone: "",
   shop_address_street: "", shop_address_district: "",
   shop_address_city: "", shop_address_province: "",
 };
@@ -64,7 +61,6 @@ export default function RegisterSeller() {
     if (step === 0) {
       if (!form.first_name) e.first_name = "Required";
       if (!form.last_name) e.last_name = "Required";
-      if (!form.father_name) e.father_name = "Required";
       if (!form.email) e.email = "Required";
       if (!form.phone_number) e.phone_number = "Required";
       if (!form.date_of_birth) e.date_of_birth = "Required";
@@ -81,8 +77,6 @@ export default function RegisterSeller() {
       if (!form.shop_name) e.shop_name = "Required";
       if (!form.shop_category) e.shop_category = "Required";
       if (!form.business_phone) e.business_phone = "Required";
-      if (!form.business_license_no) e.business_license_no = "Required";
-      if (!form.business_license_photo) e.business_license_photo = "Required";
     }
     if (step === 3) {
       if (!form.shop_address_street) e.shop_address_street = "Required";
@@ -99,7 +93,7 @@ export default function RegisterSeller() {
   }
 
   async function handleSubmit() {
-    if (!form.national_id_photo || !form.profile_photo || !form.business_license_photo) return;
+    if (!form.national_id_photo || !form.profile_photo) return;
     setApiError("");
     setSubmitting(true);
     try {
@@ -132,7 +126,6 @@ export default function RegisterSeller() {
               <Input label="First name" value={form.first_name} onChange={(e) => set("first_name", e.target.value)} error={errors.first_name} required />
               <Input label="Last name" value={form.last_name} onChange={(e) => set("last_name", e.target.value)} error={errors.last_name} required />
             </div>
-            <Input label="Father's name" value={form.father_name} onChange={(e) => set("father_name", e.target.value)} error={errors.father_name} required />
             <Input label="Email" type="email" value={form.email} onChange={(e) => set("email", e.target.value)} error={errors.email} autoComplete="email" required />
             <Input label="Phone number" type="tel" value={form.phone_number} onChange={(e) => set("phone_number", e.target.value)} error={errors.phone_number} required />
             <Input label="Date of birth" type="date" value={form.date_of_birth} onChange={(e) => set("date_of_birth", e.target.value)} error={errors.date_of_birth} required />
@@ -155,8 +148,6 @@ export default function RegisterSeller() {
             <Input label="Shop category" value={form.shop_category} onChange={(e) => set("shop_category", e.target.value)} error={errors.shop_category} required />
             <Input label="Business description (optional)" value={form.business_description} onChange={(e) => set("business_description", e.target.value)} />
             <Input label="Business phone" type="tel" value={form.business_phone} onChange={(e) => set("business_phone", e.target.value)} error={errors.business_phone} required />
-            <Input label="Business license number" value={form.business_license_no} onChange={(e) => set("business_license_no", e.target.value)} error={errors.business_license_no} required />
-            <ImageUpload label="Business license photo" onChange={(f) => set("business_license_photo", f)} error={errors.business_license_photo} />
           </>
         )}
 

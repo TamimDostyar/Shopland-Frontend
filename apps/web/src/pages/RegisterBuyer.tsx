@@ -17,7 +17,6 @@ type FormState = {
   confirm_password: string;
   first_name: string;
   last_name: string;
-  father_name: string;
   phone_number: string;
   date_of_birth: string;
   // Step 2
@@ -37,7 +36,7 @@ type FormState = {
 
 const INITIAL: FormState = {
   email: "", password: "", confirm_password: "",
-  first_name: "", last_name: "", father_name: "",
+  first_name: "", last_name: "",
   phone_number: "", date_of_birth: "",
   national_id: "", national_id_photo: null, profile_photo: null,
   address_label: "Home", address_full_name: "", address_phone_number: "",
@@ -64,7 +63,6 @@ export default function RegisterBuyer() {
     if (step === 0) {
       if (!form.first_name) e.first_name = "Required";
       if (!form.last_name) e.last_name = "Required";
-      if (!form.father_name) e.father_name = "Required";
       if (!form.email) e.email = "Required";
       if (!form.phone_number) e.phone_number = "Required";
       if (!form.date_of_birth) e.date_of_birth = "Required";
@@ -128,7 +126,6 @@ export default function RegisterBuyer() {
               <Input label="First name" value={form.first_name} onChange={(e) => set("first_name", e.target.value)} error={errors.first_name} required />
               <Input label="Last name" value={form.last_name} onChange={(e) => set("last_name", e.target.value)} error={errors.last_name} required />
             </div>
-            <Input label="Father's name" value={form.father_name} onChange={(e) => set("father_name", e.target.value)} error={errors.father_name} required />
             <Input label="Email" type="email" value={form.email} onChange={(e) => set("email", e.target.value)} error={errors.email} autoComplete="email" required />
             <Input label="Phone number" type="tel" value={form.phone_number} onChange={(e) => set("phone_number", e.target.value)} error={errors.phone_number} required />
             <Input label="Date of birth" type="date" value={form.date_of_birth} onChange={(e) => set("date_of_birth", e.target.value)} error={errors.date_of_birth} required />

@@ -354,7 +354,7 @@ export type BuyerRegistrationData = {
   confirm_password: string;
   first_name: string;
   last_name: string;
-  father_name: string;
+  father_name?: string;
   phone_number: string;
   national_id: string;
   national_id_photo: File;
@@ -424,7 +424,7 @@ export type SellerRegistrationData = {
   confirm_password: string;
   first_name: string;
   last_name: string;
-  father_name: string;
+  father_name?: string;
   phone_number: string;
   national_id: string;
   national_id_photo: File;
@@ -435,8 +435,8 @@ export type SellerRegistrationData = {
   shop_category: string;
   business_description?: string;
   business_phone: string;
-  business_license_no: string;
-  business_license_photo: File;
+  business_license_no?: string;
+  business_license_photo?: File;
   shop_address_street: string;
   shop_address_district: string;
   shop_address_city: string;
