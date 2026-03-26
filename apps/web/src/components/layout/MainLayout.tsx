@@ -2,6 +2,7 @@ import { type ReactNode, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { useCart } from "../../hooks/useCart";
+import LegalLinks from "../legal/LegalLinks";
 import {
   CartIcon,
   CategoryIcon,
@@ -262,7 +263,7 @@ export default function MainLayout({ children }: Props) {
 
       <footer className="mt-20 border-t border-[color:var(--border)] bg-[rgba(255,255,255,0.72)] backdrop-blur-xl">
         <div className="mx-auto max-w-7xl px-4 py-14">
-          <div className="grid gap-8 lg:grid-cols-[1.4fr_repeat(3,1fr)]">
+          <div className="grid gap-8 lg:grid-cols-[1.4fr_repeat(4,1fr)]">
             <div className="rounded-[1.75rem] bg-[linear-gradient(135deg,#172033,#243457)] p-6 text-white shadow-[0_24px_60px_rgba(23,32,51,0.18)]">
               <div className="mb-4 flex items-center gap-3">
                 <div className="flex size-12 items-center justify-center rounded-full bg-white/12">
@@ -307,6 +308,13 @@ export default function MainLayout({ children }: Props) {
                   { label: "Saved addresses", to: "/profile/addresses" },
                 ],
               },
+              {
+                title: "Legal",
+                links: [
+                  { label: "Privacy Policy", to: "/privacy" },
+                  { label: "Terms & Conditions", to: "/terms" },
+                ],
+              },
             ].map((column) => (
               <div key={column.title}>
                 <div className="mb-4 text-sm font-bold uppercase tracking-[0.16em] text-[color:var(--text-soft)]">
@@ -334,6 +342,7 @@ export default function MainLayout({ children }: Props) {
               <span>Verified sellers</span>
               <span>Cash on delivery</span>
             </div>
+            <LegalLinks />
           </div>
         </div>
       </footer>

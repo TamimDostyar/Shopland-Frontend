@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import LegalLinks from "../legal/LegalLinks";
 import { ArrowLeftIcon, ShieldIcon, SparklesIcon, StoreIcon } from "../ui/icons";
 
 interface Props {
@@ -112,6 +113,16 @@ export default function AuthLayout({ title, subtitle, children, backTo, backLabe
           </h1>
           {subtitle && <p className="mb-6 text-sm" style={{ color: "var(--text-soft)" }}>{subtitle}</p>}
           {children}
+
+          <div className="mt-6 rounded-[1.4rem] border border-[color:var(--border)] bg-[var(--surface-muted)] px-4 py-4">
+            <p className="text-xs leading-6 text-[color:var(--text-soft)]">
+              By continuing, you agree to the Shopland Terms &amp; Conditions and Privacy Policy.
+              We use account, contact, and verification data to operate your account, protect the marketplace,
+              and in emergencies or safety incidents help verify who you are. We do not sell personal data or
+              use personal data to train general-purpose AI or unrelated software models.
+            </p>
+            <LegalLinks className="mt-3 gap-2" linkClassName="text-xs font-semibold" separatorClassName="text-xs" />
+          </div>
         </div>
       </div>
     </div>

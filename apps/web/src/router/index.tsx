@@ -8,6 +8,8 @@ import Register from "../pages/Register";
 import RegisterBuyer from "../pages/RegisterBuyer";
 import RegisterSeller from "../pages/RegisterSeller";
 import VerifyTelegram from "../pages/VerifyTelegram";
+import PrivacyPolicy from "../pages/PrivacyPolicy";
+import TermsConditions from "../pages/TermsConditions";
 
 // Public pages
 import Home from "../pages/Home";
@@ -94,6 +96,8 @@ export const router = createBrowserRouter([
   { path: "/register/buyer", element: <RegisterBuyer /> },
   { path: "/register/seller", element: <RegisterSeller /> },
   { path: "/verify-telegram", element: <VerifyTelegram /> },
+  { path: "/privacy", element: <PrivacyPolicy /> },
+  { path: "/terms", element: <TermsConditions /> },
 
   // Cart & Checkout (protected)
   {
