@@ -4,6 +4,10 @@ export function setApiBaseUrl(url: string): void {
   _baseUrl = url.replace(/\/$/, "");
 }
 
+export function getApiBaseUrl(): string {
+  return _baseUrl;
+}
+
 export class ApiError extends Error {
   readonly status: number;
   readonly data: Record<string, unknown>;

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import type { Product } from "@shopland/shared";
+import { getApiBaseUrl, type Product } from "@shopland/shared";
 
 interface Props {
   product: Product;
@@ -11,9 +11,7 @@ function resolveMediaUrl(url: string | null | undefined): string | null {
   if (/^https?:\/\//i.test(url)) return url;
   // Relative media path from API (e.g. "/media/...")
   if (url.startsWith("/")) {
-    const base =
-      (import.meta.env.VITE_API_BASE_URL as string | undefined) ??
-      "http://localhost:8000";
+    const base = getApiBaseUrl();
     return `${base.replace(/\/$/, "")}${url}`;
   }
   return url;
