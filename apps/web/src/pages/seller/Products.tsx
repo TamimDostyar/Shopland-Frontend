@@ -32,7 +32,10 @@ export default function SellerProducts() {
       toast.success("Product deleted");
       setDeleteConfirm(null);
     },
-    onError: () => toast.error("Failed to delete product"),
+    onError: (err: unknown) => {
+      const msg = err instanceof Error ? err.message : "Failed to delete product";
+      toast.error(msg);
+    },
   });
 
   const allProducts: Product[] = data?.results ?? [];

@@ -50,7 +50,12 @@ async function request(
 
   if (res.status === 204) return undefined;
 
-  const data = (await res.json()) as Record<string, unknown>;
+  let data: Record<string, unknown> = {};
+  try {
+    data = (await res.json()) as Record<string, unknown>;
+  } catch {
+    // non-JSON response (e.g. HTML error page from server)
+  }
 
   if (!res.ok) {
     throw new ApiError(res.status, data);
