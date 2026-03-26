@@ -1,169 +1,53 @@
-import { useState } from "react";
-import type { FormEvent } from "react";
-import type { Locale } from "@shopland/shared";
-import {
-  APP_NAME,
-  COMING_SOON,
-  DEFAULT_LOCALE,
-  LOCALES,
-  joinWaitlist,
-} from "@shopland/shared";
-import "./App.css";
+import { RouterProvider } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "react-hot-toast";
+import { setApiBaseUrl } from "@shopland/shared";
+import { AuthProvider } from "./context/AuthContext";
+import { CartProvider } from "./context/CartContext";
+import { router } from "./router";
 
-type SubmitState = "idle" | "loading" | "success" | "duplicate" | "error";
+setApiBaseUrl(
+  import.meta.env.MODE === "LOCAL"
+    ? "http://localhost:8000"
+    : (import.meta.env.VITE_API_BASE_URL as string) ?? "http://localhost:8000",
+);
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5,
+      // Don't hammer the API when throttled or forbidden.
+      retry: (failureCount, error: unknown) => {
+        const status = (error as { status?: number })?.status;
+        if (status === 401 || status === 403 || status === 429) return false;
+        return failureCount < 1;
+      },
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 export default function App() {
-  const [locale, setLocale] = useState<Locale>(DEFAULT_LOCALE);
-  const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
-  const [submitState, setSubmitState] = useState<SubmitState>("idle");
-
-  const content = COMING_SOON[locale];
-  const dir = LOCALES[locale].dir;
-
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    void submitWaitlist(event);
-  }
-
-  async function submitWaitlist(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const trimmedName = name.trim();
-    const trimmedUsername = username.trim().toLowerCase();
-    if (!trimmedName || !trimmedUsername) return;
-
-    setSubmitState("loading");
-
-    try {
-      const data = await joinWaitlist(trimmedName, trimmedUsername);
-      setSubmitState(data.already_joined ? "duplicate" : "success");
-      setName("");
-      setUsername("");
-    } catch {
-      setSubmitState("error");
-    }
-  }
-
-  function resetState() {
-    if (submitState !== "idle") setSubmitState("idle");
-  }
-
-  const feedback =
-    submitState === "success"
-      ? content.successMessage
-      : submitState === "duplicate"
-        ? content.duplicateMessage
-        : submitState === "error"
-          ? content.errorMessage
-          : null;
-
-  const localeKeys = Object.keys(LOCALES) as Locale[];
-
   return (
-    <div className="shell">
-      <div className="glow glow-1" aria-hidden="true" />
-      <div className="glow glow-2" aria-hidden="true" />
-
-      <div className="page" dir={dir}>
-        <header className="topbar">
-          <div className="topbar-left">
-            <span className="logo">{APP_NAME}</span>
-            <span className="pill">{content.badge}</span>
-          </div>
-
-          <nav className="lang-switcher" aria-label="Language">
-            {localeKeys.map((key) => (
-              <button
-                key={key}
-                className={`lang-btn${key === locale ? " active" : ""}`}
-                onClick={() => setLocale(key)}
-                aria-current={key === locale ? "true" : undefined}
-              >
-                {LOCALES[key].label}
-              </button>
-            ))}
-          </nav>
-        </header>
-
-        <main className="hero">
-          <h1>{content.title}</h1>
-          <p className="subtitle">{content.subtitle}</p>
-
-          <ul className="goals">
-            {content.goals.map((g) => (
-              <li key={g.title}>
-                <strong>{g.title}</strong>
-                <span className="goal-sep" aria-hidden="true" />
-                <span>{g.detail}</span>
-              </li>
-            ))}
-          </ul>
-
-          <form className="waitlist" onSubmit={handleSubmit}>
-            <p className="waitlist-title">{content.formTitle}</p>
-
-            <div className="input-row">
-              <label className="sr-only" htmlFor="name">
-                Name
-              </label>
-              <input
-                id="name"
-                type="text"
-                value={name}
-                onChange={(e) => { setName(e.target.value); resetState(); }}
-                placeholder={content.namePlaceholder}
-                autoComplete="name"
-                required
-                disabled={submitState === "loading"}
-              />
-            </div>
-
-            <div className="input-row">
-              <label className="sr-only" htmlFor="username">
-                Username
-              </label>
-              <input
-                id="username"
-                type="text"
-                value={username}
-                onChange={(e) => { setUsername(e.target.value); resetState(); }}
-                placeholder={content.usernamePlaceholder}
-                autoComplete="username"
-                required
-                disabled={submitState === "loading"}
-              />
-              <button
-                type="submit"
-                className="cta"
-                disabled={submitState === "loading"}
-              >
-                {submitState === "loading" ? "..." : content.ctaLabel}
-              </button>
-            </div>
-
-            <p className="note">{content.privacyNote}</p>
-
-            {feedback && (
-              <p
-                className={
-                  submitState === "success"
-                    ? "feedback ok"
-                    : submitState === "duplicate"
-                      ? "feedback warn"
-                      : "feedback err"
-                }
-                role="status"
-              >
-                {feedback}
-              </p>
-            )}
-          </form>
-        </main>
-
-        <footer className="bottom">
-          <a href={`mailto:${content.footerEmail}`}>{content.footerEmail}</a>
-          <span>© {new Date().getFullYear()} {APP_NAME}</span>
-        </footer>
-      </div>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <CartProvider>
+          <RouterProvider router={router} />
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              style: {
+                background: "#0b0f1f",
+                color: "#c8cde0",
+                border: "1px solid rgba(255,255,255,0.08)",
+                borderRadius: "12px",
+              },
+              success: { iconTheme: { primary: "#4ade80", secondary: "#060816" } },
+              error: { iconTheme: { primary: "#f87171", secondary: "#060816" } },
+            }}
+          />
+        </CartProvider>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }

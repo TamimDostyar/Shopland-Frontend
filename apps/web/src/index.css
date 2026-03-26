@@ -1,4 +1,20 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #060816;
+  --color-surface: #0b0f1f;
+  --color-accent: #ff7d48;
+  --color-accent-strong: #ffc0a5;
+  --color-text: #c8cde0;
+  --color-muted: #8a91b2;
+  --color-heading: #f7f8ff;
+  --color-border: rgba(255,255,255,0.08);
+  --color-error: #f87171;
+  --color-success: #4ade80;
+  --font-sans: "Inter", sans-serif;
+  --font-heading: "Sora", sans-serif;
+}
 
 :root {
   --bg: #060816;

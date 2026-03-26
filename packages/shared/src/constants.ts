@@ -2,6 +2,8 @@ export const APP_NAME = "Shopland";
 export const APP_VERSION = "1.0.0";
 
 export const API_BASE_URL: string =
+
+  // this ensures we get the .env from local
   import.meta.env.MODE === "LOCAL"
     ? "http://localhost:8000"
     : import.meta.env.VITE_API_BASE_URL;
