@@ -1,13 +1,32 @@
 import { http } from "../http";
 import type { Order, PaginatedResponse } from "../types";
 
+function normalizeOrderListResponse(
+  data: PaginatedResponse<Order> | Order[],
+): PaginatedResponse<Order> {
+  if (Array.isArray(data)) {
+    return {
+      count: data.length,
+      next: null,
+      previous: null,
+      results: data,
+    };
+  }
+
+  return data;
+}
+
 // Buyer endpoints
-export function getMyOrders(
+export async function getMyOrders(
   token: string,
   status?: string,
 ): Promise<PaginatedResponse<Order>> {
   const q = status ? `?status=${status}` : "";
-  return http.get<PaginatedResponse<Order>>(`/api/orders/my-orders/${q}`, token);
+  const data = await http.get<PaginatedResponse<Order> | Order[]>(
+    `/api/orders/my-orders/${q}`,
+    token,
+  );
+  return normalizeOrderListResponse(data);
 }
 
 export function getMyOrder(token: string, orderNumber: string): Promise<Order> {
@@ -49,15 +68,16 @@ export function confirmDelivery(
 }
 
 // Seller endpoints
-export function getSellerOrders(
+export async function getSellerOrders(
   token: string,
   status?: string,
 ): Promise<PaginatedResponse<Order>> {
   const q = status ? `?status=${status}` : "";
-  return http.get<PaginatedResponse<Order>>(
+  const data = await http.get<PaginatedResponse<Order> | Order[]>(
     `/api/orders/seller/orders/${q}`,
     token,
   );
+  return normalizeOrderListResponse(data);
 }
 
 export function getSellerOrder(

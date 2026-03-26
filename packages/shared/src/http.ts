@@ -74,8 +74,8 @@ export const http = {
   patch: <T>(path: string, body: unknown, token?: string) =>
     request("PATCH", path, { token, body }) as Promise<T>,
 
-  delete: (path: string, token?: string) =>
-    request("DELETE", path, { token }) as Promise<void>,
+  delete: <T = void>(path: string, token?: string) =>
+    request("DELETE", path, { token }) as Promise<T>,
 
   postForm: <T>(path: string, formData: FormData, token?: string) =>
     request("POST", path, { token, formData }) as Promise<T>,

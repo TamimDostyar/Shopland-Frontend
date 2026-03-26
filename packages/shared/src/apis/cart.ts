@@ -21,8 +21,8 @@ export function updateCartItem(
   return http.patch<Cart>(`/api/cart/items/${itemId}/`, { quantity }, token);
 }
 
-export function removeCartItem(token: string, itemId: string): Promise<void> {
-  return http.delete(`/api/cart/items/${itemId}/`, token);
+export function removeCartItem(token: string, itemId: string): Promise<Cart> {
+  return http.delete<Cart>(`/api/cart/items/${itemId}/`, token);
 }
 
 export function clearCart(token: string): Promise<void> {

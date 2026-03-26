@@ -32,8 +32,8 @@ export default function Cart() {
   const updateMutation = useMutation({
     mutationFn: ({ itemId, qty }: { itemId: string; qty: number }) =>
       updateCartItem(accessToken!, itemId, qty),
-    onSuccess: async () => {
-      await qc.invalidateQueries({ queryKey: ["cart"] });
+    onSuccess: async (updatedCart) => {
+      qc.setQueryData(["cart"], updatedCart);
       await refreshCart();
     },
     onError: () => toast.error("Could not update quantity"),
@@ -41,10 +41,14 @@ export default function Cart() {
 
   const removeMutation = useMutation({
     mutationFn: (itemId: string) => removeCartItem(accessToken!, itemId),
-    onSuccess: async () => {
-      await qc.invalidateQueries({ queryKey: ["cart"] });
+    onSuccess: async (updatedCart) => {
+      qc.setQueryData(["cart"], updatedCart);
       await refreshCart();
       toast.success("Item removed");
+    },
+    onError: async () => {
+      await qc.invalidateQueries({ queryKey: ["cart"] });
+      await refreshCart();
     },
   });
 
