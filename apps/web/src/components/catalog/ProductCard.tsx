@@ -11,7 +11,12 @@ export default function ProductCard({ product }: Props) {
     ? parseFloat(product.discount_price)
     : null;
   const displayPrice = discountPrice ?? price;
-  const img = product.primary_image ?? product.images?.[0]?.image;
+  // Backend returns `primary_image` as an object (e.g. { image: url, ... }),
+  // but frontend types allow it to be missing/string. Handle both safely.
+  const primaryImageUnknown = (product as unknown as { primary_image?: unknown }).primary_image;
+  const img =
+    (typeof primaryImageUnknown === "string" ? primaryImageUnknown : (primaryImageUnknown as any)?.image) ??
+    product.images?.[0]?.image;
   const sellerName = product.seller?.shop_name ?? "Shopland Seller";
 
   return (
