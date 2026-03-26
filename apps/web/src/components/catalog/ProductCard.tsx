@@ -5,6 +5,20 @@ interface Props {
   product: Product;
 }
 
+function resolveMediaUrl(url: string | null | undefined): string | null {
+  if (!url) return null;
+  // Absolute URL already
+  if (/^https?:\/\//i.test(url)) return url;
+  // Relative media path from API (e.g. "/media/...")
+  if (url.startsWith("/")) {
+    const base =
+      (import.meta.env.VITE_API_BASE_URL as string | undefined) ??
+      "http://localhost:8000";
+    return `${base.replace(/\/$/, "")}${url}`;
+  }
+  return url;
+}
+
 export default function ProductCard({ product }: Props) {
   const price = parseFloat(product.price);
   const discountPrice = product.discount_price
@@ -14,9 +28,10 @@ export default function ProductCard({ product }: Props) {
   // Backend returns `primary_image` as an object (e.g. { image: url, ... }),
   // but frontend types allow it to be missing/string. Handle both safely.
   const primaryImageUnknown = (product as unknown as { primary_image?: unknown }).primary_image;
-  const img =
+  const rawImg =
     (typeof primaryImageUnknown === "string" ? primaryImageUnknown : (primaryImageUnknown as any)?.image) ??
     product.images?.[0]?.image;
+  const img = resolveMediaUrl(rawImg);
   const sellerName = product.seller?.shop_name ?? "Shopland Seller";
 
   return (
