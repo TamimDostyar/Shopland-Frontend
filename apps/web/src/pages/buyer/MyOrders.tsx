@@ -112,7 +112,7 @@ export default function MyOrders() {
 
 function OrderCard({ order }: { order: Order }) {
   const st = STATUS_COLORS[order.status] ?? STATUS_COLORS.pending;
-  const firstItem = order.items[0];
+  const firstItem = order.items?.[0];
 
   return (
     <Link
@@ -151,7 +151,7 @@ function OrderCard({ order }: { order: Order }) {
           <p className="text-sm truncate" style={{ color: "var(--text)" }}>
             {firstItem?.product_name}
           </p>
-          {order.items.length > 1 && (
+          {(order.items?.length ?? 0) > 1 && (
             <p className="text-xs" style={{ color: "var(--text-soft)" }}>
               +{order.items.length - 1} more items
             </p>
