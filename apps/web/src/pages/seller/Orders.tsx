@@ -169,12 +169,12 @@ export default function SellerOrders() {
 
                   {/* Items preview */}
                   <div className="mb-4 space-y-1">
-                    {order.items.slice(0, 3).map((item) => (
+                    {(order.items ?? []).slice(0, 3).map((item) => (
                       <p key={item.id} className="text-xs" style={{ color: "var(--text-soft)" }}>
                         • {item.product_name} × {item.quantity} — ؋{parseFloat(item.subtotal).toLocaleString()}
                       </p>
                     ))}
-                    {order.items.length > 3 && (
+                    {(order.items?.length ?? 0) > 3 && (
                       <p className="text-xs" style={{ color: "var(--text-soft)" }}>
                         +{order.items.length - 3} more items
                       </p>
