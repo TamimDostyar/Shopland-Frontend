@@ -261,7 +261,7 @@ function SectionHeader({
   seeAllLink?: string;
 }) {
   return (
-    <div className="flex items-end justify-between mb-6">
+    <div className="flex flex-wrap items-end justify-between gap-3 mb-6">
       <div>
         <h2
           className="text-2xl font-bold"
@@ -344,7 +344,7 @@ function FeaturedShowcaseCard({
     return (
       <div
         className={`overflow-hidden rounded-[1.6rem] bg-[var(--surface-muted)] animate-pulse ${
-          large ? "min-h-[360px]" : compact ? "min-h-[140px]" : "min-h-[172px]"
+          large ? "min-h-[220px] sm:min-h-[360px]" : compact ? "min-h-[120px] sm:min-h-[140px]" : "min-h-[160px] sm:min-h-[172px]"
         }`}
       />
     );
@@ -354,7 +354,7 @@ function FeaturedShowcaseCard({
     <Link
       to={`/product/${product.slug}`}
       className={`group relative overflow-hidden rounded-[1.6rem] border border-[color:var(--border)] bg-[var(--surface-muted)] shadow-[0_16px_40px_rgba(23,32,51,0.06)] ${
-        large ? "min-h-[360px]" : compact ? "min-h-[140px]" : "min-h-[172px]"
+        large ? "min-h-[220px] sm:min-h-[360px]" : compact ? "min-h-[120px] sm:min-h-[140px]" : "min-h-[160px] sm:min-h-[172px]"
       }`}
     >
       {img ? (

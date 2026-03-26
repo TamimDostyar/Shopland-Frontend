@@ -82,7 +82,7 @@ export default function ProductCard({ product }: Props) {
         )}
       </div>
 
-      <div className="p-4">
+      <div className="p-3 sm:p-4">
         <div className="mb-3 flex items-center justify-between gap-2">
           <span className="rounded-full bg-[var(--surface-muted)] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--text-soft)]">
             {product.category?.name ?? "Product"}
@@ -96,14 +96,14 @@ export default function ProductCard({ product }: Props) {
         </div>
 
         <p
-          className="mb-2 line-clamp-2 min-h-[2.9rem] text-[15px] font-semibold leading-snug"
+          className="mb-2 line-clamp-2 min-h-[2.6rem] text-[13px] font-semibold leading-snug sm:min-h-[2.9rem] sm:text-[15px]"
           style={{ color: "var(--text-h)" }}
         >
           {product.name}
         </p>
 
         <div className="mb-2 flex items-end gap-2">
-          <span className="text-xl font-bold" style={{ color: "var(--text-h)" }}>
+          <span className="text-lg font-bold sm:text-xl" style={{ color: "var(--text-h)" }}>
             ؋{displayPrice.toLocaleString()}
           </span>
           {discountPrice && (

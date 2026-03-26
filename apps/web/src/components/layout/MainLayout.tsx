@@ -61,7 +61,7 @@ export default function MainLayout({ children }: Props) {
     return () => document.removeEventListener("mousedown", handle);
   }, []);
 
-  function handleSearch(e: React.FormEvent) {
+  function handleSearch(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const query = searchQuery.trim();
     navigate(query ? `/search?q=${encodeURIComponent(query)}` : "/search");
@@ -84,6 +84,7 @@ export default function MainLayout({ children }: Props) {
 
   return (
     <div className="min-h-screen flex flex-col text-[color:var(--text)]">
+      {/* Top Banner */}
       <div
         className="border-b"
         style={{
@@ -96,7 +97,7 @@ export default function MainLayout({ children }: Props) {
             <SparklesIcon size={14} className="text-[color:var(--accent)]" />
             Bright deals, verified sellers, cash on delivery.
           </div>
-          <div className="flex items-center gap-4 text-[color:var(--text-soft)]">
+          <div className="hidden sm:flex items-center gap-4 text-[color:var(--text-soft)]">
             <span className="inline-flex items-center gap-1.5">
               <TruckIcon size={14} />
               Nationwide delivery
@@ -110,26 +111,34 @@ export default function MainLayout({ children }: Props) {
       </div>
 
       <header className="sticky top-0 z-50 border-b border-[color:var(--border)] bg-[rgba(247,248,251,0.86)] backdrop-blur-xl">
-        <div className="mx-auto max-w-7xl px-4 py-4">
-          <div className="flex flex-wrap items-center gap-4">
+        <div className="mx-auto max-w-7xl px-4 py-3 md:py-4">
+
+          {/* Primary row: Logo + desktop search + actions */}
+          <div className="flex items-center gap-3 md:gap-4">
+
+            {/* Logo */}
             <Link
               to="/"
-              className="flex items-center gap-3 rounded-full bg-white px-4 py-2 shadow-[0_14px_36px_rgba(23,32,51,0.06)]"
+              className="flex shrink-0 items-center gap-2 rounded-full bg-white px-3 py-2 shadow-[0_14px_36px_rgba(23,32,51,0.06)] md:gap-3 md:px-4"
             >
-              <div className="flex size-11 items-center justify-center rounded-full bg-[linear-gradient(135deg,#ff6a3d,#ff9e62)] text-white shadow-[0_10px_24px_rgba(255,106,61,0.28)]">
+              <div className="flex size-9 items-center justify-center rounded-full bg-[linear-gradient(135deg,#ff6a3d,#ff9e62)] text-white shadow-[0_10px_24px_rgba(255,106,61,0.28)] md:size-11">
                 <StoreIcon size={20} />
               </div>
               <div>
-                <div className="text-lg font-bold leading-none text-[color:var(--text-h)]" style={{ fontFamily: "var(--heading)" }}>
+                <div
+                  className="text-base font-bold leading-none text-[color:var(--text-h)] md:text-lg"
+                  style={{ fontFamily: "var(--heading)" }}
+                >
                   Shopland
                 </div>
-                <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[color:var(--text-soft)]">
+                <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[color:var(--text-soft)] md:text-[11px]">
                   Marketplace
                 </div>
               </div>
             </Link>
 
-            <form onSubmit={handleSearch} className="min-w-[260px] flex-1">
+            {/* Desktop search — hidden on mobile */}
+            <form onSubmit={handleSearch} className="hidden flex-1 md:block">
               <div className="flex items-center gap-2 rounded-full border border-[color:var(--border)] bg-white p-2 shadow-[0_12px_32px_rgba(23,32,51,0.06)]">
                 <div className="flex size-10 items-center justify-center rounded-full bg-[var(--surface-muted)] text-[color:var(--text-soft)]">
                   <SearchIcon size={18} />
@@ -150,10 +159,14 @@ export default function MainLayout({ children }: Props) {
               </div>
             </form>
 
-            <div className="ml-auto flex items-center gap-2">
+            {/* Mobile spacer — pushes actions to the right */}
+            <div className="flex-1 md:hidden" />
+
+            {/* Cart + Auth */}
+            <div className="flex shrink-0 items-center gap-2">
               <Link
                 to="/cart"
-                className="relative inline-flex items-center gap-2 rounded-full border border-[color:var(--border)] bg-white px-4 py-3 text-sm font-semibold text-[color:var(--text-h)] shadow-[0_12px_28px_rgba(23,32,51,0.05)] transition-all hover:-translate-y-0.5"
+                className="relative inline-flex items-center gap-1.5 rounded-full border border-[color:var(--border)] bg-white px-3 py-2.5 text-sm font-semibold text-[color:var(--text-h)] shadow-[0_12px_28px_rgba(23,32,51,0.05)] transition-all hover:-translate-y-0.5 md:gap-2 md:px-4 md:py-3"
               >
                 <CartIcon size={18} />
                 <span className="hidden sm:inline">Cart</span>
@@ -168,12 +181,12 @@ export default function MainLayout({ children }: Props) {
                 <div className="relative" ref={profileRef}>
                   <button
                     onClick={() => setProfileOpen((open) => !open)}
-                    className="inline-flex items-center gap-3 rounded-full border border-[color:var(--border)] bg-white px-3 py-2.5 text-left shadow-[0_12px_28px_rgba(23,32,51,0.05)] transition-all hover:-translate-y-0.5"
+                    className="inline-flex items-center gap-2 rounded-full border border-[color:var(--border)] bg-white px-2 py-2 text-left shadow-[0_12px_28px_rgba(23,32,51,0.05)] transition-all hover:-translate-y-0.5 md:gap-3 md:px-3 md:py-2.5"
                   >
-                    <div className="flex size-10 items-center justify-center rounded-full bg-[linear-gradient(135deg,#1f7aff,#5ba0ff)] text-white">
-                      {user.first_name?.[0]?.toUpperCase() ?? <UserIcon size={18} />}
+                    <div className="flex size-8 items-center justify-center rounded-full bg-[linear-gradient(135deg,#1f7aff,#5ba0ff)] text-sm font-bold text-white md:size-10">
+                      {user.first_name?.[0]?.toUpperCase() ?? <UserIcon size={16} />}
                     </div>
-                    <div className="hidden sm:block">
+                    <div className="hidden md:block">
                       <div className="text-sm font-semibold text-[color:var(--text-h)]">
                         {user.first_name || user.email.split("@")[0]}
                       </div>
@@ -181,7 +194,7 @@ export default function MainLayout({ children }: Props) {
                         {user.role}
                       </div>
                     </div>
-                    <ChevronDownIcon size={16} className="hidden text-[color:var(--text-soft)] sm:block" />
+                    <ChevronDownIcon size={16} className="hidden text-[color:var(--text-soft)] md:block" />
                   </button>
 
                   {profileOpen && (
@@ -220,37 +233,65 @@ export default function MainLayout({ children }: Props) {
                 <div className="flex items-center gap-2">
                   <Link
                     to="/login"
-                    className="rounded-full border border-[color:var(--border)] bg-white px-4 py-3 text-sm font-semibold text-[color:var(--text-h)] shadow-[0_12px_28px_rgba(23,32,51,0.05)]"
+                    className="rounded-full border border-[color:var(--border)] bg-white px-3 py-2.5 text-sm font-semibold text-[color:var(--text-h)] shadow-[0_12px_28px_rgba(23,32,51,0.05)] md:px-4 md:py-3"
                   >
                     Sign in
                   </Link>
                   <Link
                     to="/register"
-                    className="rounded-full bg-[var(--accent)] px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(255,106,61,0.24)]"
+                    className="rounded-full bg-[var(--accent)] px-3 py-2.5 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(255,106,61,0.24)] md:px-5 md:py-3"
                   >
-                    Create account
+                    <span className="hidden sm:inline">Create account</span>
+                    <span className="sm:hidden">Join</span>
                   </Link>
                 </div>
               )}
             </div>
           </div>
 
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-            <nav className="flex flex-wrap items-center gap-2">
+          {/* Mobile search row — hidden on md+ */}
+          <form onSubmit={handleSearch} className="mt-2.5 md:hidden">
+            <div className="flex items-center gap-2 rounded-full border border-[color:var(--border)] bg-white p-1.5 shadow-[0_12px_32px_rgba(23,32,51,0.06)]">
+              <div className="flex size-8 items-center justify-center rounded-full bg-[var(--surface-muted)] text-[color:var(--text-soft)]">
+                <SearchIcon size={16} />
+              </div>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search products..."
+                className="h-9 flex-1 border-0 bg-transparent px-1 text-sm text-[color:var(--text-h)] outline-none placeholder:text-[color:var(--text-soft)]"
+              />
+              <button
+                type="submit"
+                className="rounded-full bg-[var(--accent)] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(255,106,61,0.24)] transition-transform hover:-translate-y-0.5"
+              >
+                Search
+              </button>
+            </div>
+          </form>
+
+          {/* Category pills + secondary nav */}
+          <div className="mt-3 flex items-center justify-between gap-3">
+            <nav className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {CATEGORY_PILLS.map((item) => (
                 <Link
                   key={item.to}
                   to={item.to}
-                  className="inline-flex items-center gap-2 rounded-full border border-[color:var(--border)] bg-white/90 px-4 py-2 text-sm font-semibold text-[color:var(--text)] transition-all hover:-translate-y-0.5 hover:border-[color:var(--accent)] hover:text-[color:var(--accent)]"
+                  className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-[color:var(--border)] bg-white/90 px-3 py-1.5 text-xs font-semibold text-[color:var(--text)] transition-all hover:-translate-y-0.5 hover:border-[color:var(--accent)] hover:text-[color:var(--accent)] md:gap-2 md:px-4 md:py-2 md:text-sm"
                 >
-                  <CategoryIcon slug={item.slug} size={16} />
+                  <CategoryIcon slug={item.slug} size={14} />
                   {item.label}
                 </Link>
               ))}
             </nav>
-            <nav className="flex flex-wrap items-center gap-4 text-sm font-semibold text-[color:var(--text-soft)]">
+            <nav className="hidden shrink-0 items-center gap-4 text-sm font-semibold text-[color:var(--text-soft)] md:flex">
               {NAV_LINKS.map((item) => (
-                <Link key={item.to} to={item.to} className="transition-colors hover:text-[color:var(--accent)]">
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className="whitespace-nowrap transition-colors hover:text-[color:var(--accent)]"
+                >
                   {item.label}
                 </Link>
               ))}
@@ -263,8 +304,8 @@ export default function MainLayout({ children }: Props) {
 
       <footer className="mt-20 border-t border-[color:var(--border)] bg-[rgba(255,255,255,0.72)] backdrop-blur-xl">
         <div className="mx-auto max-w-7xl px-4 py-14">
-          <div className="grid gap-8 lg:grid-cols-[1.4fr_repeat(4,1fr)]">
-            <div className="rounded-[1.75rem] bg-[linear-gradient(135deg,#172033,#243457)] p-6 text-white shadow-[0_24px_60px_rgba(23,32,51,0.18)]">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-[1.4fr_repeat(4,1fr)]">
+            <div className="rounded-[1.75rem] bg-[linear-gradient(135deg,#172033,#243457)] p-6 text-white shadow-[0_24px_60px_rgba(23,32,51,0.18)] sm:col-span-2 lg:col-span-1">
               <div className="mb-4 flex items-center gap-3">
                 <div className="flex size-12 items-center justify-center rounded-full bg-white/12">
                   <StoreIcon size={22} />
