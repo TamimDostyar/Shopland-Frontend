@@ -11,7 +11,7 @@ type VerifyEmailResponse = {
   verification_status: VerificationStatus;
 };
 
-type ResendResponse = { detail: string; telegram_link?: string };
+type ResendResponse = { detail: string };
 
 export function verifyEmail(token: string): Promise<VerifyEmailResponse> {
   return http.post<VerifyEmailResponse>("/api/users/verify-email/", { token });

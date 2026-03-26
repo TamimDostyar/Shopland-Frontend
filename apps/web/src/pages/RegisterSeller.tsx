@@ -97,7 +97,7 @@ export default function RegisterSeller() {
       const data = form as SellerRegistrationData;
       const res = await registerSeller(data);
       await setTokensAndUser(res.access, res.refresh, res.user);
-      navigate("/verify-telegram", { state: { phone_number: form.phone_number } });
+      navigate("/profile");
     } catch (err) {
       setApiError(err instanceof ApiError ? err.message : "Registration failed.");
     } finally {

@@ -1,6 +1,6 @@
 /**
  * Platform-agnostic token storage interface.
- * Web/desktop use localStorage by default.
+ * Web/desktop use cookies by default.
  * Mobile provides an AsyncStorage adapter via `configureTokenStorage`.
  */
 
@@ -13,8 +13,29 @@ export type TokenStorage = {
 const ACCESS_KEY = "shopland_access";
 const REFRESH_KEY = "shopland_refresh";
 
-let _storage: TokenStorage | null =
-  typeof localStorage !== "undefined" ? localStorage : null;
+// 7 days — long enough to cover the refresh token lifetime.
+// Actual token expiry is enforced by JWT validation on the backend.
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
+
+const cookieStorage: TokenStorage | null =
+  typeof document !== "undefined"
+    ? {
+        getItem(key: string): string | null {
+          const match = document.cookie.match(
+            new RegExp("(?:^|;\\s*)" + key + "=([^;]*)"),
+          );
+          return match ? decodeURIComponent(match[1]) : null;
+        },
+        setItem(key: string, value: string): void {
+          document.cookie = `${key}=${encodeURIComponent(value)}; max-age=${COOKIE_MAX_AGE}; path=/; SameSite=Strict`;
+        },
+        removeItem(key: string): void {
+          document.cookie = `${key}=; max-age=0; path=/; SameSite=Strict`;
+        },
+      }
+    : null;
+
+let _storage: TokenStorage | null = cookieStorage;
 
 export function configureTokenStorage(storage: TokenStorage): void {
   _storage = storage;
