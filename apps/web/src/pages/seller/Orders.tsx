@@ -83,19 +83,22 @@ export default function SellerOrders() {
         <BackButton to="/seller" label="Dashboard" className="mb-5" />
 
         <h1
-          className="text-2xl font-bold mb-6"
+          className="mb-6 text-2xl font-bold"
           style={{ fontFamily: "var(--heading)", color: "var(--text-h)" }}
         >
           Orders
         </h1>
 
         {/* Tabs */}
-        <div className="flex gap-1 mb-6 p-1 rounded-xl" style={{ background: "var(--surface)" }}>
+        <div
+          className="mb-6 grid grid-cols-2 gap-1 rounded-xl p-1 sm:grid-cols-4"
+          style={{ background: "var(--surface)" }}
+        >
           {TABS.map((t, i) => (
             <button
               key={t.label}
               onClick={() => setTab(i)}
-              className="flex-1 py-2 rounded-lg text-sm font-medium transition-all relative"
+              className="relative min-w-0 rounded-lg px-3 py-2 text-sm font-medium transition-all"
               style={{
                 background: tab === i ? "rgba(255,125,72,0.12)" : "transparent",
                 color: tab === i ? "var(--accent)" : "var(--text-soft)",
@@ -123,7 +126,7 @@ export default function SellerOrders() {
           </div>
         ) : orders.length === 0 ? (
           <div
-            className="rounded-2xl p-12 text-center"
+            className="rounded-2xl p-8 text-center sm:p-12"
             style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
           >
             <p className="text-4xl mb-4">🧾</p>
@@ -136,25 +139,25 @@ export default function SellerOrders() {
               return (
                 <div
                   key={order.id}
-                  className="rounded-2xl p-5"
+                  className="rounded-2xl p-4 sm:p-5"
                   style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
                 >
-                  <div className="flex items-start justify-between gap-4 mb-4">
-                    <div>
+                  <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                    <div className="min-w-0">
                       <Link
                         to={`/seller/orders/${order.order_number}`}
-                        className="font-semibold hover:underline"
+                        className="block break-all font-semibold hover:underline"
                         style={{ color: "var(--text-h)" }}
                       >
                         {order.order_number}
                       </Link>
-                      <p className="text-xs mt-0.5" style={{ color: "var(--text-soft)" }}>
+                      <p className="mt-0.5 text-xs leading-5" style={{ color: "var(--text-soft)" }}>
                         {new Date(order.created_at).toLocaleDateString("en-US", { dateStyle: "medium" })}
                         {" · "}
                         {getDeliveryText(order)}
                       </p>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex flex-wrap items-center gap-2 sm:justify-end">
                       <span
                         className="px-2.5 py-1 rounded-full text-xs font-medium"
                         style={{ background: st.bg, color: st.text }}
@@ -170,7 +173,7 @@ export default function SellerOrders() {
                   {/* Items preview */}
                   <div className="mb-4 space-y-1">
                     {(order.items ?? []).slice(0, 3).map((item) => (
-                      <p key={item.id} className="text-xs" style={{ color: "var(--text-soft)" }}>
+                      <p key={item.id} className="text-xs leading-5 break-words" style={{ color: "var(--text-soft)" }}>
                         • {item.product_name} × {item.quantity} — ؋{parseFloat(item.subtotal).toLocaleString()}
                       </p>
                     ))}
@@ -182,13 +185,13 @@ export default function SellerOrders() {
                   </div>
 
                   {/* Action buttons */}
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
                     {order.status === "pending" && (
                       <>
                         <button
                           onClick={() => acceptMutation.mutate(order.order_number)}
                           disabled={acceptMutation.isPending}
-                          className="px-4 py-2 rounded-xl text-sm font-medium transition-opacity hover:opacity-90 disabled:opacity-50"
+                          className="w-full rounded-xl px-4 py-2 text-sm font-medium transition-opacity hover:opacity-90 disabled:opacity-50 sm:w-auto"
                           style={{ background: "#4ade80", color: "#060816" }}
                         >
                           ✓ Accept
@@ -198,7 +201,7 @@ export default function SellerOrders() {
                             setRejectModal(order.order_number);
                             setRejectReason("");
                           }}
-                          className="px-4 py-2 rounded-xl text-sm font-medium transition-all hover:opacity-90"
+                          className="w-full rounded-xl px-4 py-2 text-sm font-medium transition-all hover:opacity-90 sm:w-auto"
                           style={{ background: "rgba(248,113,113,0.12)", color: "#f87171", border: "1px solid rgba(248,113,113,0.2)" }}
                         >
                           ✗ Reject
@@ -209,7 +212,7 @@ export default function SellerOrders() {
                       <button
                         onClick={() => processingMutation.mutate(order.order_number)}
                         disabled={processingMutation.isPending}
-                        className="px-4 py-2 rounded-xl text-sm font-medium transition-opacity hover:opacity-90 disabled:opacity-50"
+                        className="w-full rounded-xl px-4 py-2 text-sm font-medium transition-opacity hover:opacity-90 disabled:opacity-50 sm:w-auto"
                         style={{ background: "rgba(167,139,250,0.15)", color: "#a78bfa", border: "1px solid rgba(167,139,250,0.3)" }}
                       >
                         📦 Mark as Preparing
@@ -219,7 +222,7 @@ export default function SellerOrders() {
                       <button
                         onClick={() => readyMutation.mutate(order.order_number)}
                         disabled={readyMutation.isPending}
-                        className="px-4 py-2 rounded-xl text-sm font-medium transition-opacity hover:opacity-90 disabled:opacity-50"
+                        className="w-full rounded-xl px-4 py-2 text-sm font-medium transition-opacity hover:opacity-90 disabled:opacity-50 sm:w-auto"
                         style={{ background: "rgba(52,211,153,0.12)", color: "#34d399", border: "1px solid rgba(52,211,153,0.3)" }}
                       >
                         ✅ Mark as Ready for Pickup
@@ -227,7 +230,7 @@ export default function SellerOrders() {
                     )}
                     <Link
                       to={`/seller/orders/${order.order_number}`}
-                      className="px-4 py-2 rounded-xl text-sm transition-all hover:bg-white/5"
+                      className="w-full rounded-xl px-4 py-2 text-center text-sm transition-all hover:bg-white/5 sm:w-auto"
                       style={{ border: "1px solid var(--border)", color: "var(--text)" }}
                     >
                       View Details

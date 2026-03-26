@@ -31,12 +31,12 @@ export default function SellerLayout({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,#f7f8fb,#edf3f9)] text-[color:var(--text)] lg:flex">
       <aside
-        className="flex shrink-0 flex-col border-r border-[color:var(--border)] bg-[rgba(255,255,255,0.85)] px-4 py-5 backdrop-blur-xl lg:w-72"
+        className="flex shrink-0 flex-col border-b border-[color:var(--border)] bg-[rgba(255,255,255,0.85)] px-4 py-4 backdrop-blur-xl lg:w-72 lg:border-b-0 lg:border-r lg:px-4 lg:py-5"
         style={{
           boxShadow: "0 22px 60px rgba(23,32,51,0.08)",
         }}
       >
-        <div className="rounded-[1.75rem] bg-[linear-gradient(135deg,#172033,#243457)] p-5 text-white">
+        <div className="rounded-[1.75rem] bg-[linear-gradient(135deg,#172033,#243457)] p-4 text-white sm:p-5">
           <div className="mb-4 flex items-center gap-3">
             <div className="flex size-11 items-center justify-center rounded-2xl bg-white/10">
               <StoreIcon size={20} />
@@ -55,14 +55,14 @@ export default function SellerLayout({ children }: { children: ReactNode }) {
           </p>
         </div>
 
-        <nav className="flex-1 space-y-2 py-6">
+        <nav className="-mx-1 flex gap-2 overflow-x-auto py-5 lg:mx-0 lg:flex-1 lg:flex-col lg:overflow-visible lg:py-6">
           {NAV_ITEMS.map((item) => (
             <NavLink
               key={item.to}
               to={item.to}
               end={item.exact}
               className={({ isActive }) =>
-                `flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition-all ${
+                `flex min-w-fit items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold whitespace-nowrap transition-all lg:min-w-0 ${
                   isActive
                     ? "bg-[linear-gradient(90deg,rgba(255,106,61,0.14),rgba(31,122,255,0.1))] text-[color:var(--accent)] shadow-[0_12px_30px_rgba(23,32,51,0.05)]"
                     : "text-[color:var(--text)] hover:bg-white hover:text-[color:var(--accent)]"
@@ -105,21 +105,21 @@ export default function SellerLayout({ children }: { children: ReactNode }) {
         </div>
       </aside>
 
-      <main className="flex-1 px-4 py-5 lg:px-8 lg:py-8">
+      <main className="flex-1 px-4 py-4 sm:px-5 sm:py-5 lg:px-8 lg:py-8">
         <div className="mx-auto max-w-6xl">
-          <div className="mb-6 rounded-[1.75rem] border border-[color:var(--border)] bg-white px-6 py-4 shadow-[0_18px_50px_rgba(23,32,51,0.05)]">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div>
+          <div className="mb-6 rounded-[1.75rem] border border-[color:var(--border)] bg-white px-4 py-4 shadow-[0_18px_50px_rgba(23,32,51,0.05)] sm:px-6">
+            <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+              <div className="min-w-0">
                 <div className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--text-soft)]">
                   Seller dashboard
                 </div>
-                <div className="text-xl font-bold text-[color:var(--text-h)]" style={{ fontFamily: "var(--heading)" }}>
+                <div className="text-lg font-bold text-[color:var(--text-h)] sm:text-xl" style={{ fontFamily: "var(--heading)" }}>
                   Run your shop with a cleaner workflow
                 </div>
               </div>
               <Link
                 to="/seller/products/new"
-                className="rounded-full bg-[var(--accent)] px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(255,106,61,0.22)]"
+                className="inline-flex w-full items-center justify-center rounded-full bg-[var(--accent)] px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(255,106,61,0.22)] sm:w-auto"
               >
                 Add product
               </Link>

@@ -19,7 +19,6 @@ type FormState = {
   phone_number: string;
   date_of_birth: string;
   national_id: string;
-  national_id_photo: File | null;
   profile_photo: File | null;
   shop_name: string;
   shop_category: string;
@@ -35,7 +34,7 @@ const INITIAL: FormState = {
   email: "", password: "", confirm_password: "",
   first_name: "", last_name: "",
   phone_number: "", date_of_birth: "",
-  national_id: "", national_id_photo: null, profile_photo: null,
+  national_id: "", profile_photo: null,
   shop_name: "", shop_category: "", business_description: "",
   business_phone: "",
   shop_address_street: "", shop_address_district: "",
@@ -70,7 +69,6 @@ export default function RegisterSeller() {
     }
     if (step === 1) {
       if (!form.national_id) e.national_id = "Required";
-      if (!form.national_id_photo) e.national_id_photo = "Required";
       if (!form.profile_photo) e.profile_photo = "Required";
     }
     if (step === 2) {
@@ -92,7 +90,7 @@ export default function RegisterSeller() {
   }
 
   async function handleSubmit() {
-    if (!form.national_id_photo || !form.profile_photo) return;
+    if (!form.profile_photo) return;
     setApiError("");
     setSubmitting(true);
     try {
@@ -136,8 +134,10 @@ export default function RegisterSeller() {
         {step === 1 && (
           <>
             <Input label="National ID number" value={form.national_id} onChange={(e) => set("national_id", e.target.value)} error={errors.national_id} required />
-            <ImageUpload label="National ID photo" onChange={(f) => set("national_id_photo", f)} error={errors.national_id_photo} />
             <ImageUpload label="Profile photo (selfie)" onChange={(f) => set("profile_photo", f)} error={errors.profile_photo} />
+            <Alert kind="info">
+              National ID photo is no longer required during seller signup.
+            </Alert>
           </>
         )}
 

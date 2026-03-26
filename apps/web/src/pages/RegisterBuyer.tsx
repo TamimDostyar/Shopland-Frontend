@@ -21,7 +21,6 @@ type FormState = {
   date_of_birth: string;
   // Step 2
   national_id: string;
-  national_id_photo: File | null;
   profile_photo: File | null;
   // Step 3 — names match backend serializer
   address_label: string;
@@ -38,7 +37,7 @@ const INITIAL: FormState = {
   email: "", password: "", confirm_password: "",
   first_name: "", last_name: "",
   phone_number: "", date_of_birth: "",
-  national_id: "", national_id_photo: null, profile_photo: null,
+  national_id: "", profile_photo: null,
   address_label: "Home", address_full_name: "", address_phone_number: "",
   address_street: "", address_district: "", address_city: "", address_province: "",
   address_nearby_landmark: "",
@@ -72,7 +71,6 @@ export default function RegisterBuyer() {
     }
     if (step === 1) {
       if (!form.national_id) e.national_id = "Required";
-      if (!form.national_id_photo) e.national_id_photo = "Required";
       if (!form.profile_photo) e.profile_photo = "Required";
     }
     if (step === 2) {
@@ -93,7 +91,7 @@ export default function RegisterBuyer() {
   }
 
   async function handleSubmit() {
-    if (!form.national_id_photo || !form.profile_photo) return;
+    if (!form.profile_photo) return;
     setApiError("");
     setSubmitting(true);
     try {
@@ -137,8 +135,10 @@ export default function RegisterBuyer() {
         {step === 1 && (
           <>
             <Input label="National ID number" value={form.national_id} onChange={(e) => set("national_id", e.target.value)} error={errors.national_id} required />
-            <ImageUpload label="National ID photo" onChange={(f) => set("national_id_photo", f)} error={errors.national_id_photo} />
             <ImageUpload label="Profile photo (selfie)" onChange={(f) => set("profile_photo", f)} error={errors.profile_photo} />
+            <Alert kind="info">
+              National ID photo is no longer required during signup.
+            </Alert>
           </>
         )}
 

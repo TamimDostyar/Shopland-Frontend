@@ -357,7 +357,7 @@ export type BuyerRegistrationData = {
   father_name?: string;
   phone_number: string;
   national_id: string;
-  national_id_photo: File;
+  national_id_photo?: File | null;
   profile_photo: File;
   date_of_birth: string;
   // Address (field names match backend serializer exactly)
@@ -425,7 +425,7 @@ export type SellerRegistrationData = {
   father_name?: string;
   phone_number: string;
   national_id: string;
-  national_id_photo: File;
+  national_id_photo?: File | null;
   profile_photo: File;
   date_of_birth: string;
   // Shop
