@@ -15,6 +15,14 @@ export default function OrderConfirmation() {
     enabled: !!accessToken && !!orderNumber,
   });
 
+  const delivery = order?.delivery_address_display ?? (order?.delivery_address
+    ? {
+        full_name: order.delivery_address.full_name,
+        city: order.delivery_address.city,
+        province: order.delivery_address.province,
+      }
+    : null);
+
   return (
     <MainLayout>
       <div className="max-w-xl mx-auto px-4 py-20 text-center">
@@ -58,7 +66,9 @@ export default function OrderConfirmation() {
               <div>
                 <p className="text-xs mb-1" style={{ color: "var(--text-soft)" }}>Deliver to</p>
                 <p className="text-sm" style={{ color: "var(--text)" }}>
-                  {order.delivery_address.full_name} — {order.delivery_address.city}, {order.delivery_address.province}
+                  {delivery
+                    ? `${delivery.full_name} — ${[delivery.city, delivery.province].filter(Boolean).join(", ")}`
+                    : "Address information unavailable"}
                 </p>
               </div>
             </>

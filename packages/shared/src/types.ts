@@ -155,12 +155,13 @@ export type OrderStatusEntry = {
 
 export type OrderItem = {
   id: string;
+  product?: { id: string; slug: string; primary_image?: string | null } | null;
   product_name: string;
   product_price: string;
   quantity: number;
   subtotal: string;
-  seller: SellerSummary;
-  product?: { id: string; slug: string; primary_image?: string | null } | null;
+  seller?: SellerSummary;
+  seller_shop?: string;
 };
 
 export type Order = {
@@ -171,7 +172,15 @@ export type Order = {
   subtotal: string;
   delivery_fee: string;
   total: string;
-  delivery_address: Address;
+  delivery_address?: Address;
+  delivery_address_display?: {
+    full_name: string;
+    phone?: string;
+    street?: string;
+    district?: string;
+    city?: string;
+    province?: string;
+  };
   delivery_phone: string;
   buyer_notes?: string;
   cancellation_reason?: string;

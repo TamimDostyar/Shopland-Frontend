@@ -83,6 +83,15 @@ export default function OrderDetail() {
   const st = STATUS_COLORS[order.status] ?? STATUS_COLORS.pending;
   const canCancel = ["pending", "accepted", "processing"].includes(order.status);
   const canConfirm = order.status === "delivered";
+  const delivery = order.delivery_address_display ?? (order.delivery_address
+    ? {
+        full_name: order.delivery_address.full_name,
+        street: order.delivery_address.street_address,
+        district: order.delivery_address.district,
+        city: order.delivery_address.city,
+        province: order.delivery_address.province,
+      }
+    : null);
 
   // Find current step index for timeline
   const currentStepIdx = TIMELINE_STEPS.findIndex((s) => s.status === order.status);
@@ -214,7 +223,7 @@ export default function OrderDetail() {
                     {item.product_name}
                   </p>
                   <p className="text-xs mt-0.5" style={{ color: "var(--text-soft)" }}>
-                    {item.seller.shop_name} · x{item.quantity}
+                    {(item.seller?.shop_name ?? item.seller_shop ?? "Seller")} · x{item.quantity}
                   </p>
                 </div>
                 <p className="text-sm font-medium shrink-0" style={{ color: "var(--accent)" }}>
@@ -248,13 +257,13 @@ export default function OrderDetail() {
         >
           <h2 className="font-semibold mb-3" style={{ color: "var(--text-h)" }}>Delivery Address</h2>
           <p className="text-sm" style={{ color: "var(--text)" }}>
-            {order.delivery_address.full_name}
+            {delivery?.full_name ?? "Address unavailable"}
           </p>
           <p className="text-sm" style={{ color: "var(--text-soft)" }}>
-            {order.delivery_address.street_address}, {order.delivery_address.district}
+            {[delivery?.street, delivery?.district].filter(Boolean).join(", ") || "Street unavailable"}
           </p>
           <p className="text-sm" style={{ color: "var(--text-soft)" }}>
-            {order.delivery_address.city}, {order.delivery_address.province}
+            {[delivery?.city, delivery?.province].filter(Boolean).join(", ") || "City unavailable"}
           </p>
           <p className="text-sm mt-1" style={{ color: "var(--text-soft)" }}>
             📞 {order.delivery_phone}

@@ -39,6 +39,17 @@ export default function SellerOrders() {
   const allOrders: Order[] = data?.results ?? [];
   const orders = allOrders.filter(TABS[tab].filter);
 
+  function getDeliveryText(order: Order) {
+    const delivery = order.delivery_address_display ?? (order.delivery_address
+      ? {
+          city: order.delivery_address.city,
+          province: order.delivery_address.province,
+        }
+      : null);
+
+    return [delivery?.city, delivery?.province].filter(Boolean).join(", ") || "Address unavailable";
+  }
+
   async function invalidate() {
     await qc.invalidateQueries({ queryKey: ["seller-orders-all"] });
   }
@@ -140,7 +151,7 @@ export default function SellerOrders() {
                       <p className="text-xs mt-0.5" style={{ color: "var(--text-soft)" }}>
                         {new Date(order.created_at).toLocaleDateString("en-US", { dateStyle: "medium" })}
                         {" · "}
-                        {order.delivery_address.city}, {order.delivery_address.province}
+                        {getDeliveryText(order)}
                       </p>
                     </div>
                     <div className="flex items-center gap-3">

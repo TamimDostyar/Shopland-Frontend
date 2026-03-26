@@ -78,6 +78,15 @@ export default function SellerOrderDetail() {
 
   const st = STATUS_COLORS[order.status] ?? STATUS_COLORS.pending;
   const isAccepted = ["accepted", "processing", "ready_for_pickup", "out_for_delivery"].includes(order.status);
+  const delivery = order.delivery_address_display ?? (order.delivery_address
+    ? {
+        full_name: order.delivery_address.full_name,
+        street: order.delivery_address.street_address,
+        district: order.delivery_address.district,
+        city: order.delivery_address.city,
+        province: order.delivery_address.province,
+      }
+    : null);
 
   return (
     <SellerLayout>
@@ -104,15 +113,15 @@ export default function SellerOrderDetail() {
         <div className="rounded-2xl p-5 mb-5" style={{ background: "var(--surface)", border: "1px solid var(--border)" }}>
           <h2 className="font-semibold mb-3" style={{ color: "var(--text-h)" }}>Buyer Info</h2>
           <p className="text-sm" style={{ color: "var(--text)" }}>
-            Delivering to: {order.delivery_address.city}, {order.delivery_address.province}
+            Delivering to: {[delivery?.city, delivery?.province].filter(Boolean).join(", ") || "Address unavailable"}
           </p>
           {isAccepted && (
             <>
               <p className="text-sm mt-1" style={{ color: "var(--text-soft)" }}>
-                {order.delivery_address.full_name}
+                {delivery?.full_name ?? "Address unavailable"}
               </p>
               <p className="text-sm" style={{ color: "var(--text-soft)" }}>
-                {order.delivery_address.street_address}, {order.delivery_address.district}
+                {[delivery?.street, delivery?.district].filter(Boolean).join(", ") || "Street unavailable"}
               </p>
               <p className="text-sm" style={{ color: "var(--text-soft)" }}>
                 📞 {order.delivery_phone}
