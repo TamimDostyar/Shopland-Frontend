@@ -14,7 +14,7 @@ function buildBuyerForm(data: BuyerRegistrationData): FormData {
   fd.append("last_name", data.last_name);
   fd.append("father_name", data.father_name ?? "");
   fd.append("phone_number", data.phone_number);
-  fd.append("national_id", data.national_id);
+  if (data.national_id) fd.append("national_id", data.national_id);
   if (data.national_id_photo) fd.append("national_id_photo", data.national_id_photo);
   if (data.profile_photo) fd.append("profile_photo", data.profile_photo);
   fd.append("date_of_birth", data.date_of_birth);
@@ -39,7 +39,7 @@ function buildSellerForm(data: SellerRegistrationData): FormData {
   fd.append("last_name", data.last_name);
   fd.append("father_name", data.father_name ?? "");
   fd.append("phone_number", data.phone_number);
-  fd.append("national_id", data.national_id);
+  if (data.national_id) fd.append("national_id", data.national_id);
   if (data.national_id_photo) fd.append("national_id_photo", data.national_id_photo);
   if (data.profile_photo) fd.append("profile_photo", data.profile_photo);
   fd.append("date_of_birth", data.date_of_birth);

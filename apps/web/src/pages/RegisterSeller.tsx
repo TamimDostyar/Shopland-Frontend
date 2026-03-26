@@ -18,7 +18,6 @@ type FormState = {
   last_name: string;
   phone_number: string;
   date_of_birth: string;
-  national_id: string;
   profile_photo: File | null;
   shop_name: string;
   shop_category: string;
@@ -34,7 +33,7 @@ const INITIAL: FormState = {
   email: "", password: "", confirm_password: "",
   first_name: "", last_name: "",
   phone_number: "", date_of_birth: "",
-  national_id: "", profile_photo: null,
+  profile_photo: null,
   shop_name: "", shop_category: "", business_description: "",
   business_phone: "",
   shop_address_street: "", shop_address_district: "",
@@ -68,7 +67,6 @@ export default function RegisterSeller() {
         e.confirm_password = "Passwords do not match";
     }
     if (step === 1) {
-      if (!form.national_id) e.national_id = "Required";
       if (!form.profile_photo) e.profile_photo = "Required";
     }
     if (step === 2) {
@@ -133,10 +131,9 @@ export default function RegisterSeller() {
 
         {step === 1 && (
           <>
-            <Input label="National ID number" value={form.national_id} onChange={(e) => set("national_id", e.target.value)} error={errors.national_id} required />
             <ImageUpload label="Profile photo (selfie)" onChange={(f) => set("profile_photo", f)} error={errors.profile_photo} />
             <Alert kind="info">
-              National ID photo is no longer required during seller signup.
+              National ID information is no longer required during seller signup.
             </Alert>
           </>
         )}

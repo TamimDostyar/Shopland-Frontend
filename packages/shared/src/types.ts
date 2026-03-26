@@ -356,7 +356,7 @@ export type BuyerRegistrationData = {
   last_name: string;
   father_name?: string;
   phone_number: string;
-  national_id: string;
+  national_id?: string;
   national_id_photo?: File | null;
   profile_photo: File;
   date_of_birth: string;
@@ -424,7 +424,7 @@ export type SellerRegistrationData = {
   last_name: string;
   father_name?: string;
   phone_number: string;
-  national_id: string;
+  national_id?: string;
   national_id_photo?: File | null;
   profile_photo: File;
   date_of_birth: string;
