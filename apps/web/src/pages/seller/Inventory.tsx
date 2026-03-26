@@ -10,6 +10,7 @@ import {
 import SellerLayout from "../../components/layout/SellerLayout";
 import BackButton from "../../components/ui/BackButton";
 import { useAuth } from "../../hooks/useAuth";
+import { PackageIcon } from "../../components/ui/icons";
 
 export default function Inventory() {
   const { accessToken } = useAuth();
@@ -89,15 +90,14 @@ export default function Inventory() {
         {isLoading ? (
           <div className="space-y-3">
             {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="h-16 rounded-2xl animate-pulse" style={{ background: "var(--surface)" }} />
+              <div key={i} className="h-16 rounded-2xl animate-pulse" style={{ background: "var(--surface-muted)" }} />
             ))}
           </div>
         ) : items.length === 0 ? (
-          <div
-            className="rounded-2xl p-12 text-center"
-            style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
-          >
-            <p className="text-4xl mb-4">📦</p>
+          <div className="rounded-[2rem] border border-[color:var(--border)] bg-white p-12 text-center shadow-[0_18px_46px_rgba(23,32,51,0.06)]">
+            <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-[var(--surface-accent)] text-[color:var(--accent)]">
+              <PackageIcon size={28} />
+            </div>
             <p style={{ color: "var(--text-soft)" }}>
               {showLowOnly ? "No low stock products." : "No stock data yet."}
             </p>

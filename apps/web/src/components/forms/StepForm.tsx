@@ -27,31 +27,32 @@ export default function StepForm({
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Progress bar */}
-      <div>
-        <div className="flex justify-between mb-2">
+      <div className="rounded-2xl border border-[color:var(--border)] bg-[var(--surface-muted)] p-4">
+        <div className="flex flex-wrap justify-between gap-2 mb-3">
           {steps.map((s, i) => (
             <span
               key={s}
-              className={`text-xs font-medium ${i <= currentStep ? "text-accent" : "text-muted"}`}
+              className={`rounded-full px-3 py-1 text-xs font-semibold ${i <= currentStep ? "bg-[rgba(255,106,61,0.12)] text-accent" : "bg-white text-muted"}`}
             >
               {i + 1}. {s}
             </span>
           ))}
         </div>
-        <div className="h-1 bg-border rounded-full overflow-hidden">
+        <div className="h-2 bg-white rounded-full overflow-hidden">
           <div
-            className="h-full bg-accent rounded-full transition-all duration-300"
-            style={{ width: `${progress}%` }}
+            className="h-full rounded-full transition-all duration-300"
+            style={{ background: "linear-gradient(90deg, var(--accent), var(--accent-secondary))", width: `${progress}%` }}
           />
         </div>
       </div>
 
-      {/* Step content */}
-      <div className="flex flex-col gap-4">{children}</div>
+      <div
+        className="rounded-[1.75rem] border border-[color:var(--border)] bg-white p-5 shadow-[0_20px_50px_rgba(23,32,51,0.06)]"
+      >
+        <div className="flex flex-col gap-4">{children}</div>
+      </div>
 
-      {/* Navigation */}
-      <div className="flex gap-3 pt-2">
+      <div className="flex gap-3 pt-1">
         {currentStep > 0 && (
           <Button variant="ghost" onClick={onBack} className="flex-1">
             Back
@@ -68,7 +69,7 @@ export default function StepForm({
           </Button>
         ) : (
           <Button onClick={onNext} disabled={nextDisabled} className="flex-1">
-            Next
+            Continue
           </Button>
         )}
       </div>

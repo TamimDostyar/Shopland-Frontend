@@ -7,6 +7,16 @@ import MainLayout from "../components/layout/MainLayout";
 import BackButton from "../components/ui/BackButton";
 import { useAuth } from "../hooks/useAuth";
 import { useCart } from "../hooks/useCart";
+import {
+  CartIcon,
+  CheckCircleIcon,
+  ImageIcon,
+  LocationIcon,
+  NoteIcon,
+  PhoneIcon,
+  ShieldIcon,
+  TruckIcon,
+} from "../components/ui/icons";
 
 export default function Checkout() {
   const { accessToken, user } = useAuth();
@@ -62,7 +72,9 @@ export default function Checkout() {
     return (
       <MainLayout>
         <div className="max-w-xl mx-auto px-4 py-20 text-center">
-          <p className="text-5xl mb-4">🔒</p>
+          <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-[var(--surface-accent)] text-[color:var(--accent)]">
+            <ShieldIcon size={28} />
+          </div>
           <h2 className="text-xl font-bold mb-2" style={{ color: "var(--text-h)" }}>
             Verification Required
           </h2>
@@ -76,7 +88,11 @@ export default function Checkout() {
               { label: "ID", ok: vs.id },
             ].map(({ label, ok }) => (
               <div key={label} className="flex items-center gap-2 justify-center">
-                <span style={{ color: ok ? "#4ade80" : "#f87171" }}>{ok ? "✓" : "✗"}</span>
+                {ok ? (
+                  <CheckCircleIcon size={16} style={{ color: "#169b65" }} />
+                ) : (
+                  <ShieldIcon size={16} style={{ color: "#d94b4b" }} />
+                )}
                 <span style={{ color: "var(--text)" }}>{label}</span>
               </div>
             ))}
@@ -97,9 +113,11 @@ export default function Checkout() {
     return (
       <MainLayout>
         <div className="max-w-xl mx-auto px-4 py-20 text-center">
-          <p className="text-5xl mb-4">🛒</p>
+          <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-[var(--surface-accent)] text-[color:var(--accent)]">
+            <CartIcon size={28} />
+          </div>
           <p className="font-medium mb-4" style={{ color: "var(--text-h)" }}>Your cart is empty</p>
-          <Link to="/" style={{ color: "var(--accent)" }}>← Browse Products</Link>
+          <Link to="/" className="text-sm font-semibold" style={{ color: "var(--accent)" }}>Browse Products</Link>
         </div>
       </MainLayout>
     );
@@ -113,22 +131,18 @@ export default function Checkout() {
         <BackButton to="/cart" label="Back to Cart" className="mb-5" />
 
         <h1
-          className="text-2xl font-bold mb-8"
+          className="text-3xl font-bold mb-8"
           style={{ fontFamily: "var(--heading)", color: "var(--text-h)" }}
         >
           Checkout
         </h1>
 
         <div className="grid md:grid-cols-5 gap-8">
-          {/* ─── Left: Form ─────────────────────────────────────────────── */}
           <div className="md:col-span-3 space-y-6">
-            {/* Delivery Address */}
-            <section
-              className="rounded-2xl p-6"
-              style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
-            >
-              <h2 className="font-semibold mb-4" style={{ color: "var(--text-h)" }}>
-                📍 Delivery Address
+            <section className="rounded-[2rem] border border-[color:var(--border)] bg-white p-6 shadow-[0_18px_46px_rgba(23,32,51,0.06)]">
+              <h2 className="font-semibold mb-4 inline-flex items-center gap-2" style={{ color: "var(--text-h)" }}>
+                <LocationIcon size={18} className="text-[color:var(--accent)]" />
+                Delivery Address
               </h2>
               {!addresses || addresses.length === 0 ? (
                 <div>
@@ -137,10 +151,10 @@ export default function Checkout() {
                   </p>
                   <Link
                     to="/profile/addresses"
-                    className="text-sm"
+                    className="text-sm font-semibold"
                     style={{ color: "var(--accent)" }}
                   >
-                    Add an address →
+                    Add an address
                   </Link>
                 </div>
               ) : (
@@ -148,7 +162,7 @@ export default function Checkout() {
                   {addresses.map((addr) => (
                     <label
                       key={addr.id}
-                      className="flex items-start gap-3 cursor-pointer rounded-xl p-3 transition-all"
+                      className="flex items-start gap-3 cursor-pointer rounded-[1.5rem] p-4 transition-all"
                       style={{
                         border: `1px solid ${selectedAddressId === addr.id ? "var(--accent)" : "var(--border)"}`,
                         background:
@@ -193,41 +207,35 @@ export default function Checkout() {
               )}
             </section>
 
-            {/* Delivery Phone */}
-            <section
-              className="rounded-2xl p-6"
-              style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
-            >
-              <h2 className="font-semibold mb-4" style={{ color: "var(--text-h)" }}>
-                📞 Delivery Phone
+            <section className="rounded-[2rem] border border-[color:var(--border)] bg-white p-6 shadow-[0_18px_46px_rgba(23,32,51,0.06)]">
+              <h2 className="font-semibold mb-4 inline-flex items-center gap-2" style={{ color: "var(--text-h)" }}>
+                <PhoneIcon size={18} className="text-[color:var(--accent)]" />
+                Delivery Phone
               </h2>
               <input
                 type="tel"
                 value={deliveryPhone}
                 onChange={(e) => setDeliveryPhone(e.target.value)}
                 placeholder="+93XXXXXXXXX"
-                className="w-full px-4 py-2.5 rounded-xl text-sm outline-none"
+                className="w-full rounded-2xl border border-[color:var(--border)] bg-[var(--surface-muted)] px-4 py-3 text-sm outline-none"
                 style={{
-                  background: "rgba(255,255,255,0.04)",
-                  border: "1px solid var(--border)",
                   color: "var(--text)",
                 }}
               />
             </section>
 
-            {/* Payment */}
-            <section
-              className="rounded-2xl p-6"
-              style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
-            >
-              <h2 className="font-semibold mb-4" style={{ color: "var(--text-h)" }}>
-                💵 Payment Method
+            <section className="rounded-[2rem] border border-[color:var(--border)] bg-white p-6 shadow-[0_18px_46px_rgba(23,32,51,0.06)]">
+              <h2 className="font-semibold mb-4 inline-flex items-center gap-2" style={{ color: "var(--text-h)" }}>
+                <TruckIcon size={18} className="text-[color:var(--accent)]" />
+                Payment Method
               </h2>
               <div
-                className="rounded-xl p-4 flex items-center gap-3"
-                style={{ background: "rgba(74,222,128,0.05)", border: "1px solid rgba(74,222,128,0.2)" }}
+                className="rounded-[1.5rem] p-4 flex items-center gap-3"
+                style={{ background: "var(--success-soft)", border: "1px solid rgba(22,155,101,0.16)" }}
               >
-                <span className="text-2xl">💵</span>
+                <div className="flex size-12 items-center justify-center rounded-2xl bg-white text-[color:var(--success)]">
+                  <TruckIcon size={20} />
+                </div>
                 <div>
                   <p className="font-medium text-sm" style={{ color: "var(--text-h)" }}>
                     Cash on Delivery
@@ -239,35 +247,26 @@ export default function Checkout() {
               </div>
             </section>
 
-            {/* Notes */}
-            <section
-              className="rounded-2xl p-6"
-              style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
-            >
-              <h2 className="font-semibold mb-4" style={{ color: "var(--text-h)" }}>
-                📝 Buyer Notes (optional)
+            <section className="rounded-[2rem] border border-[color:var(--border)] bg-white p-6 shadow-[0_18px_46px_rgba(23,32,51,0.06)]">
+              <h2 className="font-semibold mb-4 inline-flex items-center gap-2" style={{ color: "var(--text-h)" }}>
+                <NoteIcon size={18} className="text-[color:var(--accent)]" />
+                Buyer Notes (optional)
               </h2>
               <textarea
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Any special instructions for the seller or driver?"
                 rows={3}
-                className="w-full px-4 py-3 rounded-xl text-sm outline-none resize-none"
+                className="w-full rounded-2xl border border-[color:var(--border)] bg-[var(--surface-muted)] px-4 py-3 text-sm outline-none resize-none"
                 style={{
-                  background: "rgba(255,255,255,0.04)",
-                  border: "1px solid var(--border)",
                   color: "var(--text)",
                 }}
               />
             </section>
           </div>
 
-          {/* ─── Right: Order Summary ──────────────────────────────────── */}
           <div className="md:col-span-2">
-            <div
-              className="rounded-2xl p-6 sticky top-24 space-y-4"
-              style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
-            >
+            <div className="rounded-[2rem] border border-[color:var(--border)] bg-white p-6 sticky top-24 space-y-4 shadow-[0_18px_46px_rgba(23,32,51,0.06)]">
               <h2 className="font-semibold" style={{ color: "var(--text-h)" }}>
                 Order Summary
               </h2>
@@ -286,7 +285,7 @@ export default function Checkout() {
                           className="w-full h-full object-cover"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-sm">🛍️</div>
+                        <div className="w-full h-full flex items-center justify-center text-[color:var(--text-soft)]"><ImageIcon size={16} /></div>
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -327,8 +326,7 @@ export default function Checkout() {
               <button
                 onClick={() => checkoutMutation.mutate()}
                 disabled={!selectedAddressId || !deliveryPhone || checkoutMutation.isPending}
-                className="w-full py-3 rounded-xl font-semibold text-sm transition-opacity hover:opacity-90 disabled:opacity-40 flex items-center justify-center gap-2"
-                style={{ background: "var(--accent)", color: "white" }}
+                className="w-full py-3.5 rounded-full font-semibold text-sm transition-opacity hover:opacity-90 disabled:opacity-40 flex items-center justify-center gap-2 bg-[var(--accent)] text-white shadow-[0_14px_30px_rgba(255,106,61,0.22)]"
               >
                 {checkoutMutation.isPending && (
                   <span className="size-4 border-2 border-white border-t-transparent rounded-full animate-spin" />

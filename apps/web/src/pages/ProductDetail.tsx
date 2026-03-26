@@ -12,6 +12,14 @@ import ProductCard from "../components/catalog/ProductCard";
 import BackButton from "../components/ui/BackButton";
 import { useAuth } from "../hooks/useAuth";
 import { useCart } from "../hooks/useCart";
+import {
+  ImageIcon,
+  LocationIcon,
+  ShieldIcon,
+  StarIcon,
+  StoreIcon,
+  TruckIcon,
+} from "../components/ui/icons";
 
 export default function ProductDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -57,13 +65,15 @@ export default function ProductDetail() {
   if (error || !product) {
     return (
       <MainLayout>
-        <div className="max-w-3xl mx-auto px-4 py-20 text-center">
-          <p className="text-5xl mb-4">😕</p>
+        <div className="mx-auto max-w-3xl px-4 py-20 text-center">
+          <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-[var(--surface-accent)] text-[color:var(--accent)]">
+            <ImageIcon size={28} />
+          </div>
           <h2 className="text-xl font-bold mb-2" style={{ color: "var(--text-h)" }}>
             Product not found
           </h2>
-          <Link to="/" style={{ color: "var(--accent)" }}>
-            ← Back to home
+          <Link to="/" className="text-sm font-semibold" style={{ color: "var(--accent)" }}>
+            Back to home
           </Link>
         </div>
       </MainLayout>
@@ -79,8 +89,7 @@ export default function ProductDetail() {
 
   return (
     <MainLayout>
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Back + Breadcrumb */}
+      <div className="mx-auto max-w-7xl px-4 py-8">
         <div className="flex items-center gap-4 mb-8">
           <BackButton />
           <nav className="flex items-center gap-2 text-sm" style={{ color: "var(--text-soft)" }}>
@@ -102,12 +111,10 @@ export default function ProductDetail() {
           </nav>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-10 mb-16">
-          {/* ─── Image Gallery ──────────────────────────────────────────── */}
+        <div className="mb-16 grid gap-10 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="space-y-4">
             <div
-              className="aspect-square rounded-2xl overflow-hidden"
-              style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
+              className="aspect-square overflow-hidden rounded-[2rem] border border-[color:var(--border)] bg-[linear-gradient(180deg,#f6f8fc,#eef3f8)] shadow-[0_22px_56px_rgba(23,32,51,0.08)]"
             >
               {allImages[selectedImg] ? (
                 <img
@@ -116,8 +123,10 @@ export default function ProductDetail() {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-6xl opacity-20">
-                  🛍️
+                <div className="flex h-full w-full items-center justify-center text-[color:var(--text-soft)]">
+                  <div className="flex size-20 items-center justify-center rounded-full bg-white/80">
+                    <ImageIcon size={36} />
+                  </div>
                 </div>
               )}
             </div>
@@ -127,7 +136,7 @@ export default function ProductDetail() {
                   <button
                     key={img.id}
                     onClick={() => setSelectedImg(i)}
-                    className="shrink-0 size-16 rounded-xl overflow-hidden transition-all"
+                    className="size-18 shrink-0 overflow-hidden rounded-2xl bg-white transition-all"
                     style={{
                       border: `2px solid ${i === selectedImg ? "var(--accent)" : "var(--border)"}`,
                     }}
@@ -139,22 +148,18 @@ export default function ProductDetail() {
             )}
           </div>
 
-          {/* ─── Product Info ────────────────────────────────────────────── */}
           <div className="space-y-6">
-            {/* Badges */}
             <div className="flex flex-wrap gap-2">
               <span
-                className="px-2.5 py-1 rounded-full text-xs font-medium capitalize"
-                style={{ background: "rgba(255,255,255,0.06)", color: "var(--text-soft)" }}
+                className="rounded-full bg-[var(--surface-muted)] px-3 py-1.5 text-xs font-semibold capitalize text-[color:var(--text-soft)]"
               >
                 {product.condition}
               </span>
               {product.city && (
                 <span
-                  className="px-2.5 py-1 rounded-full text-xs font-medium"
-                  style={{ background: "rgba(255,255,255,0.06)", color: "var(--text-soft)" }}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-[var(--surface-accent)] px-3 py-1.5 text-xs font-semibold text-[color:var(--accent)]"
                 >
-                  📍 {product.city}, {product.province}
+                  <LocationIcon size={13} /> {product.city}, {product.province}
                 </span>
               )}
             </div>
@@ -166,17 +171,15 @@ export default function ProductDetail() {
               {product.name}
             </h1>
 
-            {/* Rating */}
             {(product.average_rating ?? 0) > 0 && (
               <div className="flex items-center gap-2">
-                <div className="flex">
+                <div className="flex gap-1">
                   {[1, 2, 3, 4, 5].map((s) => (
-                    <span
+                    <StarIcon
                       key={s}
-                      style={{ color: s <= Math.round(product.average_rating ?? 0) ? "#facc15" : "rgba(255,255,255,0.2)" }}
-                    >
-                      ★
-                    </span>
+                      size={16}
+                      style={{ color: s <= Math.round(product.average_rating ?? 0) ? "#e9a322" : "rgba(23,32,51,0.18)", fill: s <= Math.round(product.average_rating ?? 0) ? "rgba(233,163,34,0.22)" : "transparent" }}
+                    />
                   ))}
                 </div>
                 <span className="text-sm" style={{ color: "var(--text-soft)" }}>
@@ -185,11 +188,10 @@ export default function ProductDetail() {
               </div>
             )}
 
-            {/* Price */}
             <div className="flex items-end gap-3">
               <span
-                className="text-3xl font-bold"
-                style={{ color: "var(--accent)" }}
+                className="text-4xl font-bold"
+                style={{ color: "var(--text-h)" }}
               >
                 ؋{displayPrice.toLocaleString()}
               </span>
@@ -202,7 +204,7 @@ export default function ProductDetail() {
                     ؋{price.toLocaleString()}
                   </span>
                   <span
-                    className="px-2 py-0.5 rounded-full text-sm font-bold"
+                    className="rounded-full bg-[var(--surface-accent)] px-3 py-1 text-sm font-bold"
                     style={{ background: "rgba(255,125,72,0.15)", color: "var(--accent)" }}
                   >
                     -{Math.round((1 - discountPrice / price) * 100)}% OFF
@@ -211,7 +213,6 @@ export default function ProductDetail() {
               )}
             </div>
 
-            {/* Stock */}
             <div>
               {product.in_stock !== false ? (
                 <span
@@ -222,7 +223,7 @@ export default function ProductDetail() {
                   In Stock
                   {(product.available_quantity ?? 0) > 0 && product.available_quantity! <= 10 && (
                     <span style={{ color: "var(--text-soft)" }}>
-                      — only {product.available_quantity} left
+                      only {product.available_quantity} left
                     </span>
                   )}
                 </span>
@@ -237,19 +238,17 @@ export default function ProductDetail() {
               )}
             </div>
 
-            {/* Quantity + Add to Cart */}
             {product.in_stock !== false && (
               <div className="flex items-center gap-4">
                 <div
-                  className="flex items-center rounded-xl overflow-hidden"
-                  style={{ border: "1px solid var(--border)" }}
+                  className="flex items-center overflow-hidden rounded-full border border-[color:var(--border)] bg-white"
                 >
                   <button
                     onClick={() => setQty((q) => Math.max(1, q - 1))}
-                    className="px-4 py-2.5 text-lg font-medium transition-colors hover:bg-white/5"
+                    className="px-4 py-2.5 text-lg font-medium transition-colors hover:bg-[var(--surface-muted)]"
                     style={{ color: "var(--text)" }}
                   >
-                    −
+                    -
                   </button>
                   <span
                     className="px-4 py-2.5 min-w-[3rem] text-center font-semibold"
@@ -259,7 +258,7 @@ export default function ProductDetail() {
                   </span>
                   <button
                     onClick={() => setQty((q) => Math.min(maxQty, q + 1))}
-                    className="px-4 py-2.5 text-lg font-medium transition-colors hover:bg-white/5"
+                    className="px-4 py-2.5 text-lg font-medium transition-colors hover:bg-[var(--surface-muted)]"
                     style={{ color: "var(--text)" }}
                   >
                     +
@@ -269,8 +268,7 @@ export default function ProductDetail() {
                 <button
                   onClick={() => { void handleAddToCart(); }}
                   disabled={adding}
-                  className="flex-1 py-2.5 rounded-xl font-semibold text-sm transition-opacity hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2"
-                  style={{ background: "var(--accent)", color: "white" }}
+                  className="flex flex-1 items-center justify-center gap-2 rounded-full bg-[var(--accent)] py-3 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(255,106,61,0.22)] transition-opacity hover:opacity-90 disabled:opacity-50"
                 >
                   {adding ? (
                     <span className="size-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -280,16 +278,14 @@ export default function ProductDetail() {
               </div>
             )}
 
-            {/* Seller info */}
             <div
-              className="rounded-2xl p-4 flex items-center gap-4"
-              style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
+              className="flex items-center gap-4 rounded-[1.75rem] border border-[color:var(--border)] bg-white p-5 shadow-[0_18px_46px_rgba(23,32,51,0.06)]"
             >
               <div
-                className="size-12 rounded-xl flex items-center justify-center text-lg font-bold shrink-0"
+                className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-[var(--surface-accent)] text-lg font-bold text-[color:var(--accent)]"
                 style={{ background: "rgba(255,125,72,0.12)", color: "var(--accent)" }}
               >
-                {product.seller.shop_name[0]}
+                <StoreIcon size={20} />
               </div>
               <div className="flex-1 min-w-0">
                 <Link
@@ -301,7 +297,7 @@ export default function ProductDetail() {
                 </Link>
                 {(product.seller.average_rating ?? 0) > 0 && (
                   <p className="text-xs mt-0.5" style={{ color: "var(--text-soft)" }}>
-                    ★ {product.seller.average_rating?.toFixed(1)} ({product.seller.total_reviews} reviews)
+                    Rated {product.seller.average_rating?.toFixed(1)} ({product.seller.total_reviews} reviews)
                   </p>
                 )}
               </div>
@@ -314,23 +310,29 @@ export default function ProductDetail() {
               </Link>
             </div>
 
-            {/* Cash on delivery note */}
             <div
-              className="rounded-xl p-3 flex items-center gap-3"
-              style={{ background: "rgba(74,222,128,0.05)", border: "1px solid rgba(74,222,128,0.15)" }}
+              className="flex items-center gap-3 rounded-[1.5rem] border border-[color:rgba(22,155,101,0.18)] bg-[var(--success-soft)] p-4"
             >
-              <span className="text-xl">💵</span>
+              <div className="flex size-10 items-center justify-center rounded-2xl bg-white text-[color:var(--success)]">
+                <TruckIcon size={18} />
+              </div>
               <p className="text-sm" style={{ color: "var(--text-soft)" }}>
-                Cash on Delivery available — pay when your order arrives.
+                Cash on delivery available. Pay when your order arrives.
               </p>
+            </div>
+
+            <div className="rounded-[1.5rem] border border-[color:var(--border)] bg-[var(--surface-muted)] p-4 text-sm text-[color:var(--text-soft)]">
+              <div className="mb-1 flex items-center gap-2 font-semibold text-[color:var(--text-h)]">
+                <ShieldIcon size={16} className="text-[color:var(--accent)]" />
+                Why this layout works better
+              </div>
+              Cleaner spacing, stronger pricing hierarchy, and easier product scanning across desktop and mobile.
             </div>
           </div>
         </div>
 
-        {/* ─── Description ─────────────────────────────────────────────── */}
         <div
-          className="rounded-2xl p-6 mb-10"
-          style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
+          className="mb-10 rounded-[2rem] border border-[color:var(--border)] bg-white p-6 shadow-[0_18px_46px_rgba(23,32,51,0.06)]"
         >
           <h2
             className="text-lg font-bold mb-4"
@@ -343,16 +345,15 @@ export default function ProductDetail() {
           </p>
         </div>
 
-        {/* ─── Related Products ─────────────────────────────────────────── */}
         {related && related.results.length > 1 && (
           <section>
             <h2
-              className="text-lg font-bold mb-6"
+              className="mb-6 text-2xl font-bold"
               style={{ fontFamily: "var(--heading)", color: "var(--text-h)" }}
             >
               Related Products
             </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
               {related.results
                 .filter((p) => p.slug !== product.slug)
                 .slice(0, 6)
@@ -370,15 +371,15 @@ export default function ProductDetail() {
 function ProductDetailSkeleton() {
   return (
     <MainLayout>
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="mx-auto max-w-7xl px-4 py-8">
         <div className="grid md:grid-cols-2 gap-10">
-          <div className="aspect-square rounded-2xl animate-pulse" style={{ background: "var(--surface)" }} />
+          <div className="aspect-square rounded-[2rem] animate-pulse" style={{ background: "var(--surface-muted)" }} />
           <div className="space-y-4">
             {[80, 60, 40, 70, 50].map((w, i) => (
               <div
                 key={i}
-                className="h-6 rounded-xl animate-pulse"
-                style={{ background: "var(--surface)", width: `${w}%` }}
+                className="h-6 rounded-full animate-pulse"
+                style={{ background: "rgba(23,32,51,0.08)", width: `${w}%` }}
               />
             ))}
           </div>

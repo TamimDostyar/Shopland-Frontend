@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { getApiBaseUrl, type Product } from "@shopland/shared";
+import { ImageIcon, LocationIcon, StarIcon } from "../ui/icons";
 
 interface Props {
   product: Product;
@@ -35,16 +36,14 @@ export default function ProductCard({ product }: Props) {
   return (
     <Link
       to={`/product/${product.slug}`}
-      className="group block rounded-2xl overflow-hidden transition-all hover:-translate-y-0.5 hover:shadow-lg"
+      className="group block overflow-hidden rounded-[1.85rem] border border-[color:var(--border)] bg-white shadow-[0_18px_42px_rgba(23,32,51,0.06)] transition-all hover:-translate-y-1 hover:shadow-[0_26px_64px_rgba(23,32,51,0.11)]"
       style={{
-        background: "var(--surface)",
-        border: "1px solid var(--border)",
+        background:
+          "linear-gradient(180deg, rgba(255,255,255,1), rgba(250,251,255,0.98))",
       }}
     >
-      {/* Image */}
       <div
-        className="relative aspect-square overflow-hidden"
-        style={{ background: "rgba(255,255,255,0.03)" }}
+        className="relative aspect-square overflow-hidden bg-[linear-gradient(180deg,#f4f6fb,#eef3f8)]"
       >
         {img ? (
           <img
@@ -54,15 +53,16 @@ export default function ProductCard({ product }: Props) {
             loading="lazy"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-4xl opacity-20">
-            🛍️
+          <div className="flex h-full w-full items-center justify-center text-[color:var(--text-soft)]">
+            <div className="flex size-16 items-center justify-center rounded-full bg-white/70">
+              <ImageIcon size={28} />
+            </div>
           </div>
         )}
 
         {discountPrice && (
           <div
-            className="absolute top-2 left-2 px-2 py-0.5 rounded-full text-xs font-bold"
-            style={{ background: "var(--accent)", color: "white" }}
+            className="absolute left-3 top-3 rounded-full bg-[var(--accent)] px-3 py-1 text-xs font-bold text-white shadow-[0_10px_24px_rgba(255,106,61,0.24)]"
           >
             -{Math.round((1 - discountPrice / price) * 100)}%
           </div>
@@ -71,11 +71,10 @@ export default function ProductCard({ product }: Props) {
         {product.in_stock === false && (
           <div
             className="absolute inset-0 flex items-center justify-center"
-            style={{ background: "rgba(6,8,22,0.7)" }}
+            style={{ background: "rgba(23,32,51,0.38)" }}
           >
             <span
-              className="px-3 py-1 rounded-full text-xs font-semibold"
-              style={{ background: "rgba(248,113,113,0.2)", color: "#f87171", border: "1px solid rgba(248,113,113,0.3)" }}
+              className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-[color:var(--error)]"
             >
               Out of Stock
             </span>
@@ -83,44 +82,50 @@ export default function ProductCard({ product }: Props) {
         )}
       </div>
 
-      {/* Info */}
-      <div className="p-3">
-        <p
-          className="text-sm font-medium leading-snug line-clamp-2 mb-2"
-          style={{ color: "var(--text-h)" }}
-        >
-          {product.name}
-        </p>
-
-        <div className="flex items-end gap-2 mb-2">
-          <span className="text-base font-bold" style={{ color: "var(--accent)" }}>
-            ؋{displayPrice.toLocaleString()}
+      <div className="p-4">
+        <div className="mb-3 flex items-center justify-between gap-2">
+          <span className="rounded-full bg-[var(--surface-muted)] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--text-soft)]">
+            {product.category?.name ?? "Product"}
           </span>
-          {discountPrice && (
-            <span className="text-xs line-through" style={{ color: "var(--text-soft)" }}>
-              ؋{price.toLocaleString()}
-            </span>
-          )}
-        </div>
-
-        <div className="flex items-center justify-between">
-          <p className="text-xs truncate" style={{ color: "var(--text-soft)" }}>
-            {sellerName}
-          </p>
           {product.city && (
-            <span
-              className="text-xs px-1.5 py-0.5 rounded-full shrink-0"
-              style={{ background: "rgba(255,255,255,0.05)", color: "var(--text-soft)" }}
-            >
+            <span className="inline-flex items-center gap-1 rounded-full bg-[var(--surface-accent)] px-2.5 py-1 text-[11px] font-semibold text-[color:var(--accent)]">
+              <LocationIcon size={12} />
               {product.city}
             </span>
           )}
         </div>
 
+        <p
+          className="mb-2 line-clamp-2 min-h-[2.9rem] text-[15px] font-semibold leading-snug"
+          style={{ color: "var(--text-h)" }}
+        >
+          {product.name}
+        </p>
+
+        <div className="mb-2 flex items-end gap-2">
+          <span className="text-xl font-bold" style={{ color: "var(--text-h)" }}>
+            ؋{displayPrice.toLocaleString()}
+          </span>
+          {discountPrice && (
+            <span className="text-sm line-through" style={{ color: "var(--text-soft)" }}>
+              ؋{price.toLocaleString()}
+            </span>
+          )}
+        </div>
+
+        <div className="flex items-center justify-between gap-3">
+          <p className="truncate text-xs font-medium" style={{ color: "var(--text-soft)" }}>
+            {sellerName}
+          </p>
+          <span className="text-xs font-semibold text-[color:var(--accent)]">
+            View item
+          </span>
+        </div>
+
         {(product.average_rating ?? 0) > 0 && (
-          <div className="flex items-center gap-1 mt-1">
-            <span className="text-xs" style={{ color: "#facc15" }}>★</span>
-            <span className="text-xs" style={{ color: "var(--text-soft)" }}>
+          <div className="mt-3 flex items-center gap-1.5">
+            <StarIcon size={14} style={{ color: "#e9a322", fill: "rgba(233,163,34,0.22)" }} />
+            <span className="text-xs font-medium" style={{ color: "var(--text-soft)" }}>
               {product.average_rating?.toFixed(1)} ({product.review_count})
             </span>
           </div>

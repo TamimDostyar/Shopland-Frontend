@@ -9,19 +9,15 @@ import {
 import MainLayout from "../components/layout/MainLayout";
 import ProductCard from "../components/catalog/ProductCard";
 import SkeletonCard from "../components/catalog/SkeletonCard";
-
-const CATEGORY_ICONS: Record<string, string> = {
-  electronics: "📱",
-  clothing: "👕",
-  food: "🍎",
-  home: "🏠",
-  books: "📚",
-  sports: "⚽",
-  toys: "🧸",
-  beauty: "💄",
-  automotive: "🚗",
-  health: "💊",
-};
+import {
+  ArrowRightIcon,
+  CategoryIcon,
+  CheckCircleIcon,
+  ShieldIcon,
+  SparklesIcon,
+  StoreIcon,
+  TruckIcon,
+} from "../components/ui/icons";
 
 export default function Home() {
   const { data: categoriesData, isLoading: catLoading } = useQuery({
@@ -45,167 +41,183 @@ export default function Home() {
 
   return (
     <MainLayout>
-      {/* ─── Hero ────────────────────────────────────────────────────────── */}
-      <section
-        className="relative overflow-hidden"
-        style={{
-          background: "linear-gradient(135deg, rgba(255,125,72,0.12) 0%, rgba(80,70,255,0.12) 100%)",
-          borderBottom: "1px solid var(--border)",
-        }}
-      >
-        <div className="max-w-7xl mx-auto px-4 py-20 flex flex-col items-center text-center">
-          <span
-            className="inline-block px-3 py-1 rounded-full text-xs font-semibold mb-4"
-            style={{ background: "rgba(255,125,72,0.15)", color: "var(--accent)", border: "1px solid rgba(255,125,72,0.25)" }}
-          >
-            Afghanistan's Online Marketplace
-          </span>
-          <h1
-            className="text-4xl sm:text-5xl font-bold mb-4 leading-tight"
-            style={{ fontFamily: "var(--heading)", color: "var(--text-h)" }}
-          >
-            Buy & Sell with{" "}
-            <span style={{ color: "var(--accent)" }}>Confidence</span>
-          </h1>
-          <p className="text-lg max-w-xl mb-8" style={{ color: "var(--text-soft)" }}>
-            Discover thousands of products from verified sellers across Afghanistan.
-            Fast delivery, cash on delivery, trusted transactions.
-          </p>
-          <div className="flex gap-3 flex-wrap justify-center">
-            <Link
-              to="/search"
-              className="px-6 py-3 rounded-xl font-semibold transition-opacity hover:opacity-90"
-              style={{ background: "var(--accent)", color: "white" }}
-            >
-              Browse Products
-            </Link>
-            <Link
-              to="/register"
-              className="px-6 py-3 rounded-xl font-semibold transition-colors hover:bg-white/5"
-              style={{ border: "1px solid var(--border)", color: "var(--text-h)" }}
-            >
-              Start Selling
-            </Link>
+      <section className="px-4 pt-8">
+        <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+          <div className="relative overflow-hidden rounded-[2rem] bg-[linear-gradient(135deg,#fff4ec,#eef5ff)] px-7 py-8 shadow-[0_30px_80px_rgba(23,32,51,0.1)] sm:px-10 sm:py-12">
+            <div className="absolute -right-16 top-8 h-52 w-52 rounded-full bg-[rgba(31,122,255,0.12)] blur-3xl" />
+            <div className="absolute -bottom-20 left-8 h-48 w-48 rounded-full bg-[rgba(255,106,61,0.16)] blur-3xl" />
+            <div className="relative max-w-2xl">
+              <span className="mb-5 inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--accent)] shadow-[0_14px_36px_rgba(23,32,51,0.06)]">
+                <SparklesIcon size={14} />
+                Reimagined marketplace
+              </span>
+              <h1
+                className="max-w-2xl text-4xl font-bold leading-[1.02] sm:text-6xl"
+                style={{ fontFamily: "var(--heading)", color: "var(--text-h)" }}
+              >
+                Shop cleaner, brighter, and faster across every aisle.
+              </h1>
+              <p className="mt-5 max-w-xl text-lg" style={{ color: "var(--text-soft)" }}>
+                Discover verified sellers, polished storefronts, and a marketplace flow inspired by the clarity of top ecommerce platforms without the clutter.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link
+                  to="/search"
+                  className="inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_16px_34px_rgba(255,106,61,0.26)]"
+                >
+                  Browse products
+                  <ArrowRightIcon size={16} />
+                </Link>
+                <Link
+                  to="/register/seller"
+                  className="inline-flex items-center gap-2 rounded-full border border-[color:var(--border)] bg-white/85 px-6 py-3.5 text-sm font-semibold text-[color:var(--text-h)] shadow-[0_14px_32px_rgba(23,32,51,0.05)]"
+                >
+                  <StoreIcon size={16} />
+                  Start selling
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
+            {[
+              {
+                icon: <ShieldIcon size={18} />,
+                title: "Verified shopping",
+                text: "Identity-backed buyer and seller accounts improve trust across the platform.",
+              },
+              {
+                icon: <TruckIcon size={18} />,
+                title: "Cash on delivery",
+                text: "Simple order flow with delivery-first payment expectations built in.",
+              },
+              {
+                icon: <CheckCircleIcon size={18} />,
+                title: "Modern storefronts",
+                text: "Cleaner product cards, faster scanning, and stronger visual hierarchy throughout.",
+              },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="rounded-[1.75rem] border border-[color:var(--border)] bg-white p-5 shadow-[0_18px_46px_rgba(23,32,51,0.06)]"
+              >
+                <div className="mb-4 flex size-11 items-center justify-center rounded-2xl bg-[var(--surface-accent)] text-[color:var(--accent)]">
+                  {item.icon}
+                </div>
+                <h2 className="text-lg font-semibold text-[color:var(--text-h)]">{item.title}</h2>
+                <p className="mt-2 text-sm text-[color:var(--text-soft)]">{item.text}</p>
+              </div>
+            ))}
           </div>
         </div>
-
-        {/* Decorative orbs */}
-        <div
-          className="absolute -top-20 -right-20 w-80 h-80 rounded-full opacity-10 blur-3xl pointer-events-none"
-          style={{ background: "var(--accent)" }}
-        />
-        <div
-          className="absolute -bottom-20 -left-20 w-80 h-80 rounded-full opacity-10 blur-3xl pointer-events-none"
-          style={{ background: "#5046e5" }}
-        />
       </section>
 
-      {/* ─── Category Bar ─────────────────────────────────────────────────── */}
-      <section className="border-b" style={{ borderColor: "var(--border)" }}>
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide pb-1">
+      <section className="px-4 pt-6">
+        <div className="mx-auto grid max-w-7xl gap-4 rounded-[2rem] border border-[color:var(--border)] bg-white/72 p-4 shadow-[0_18px_46px_rgba(23,32,51,0.05)] backdrop-blur-sm md:grid-cols-3">
+          {[
+            { stat: "20k+", label: "Monthly browsing sessions" },
+            { stat: "Verified", label: "Identity and profile checks" },
+            { stat: "Bright UX", label: "Modern marketplace refresh" },
+          ].map((item) => (
+            <div key={item.label} className="rounded-[1.4rem] bg-[var(--surface-muted)] px-5 py-4">
+              <div className="text-2xl font-bold text-[color:var(--text-h)]" style={{ fontFamily: "var(--heading)" }}>
+                {item.stat}
+              </div>
+              <div className="text-sm text-[color:var(--text-soft)]">{item.label}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="px-4 pt-6">
+        <div className="mx-auto max-w-7xl rounded-[2rem] border border-[color:var(--border)] bg-white p-5 shadow-[0_18px_46px_rgba(23,32,51,0.06)]">
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <div className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--text-soft)]">
+                Shop by department
+              </div>
+              <h2 className="text-2xl font-bold text-[color:var(--text-h)]" style={{ fontFamily: "var(--heading)" }}>
+                Explore the catalog faster
+              </h2>
+            </div>
+            <Link
+              to="/search"
+              className="inline-flex items-center gap-2 rounded-full bg-[var(--surface-accent)] px-4 py-2 text-sm font-semibold text-[color:var(--accent)]"
+            >
+              Browse full catalog
+              <ArrowRightIcon size={15} />
+            </Link>
+          </div>
+          <div className="flex items-center gap-3 overflow-x-auto pb-1">
             {catLoading
               ? Array.from({ length: 6 }).map((_, i) => (
                   <div
                     key={i}
-                    className="h-10 w-28 rounded-xl shrink-0 animate-pulse"
-                    style={{ background: "rgba(255,255,255,0.06)" }}
+                    className="h-14 w-36 shrink-0 animate-pulse rounded-2xl"
+                    style={{ background: "var(--surface-muted)" }}
                   />
                 ))
               : categories
                   .filter((c: Category) => !c.parent)
                   .slice(0, 10)
                   .map((cat: Category) => {
-                    const icon =
-                      CATEGORY_ICONS[cat.slug] ??
-                      CATEGORY_ICONS[cat.name.toLowerCase()] ??
-                      "🛍️";
                     return (
                       <Link
                         key={cat.id}
                         to={`/category/${cat.slug}`}
-                        className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap shrink-0 transition-all hover:-translate-y-0.5"
-                        style={{
-                          background: "var(--surface)",
-                          border: "1px solid var(--border)",
-                          color: "var(--text)",
-                        }}
-                        onMouseEnter={(e) => {
-                          (e.currentTarget as HTMLElement).style.borderColor = "var(--accent)";
-                          (e.currentTarget as HTMLElement).style.color = "var(--accent)";
-                        }}
-                        onMouseLeave={(e) => {
-                          (e.currentTarget as HTMLElement).style.borderColor = "var(--border)";
-                          (e.currentTarget as HTMLElement).style.color = "var(--text)";
-                        }}
+                        className="flex shrink-0 items-center gap-3 rounded-2xl border border-[color:var(--border)] bg-[var(--surface-muted)] px-4 py-3 text-sm font-semibold whitespace-nowrap text-[color:var(--text)] transition-all hover:-translate-y-0.5 hover:border-[color:var(--accent)] hover:bg-white hover:text-[color:var(--accent)]"
                       >
-                        <span>{icon}</span>
+                        <div className="flex size-9 items-center justify-center rounded-xl bg-white text-[color:var(--accent)]">
+                          <CategoryIcon slug={cat.slug} size={18} />
+                        </div>
                         {cat.name}
                       </Link>
                     );
                   })}
-            <Link
-              to="/search"
-              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap shrink-0 transition-all hover:opacity-90"
-              style={{ background: "rgba(255,125,72,0.12)", color: "var(--accent)", border: "1px solid rgba(255,125,72,0.2)" }}
-            >
-              All Categories →
-            </Link>
           </div>
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-4 py-10 space-y-16">
-        {/* ─── Featured Products ─────────────────────────────────────────── */}
+      <div className="mx-auto max-w-7xl space-y-16 px-4 py-10">
         <ProductSection
           title="Popular Products"
-          subtitle="Most viewed items by shoppers"
+          subtitle="High-interest items surfaced in a cleaner, faster shopping grid"
           products={featured}
           loading={featuredLoading}
           seeAllLink="/search?sort=most_viewed"
         />
 
-        {/* ─── Newest Arrivals ────────────────────────────────────────────── */}
         <ProductSection
           title="Just Added"
-          subtitle="Fresh listings from our sellers"
+          subtitle="Fresh listings from shops that recently updated their catalog"
           products={newest}
           loading={newestLoading}
           seeAllLink="/search?sort=newest"
         />
 
-        {/* ─── Browse Categories ──────────────────────────────────────────── */}
         {!catLoading && categories.length > 0 && (
           <section>
-            <SectionHeader title="Browse by Category" />
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            <SectionHeader title="Browse by Category" subtitle="Jump directly into the departments shoppers use most." />
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
               {categories
                 .filter((c: Category) => !c.parent)
                 .slice(0, 12)
                 .map((cat: Category) => {
-                  const icon =
-                    CATEGORY_ICONS[cat.slug] ??
-                    CATEGORY_ICONS[cat.name.toLowerCase()] ??
-                    "🛍️";
                   return (
                     <Link
                       key={cat.id}
                       to={`/category/${cat.slug}`}
-                      className="flex flex-col items-center gap-3 p-5 rounded-2xl text-center transition-all hover:-translate-y-1 hover:shadow-lg group"
-                      style={{
-                        background: "var(--surface)",
-                        border: "1px solid var(--border)",
-                      }}
-                      onMouseEnter={(e) => {
-                        (e.currentTarget as HTMLElement).style.borderColor = "var(--accent)";
-                      }}
-                      onMouseLeave={(e) => {
-                        (e.currentTarget as HTMLElement).style.borderColor = "var(--border)";
-                      }}
+                      className="group flex flex-col items-start gap-4 rounded-[1.75rem] border border-[color:var(--border)] bg-white p-5 text-left shadow-[0_16px_40px_rgba(23,32,51,0.05)] transition-all hover:-translate-y-1 hover:border-[color:var(--accent)]"
                     >
-                      <span className="text-3xl">{icon}</span>
-                      <span className="text-sm font-medium" style={{ color: "var(--text-h)" }}>
+                      <div className="flex size-12 items-center justify-center rounded-2xl bg-[var(--surface-accent)] text-[color:var(--accent)]">
+                        <CategoryIcon slug={cat.slug} size={22} />
+                      </div>
+                      <span className="text-sm font-semibold" style={{ color: "var(--text-h)" }}>
                         {cat.name}
+                      </span>
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-[color:var(--accent)]">
+                        Shop now
+                        <ArrowRightIcon size={13} />
                       </span>
                     </Link>
                   );
@@ -231,13 +243,13 @@ function SectionHeader({
     <div className="flex items-end justify-between mb-6">
       <div>
         <h2
-          className="text-xl font-bold"
+          className="text-2xl font-bold"
           style={{ fontFamily: "var(--heading)", color: "var(--text-h)" }}
         >
           {title}
         </h2>
         {subtitle && (
-          <p className="text-sm mt-0.5" style={{ color: "var(--text-soft)" }}>
+          <p className="mt-1 text-sm" style={{ color: "var(--text-soft)" }}>
             {subtitle}
           </p>
         )}
@@ -245,10 +257,11 @@ function SectionHeader({
       {seeAllLink && (
         <Link
           to={seeAllLink}
-          className="text-sm font-medium transition-colors hover:opacity-80"
+          className="inline-flex items-center gap-2 rounded-full bg-[var(--surface-accent)] px-4 py-2 text-sm font-semibold transition-colors hover:opacity-90"
           style={{ color: "var(--accent)" }}
         >
-          See all →
+          See all
+          <ArrowRightIcon size={14} />
         </Link>
       )}
     </div>
@@ -279,13 +292,12 @@ function ProductSection({
         </div>
       ) : products.length === 0 ? (
         <div
-          className="rounded-2xl p-10 text-center"
-          style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
+          className="rounded-[1.75rem] border border-[color:var(--border)] bg-white p-10 text-center shadow-[0_18px_46px_rgba(23,32,51,0.05)]"
         >
           <p style={{ color: "var(--text-soft)" }}>No products available yet.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
           {products.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}

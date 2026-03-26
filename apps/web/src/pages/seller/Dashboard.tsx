@@ -8,6 +8,14 @@ import {
 } from "@shopland/shared";
 import SellerLayout from "../../components/layout/SellerLayout";
 import { useAuth } from "../../hooks/useAuth";
+import {
+  AlertTriangleIcon,
+  CheckCircleIcon,
+  ClockIcon,
+  DashboardIcon,
+  TruckIcon,
+  WalletIcon,
+} from "../../components/ui/icons";
 
 export default function SellerDashboard() {
   const { accessToken, user } = useAuth();
@@ -54,10 +62,10 @@ export default function SellerDashboard() {
       <div className="max-w-4xl">
         <div className="mb-8">
           <h1
-            className="text-2xl font-bold"
+            className="text-3xl font-bold"
             style={{ fontFamily: "var(--heading)", color: "var(--text-h)" }}
           >
-            Welcome back, {user?.first_name} 👋
+            Welcome back, {user?.first_name}
           </h1>
           <p className="text-sm mt-1" style={{ color: "var(--text-soft)" }}>
             Here&apos;s what&apos;s happening with your store today.
@@ -70,7 +78,7 @@ export default function SellerDashboard() {
             {
               label: "New Orders",
               value: pendingCount,
-              icon: "🔔",
+              icon: ClockIcon,
               color: pendingCount > 0 ? "#fbbf24" : undefined,
               link: "/seller/orders",
               urgent: pendingCount > 0,
@@ -78,46 +86,47 @@ export default function SellerDashboard() {
             {
               label: "Active Orders",
               value: activeCount,
-              icon: "🚚",
+              icon: TruckIcon,
               link: "/seller/orders",
             },
             {
               label: "Low Stock Alerts",
               value: lowStockCount,
-              icon: "⚠️",
+              icon: AlertTriangleIcon,
               color: lowStockCount > 0 ? "#f87171" : undefined,
               link: "/seller/inventory",
             },
             {
               label: "Pending Approval",
               value: pendingProductsCount,
-              icon: "🕐",
+              icon: DashboardIcon,
               link: "/seller/products",
             },
             {
               label: "This Month (Net)",
               value: earnings?.total_net ? `؋${parseFloat(earnings.total_net).toLocaleString()}` : "—",
-              icon: "💰",
+              icon: WalletIcon,
               link: "/seller/earnings",
             },
             {
               label: "Pending Settlement",
               value: earnings?.total_pending ? `؋${parseFloat(earnings.total_pending).toLocaleString()}` : "—",
-              icon: "⏳",
+              icon: CheckCircleIcon,
               link: "/seller/earnings",
             },
           ].map((stat) => (
             <Link
               key={stat.label}
               to={stat.link}
-              className="rounded-2xl p-5 block transition-all hover:-translate-y-0.5 hover:shadow-lg"
+              className="rounded-[1.75rem] border border-[color:var(--border)] bg-white p-5 block transition-all hover:-translate-y-0.5 hover:shadow-[0_22px_56px_rgba(23,32,51,0.08)]"
               style={{
-                background: "var(--surface)",
-                border: `1px solid ${stat.urgent ? "rgba(251,191,36,0.3)" : "var(--border)"}`,
+                borderColor: stat.urgent ? "rgba(251,191,36,0.3)" : "var(--border)",
               }}
             >
               <div className="flex items-start justify-between mb-3">
-                <span className="text-2xl">{stat.icon}</span>
+                <div className="flex size-12 items-center justify-center rounded-2xl bg-[var(--surface-accent)] text-[color:var(--accent)]">
+                  <stat.icon size={20} />
+                </div>
                 {stat.urgent && (
                   <span
                     className="size-2 rounded-full animate-pulse"
@@ -143,8 +152,7 @@ export default function SellerDashboard() {
 
         {/* Quick Actions */}
         <div
-          className="rounded-2xl p-6"
-          style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
+          className="rounded-[1.75rem] border border-[color:var(--border)] bg-white p-6 shadow-[0_18px_46px_rgba(23,32,51,0.06)]"
         >
           <h2 className="font-semibold mb-4" style={{ color: "var(--text-h)" }}>
             Quick Actions

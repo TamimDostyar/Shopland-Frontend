@@ -21,9 +21,9 @@ export default function Input({ label, error, className = "", id, ...rest }: Pro
       <input
         id={inputId}
         {...rest}
-        className={`w-full px-4 py-2.5 rounded-xl bg-surface border ${
+        className={`w-full px-4 py-3 rounded-2xl bg-white border shadow-[inset_0_1px_0_rgba(255,255,255,0.6)] ${
           error ? "border-error" : "border-border"
-        } text-text placeholder:text-muted focus:outline-none focus:border-accent transition-colors ${className}`}
+        } text-text placeholder:text-muted focus:outline-none focus:border-accent focus:ring-4 focus:ring-[rgba(255,106,61,0.12)] transition-all ${className}`}
       />
       {error && <p className="text-xs text-error">{error}</p>}
     </div>

@@ -14,6 +14,7 @@ import MainLayout from "../components/layout/MainLayout";
 import BackButton from "../components/ui/BackButton";
 import { useAuth } from "../hooks/useAuth";
 import { useCart } from "../hooks/useCart";
+import { AlertTriangleIcon, CartIcon, ImageIcon, TruckIcon } from "../components/ui/icons";
 
 export default function Cart() {
   const { accessToken, isAuthenticated } = useAuth();
@@ -61,7 +62,9 @@ export default function Cart() {
     return (
       <MainLayout>
         <div className="max-w-lg mx-auto px-4 py-20 text-center">
-          <p className="text-5xl mb-4">🛒</p>
+          <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-[var(--surface-accent)] text-[color:var(--accent)]">
+            <CartIcon size={28} />
+          </div>
           <h2 className="text-xl font-bold mb-2" style={{ color: "var(--text-h)" }}>
             Sign in to view your cart
           </h2>
@@ -87,8 +90,8 @@ export default function Cart() {
           {Array.from({ length: 3 }).map((_, i) => (
             <div
               key={i}
-              className="h-28 rounded-2xl mb-4 animate-pulse"
-              style={{ background: "var(--surface)" }}
+              className="h-28 rounded-[1.75rem] mb-4 animate-pulse"
+              style={{ background: "var(--surface-muted)" }}
             />
           ))}
         </div>
@@ -101,7 +104,7 @@ export default function Cart() {
 
   return (
     <MainLayout>
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="max-w-5xl mx-auto px-4 py-8">
         <BackButton to="/" label="Continue Shopping" className="mb-5" />
 
         <h1
@@ -117,11 +120,10 @@ export default function Cart() {
         </h1>
 
         {isEmpty ? (
-          <div
-            className="rounded-2xl p-16 text-center"
-            style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
-          >
-            <p className="text-5xl mb-4">🛒</p>
+          <div className="rounded-[2rem] border border-[color:var(--border)] bg-white p-16 text-center shadow-[0_18px_46px_rgba(23,32,51,0.06)]">
+            <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-[var(--surface-accent)] text-[color:var(--accent)]">
+              <CartIcon size={28} />
+            </div>
             <p className="font-medium mb-2" style={{ color: "var(--text-h)" }}>
               Your cart is empty
             </p>
@@ -156,15 +158,13 @@ export default function Cart() {
               {!clearConfirm ? (
                 <button
                   onClick={() => setclearConfirm(true)}
-                  className="text-sm mt-2 transition-colors hover:opacity-80"
-                  style={{ color: "#f87171" }}
+                  className="mt-2 rounded-full bg-[var(--danger-soft)] px-4 py-2 text-sm font-semibold text-[color:var(--error)] transition-colors hover:bg-[#fde3e3]"
                 >
-                  🗑 Clear Cart
+                  Clear cart
                 </button>
               ) : (
                 <div
-                  className="rounded-xl p-4 flex items-center gap-4"
-                  style={{ background: "rgba(248,113,113,0.06)", border: "1px solid rgba(248,113,113,0.2)" }}
+                  className="rounded-[1.5rem] p-4 flex items-center gap-4 border border-[color:rgba(217,75,75,0.18)] bg-[var(--danger-soft)]"
                 >
                   <p className="text-sm flex-1" style={{ color: "var(--text)" }}>
                     Are you sure you want to clear the cart?
@@ -189,10 +189,7 @@ export default function Cart() {
             </div>
 
             {/* Summary */}
-            <div
-              className="rounded-2xl p-6 h-fit sticky top-24 space-y-4"
-              style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
-            >
+            <div className="rounded-[2rem] border border-[color:var(--border)] bg-white p-6 h-fit sticky top-24 space-y-4 shadow-[0_18px_46px_rgba(23,32,51,0.06)]">
               <h2 className="font-semibold" style={{ color: "var(--text-h)" }}>
                 Order Summary
               </h2>
@@ -220,17 +217,19 @@ export default function Cart() {
 
               <button
                 onClick={() => navigate("/checkout")}
-                className="w-full py-3 rounded-xl font-semibold text-sm transition-opacity hover:opacity-90"
-                style={{ background: "var(--accent)", color: "white" }}
+                className="w-full rounded-full bg-[var(--accent)] py-3.5 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(255,106,61,0.22)] transition-opacity hover:opacity-90"
               >
                 Proceed to Checkout
               </button>
 
               <div
-                className="rounded-xl p-3 text-center text-xs"
-                style={{ background: "rgba(74,222,128,0.05)", color: "var(--text-soft)" }}
+                className="rounded-[1.5rem] p-4 text-xs flex items-center gap-3"
+                style={{ background: "var(--success-soft)", color: "var(--text-soft)" }}
               >
-                💵 Cash on Delivery — pay when your order arrives
+                <div className="flex size-10 items-center justify-center rounded-2xl bg-white text-[color:var(--success)]">
+                  <TruckIcon size={18} />
+                </div>
+                Cash on delivery available at checkout.
               </div>
             </div>
           </div>
@@ -257,14 +256,13 @@ function CartItemRow({
 
   return (
     <div
-      className="rounded-2xl p-4 flex gap-4"
-      style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
+      className="rounded-[1.75rem] p-4 flex gap-4 border border-[color:var(--border)] bg-white shadow-[0_16px_40px_rgba(23,32,51,0.05)]"
     >
       {/* Image */}
       <Link to={`/product/${item.product.slug}`} className="shrink-0">
         <div
-          className="size-20 rounded-xl overflow-hidden"
-          style={{ background: "rgba(255,255,255,0.04)" }}
+          className="size-20 rounded-2xl overflow-hidden"
+          style={{ background: "var(--surface-muted)" }}
         >
           {item.product.primary_image ? (
             <img
@@ -273,7 +271,7 @@ function CartItemRow({
               className="w-full h-full object-cover"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-2xl opacity-30">🛍️</div>
+            <div className="w-full h-full flex items-center justify-center text-[color:var(--text-soft)]"><ImageIcon size={22} /></div>
           )}
         </div>
       </Link>
@@ -291,16 +289,16 @@ function CartItemRow({
           {item.product.seller.shop_name}
         </p>
         {!item.product.in_stock && (
-          <p className="text-xs mt-1" style={{ color: "#f87171" }}>
-            ⚠ Item is out of stock
+          <p className="text-xs mt-1 inline-flex items-center gap-1.5 font-semibold" style={{ color: "#f87171" }}>
+            <AlertTriangleIcon size={14} />
+            Item is out of stock
           </p>
         )}
 
         <div className="flex items-center gap-3 mt-3">
           {/* Qty control */}
           <div
-            className="flex items-center rounded-lg overflow-hidden"
-            style={{ border: "1px solid var(--border)" }}
+            className="flex items-center rounded-full overflow-hidden border border-[color:var(--border)] bg-[var(--surface-muted)]"
           >
             <button
               disabled={disabled || item.quantity <= 1}
@@ -308,7 +306,7 @@ function CartItemRow({
               className="px-3 py-1 text-sm disabled:opacity-30"
               style={{ color: "var(--text)" }}
             >
-              −
+              -
             </button>
             <span className="px-3 py-1 text-sm font-medium" style={{ color: "var(--text-h)" }}>
               {item.quantity}
@@ -332,8 +330,7 @@ function CartItemRow({
           {!showRemoveConfirm ? (
             <button
               onClick={() => setShowRemoveConfirm(true)}
-              className="ml-auto text-xs transition-colors hover:opacity-80"
-              style={{ color: "#f87171" }}
+              className="ml-auto rounded-full bg-[var(--danger-soft)] px-3 py-1.5 text-xs font-semibold text-[color:var(--error)] transition-colors hover:bg-[#fde3e3]"
             >
               Remove
             </button>

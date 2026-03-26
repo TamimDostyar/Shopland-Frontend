@@ -61,6 +61,10 @@ export default function Login() {
           Sign in
         </Button>
 
+        <div className="rounded-[1.4rem] bg-[var(--surface-muted)] px-4 py-3 text-xs text-[color:var(--text-soft)]">
+          Use the same account across shopping, seller tools, and admin access when permitted.
+        </div>
+
         <p className="text-center text-sm text-muted">
           No account?{" "}
           <Link to="/register" className="text-accent hover:underline">

@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { ArrowLeftIcon } from "./icons";
 
 interface Props {
   to?: string;
@@ -17,24 +18,9 @@ export default function BackButton({ to, label = "Back", className = "" }: Props
   return (
     <button
       onClick={handleClick}
-      className={`inline-flex items-center gap-1.5 text-sm font-medium transition-all hover:-translate-x-0.5 ${className}`}
-      style={{ color: "var(--text-soft)" }}
-      onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--accent)")}
-      onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text-soft)")}
+      className={`inline-flex items-center gap-2 rounded-full border border-[color:var(--border)] bg-white/80 px-4 py-2 text-sm font-semibold text-[color:var(--text-soft)] shadow-[0_8px_24px_rgba(23,32,51,0.05)] transition-all hover:-translate-x-0.5 hover:border-[color:var(--accent)] hover:text-[color:var(--accent)] ${className}`}
     >
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M19 12H5" />
-        <path d="m12 5-7 7 7 7" />
-      </svg>
+      <ArrowLeftIcon size={16} />
       {label}
     </button>
   );

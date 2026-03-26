@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { CameraIcon } from "../ui/icons";
 
 interface Props {
   label: string;
@@ -35,22 +36,22 @@ export default function ImageUpload({
       <button
         type="button"
         onClick={() => inputRef.current?.click()}
-        className={`flex items-center gap-3 px-4 py-3 rounded-xl border ${
+        className={`flex items-center gap-3 px-4 py-3 rounded-2xl border bg-white shadow-[0_12px_32px_rgba(23,32,51,0.05)] ${
           error ? "border-error" : "border-border"
-        } bg-surface hover:border-accent transition-colors text-left`}
+        } hover:border-accent transition-colors text-left`}
       >
         {preview ? (
           <img
             src={preview}
             alt="preview"
-            className="size-10 rounded-lg object-cover shrink-0"
+            className="size-11 rounded-xl object-cover shrink-0"
           />
         ) : (
-          <div className="size-10 rounded-lg bg-border flex items-center justify-center shrink-0">
-            <span className="text-muted text-xl">+</span>
+          <div className="size-11 rounded-xl bg-[var(--surface-muted)] text-[color:var(--accent)] flex items-center justify-center shrink-0">
+            <CameraIcon size={18} />
           </div>
         )}
-        <span className="text-sm text-muted truncate">
+        <span className="text-sm text-muted truncate font-medium">
           {fileName ?? "Choose file…"}
         </span>
       </button>

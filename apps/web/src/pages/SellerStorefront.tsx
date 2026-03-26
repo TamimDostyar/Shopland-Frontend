@@ -6,6 +6,7 @@ import MainLayout from "../components/layout/MainLayout";
 import ProductCard from "../components/catalog/ProductCard";
 import SkeletonCard from "../components/catalog/SkeletonCard";
 import BackButton from "../components/ui/BackButton";
+import { ArrowLeftIcon, ArrowRightIcon, StarIcon, StoreIcon } from "../components/ui/icons";
 
 export default function SellerStorefront() {
   const { slug } = useParams<{ slug: string }>();
@@ -32,15 +33,11 @@ export default function SellerStorefront() {
         <BackButton className="mb-6" />
 
         {/* Shop header */}
-        <div
-          className="rounded-2xl p-6 mb-8 flex items-center gap-6"
-          style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
-        >
+        <div className="rounded-[2rem] border border-[color:var(--border)] bg-white p-6 mb-8 flex items-center gap-6 shadow-[0_18px_46px_rgba(23,32,51,0.06)]">
           <div
-            className="size-16 rounded-2xl flex items-center justify-center text-2xl font-bold shrink-0"
-            style={{ background: "rgba(255,125,72,0.12)", color: "var(--accent)" }}
+            className="size-16 rounded-2xl flex items-center justify-center text-2xl font-bold shrink-0 bg-[var(--surface-accent)] text-[color:var(--accent)]"
           >
-            {seller?.shop_name?.[0] ?? slug?.[0]?.toUpperCase()}
+            <StoreIcon size={26} />
           </div>
           <div>
             <h1
@@ -51,7 +48,7 @@ export default function SellerStorefront() {
             </h1>
             {(seller?.average_rating ?? 0) > 0 && (
               <div className="flex items-center gap-1 mt-1">
-                <span style={{ color: "#facc15" }}>★</span>
+                <StarIcon size={14} style={{ color: "#e9a322", fill: "rgba(233,163,34,0.2)" }} />
                 <span className="text-sm" style={{ color: "var(--text-soft)" }}>
                   {seller?.average_rating?.toFixed(1)} ({seller?.total_reviews} reviews)
                 </span>
@@ -71,10 +68,8 @@ export default function SellerStorefront() {
           <select
             value={sort}
             onChange={(e) => { setSort(e.target.value); setPage(1); }}
-            className="px-3 py-2 rounded-xl text-sm outline-none"
+            className="px-4 py-3 rounded-full border border-[color:var(--border)] bg-[var(--surface-muted)] text-sm font-semibold outline-none"
             style={{
-              background: "var(--surface)",
-              border: "1px solid var(--border)",
               color: "var(--text)",
             }}
           >
@@ -90,11 +85,14 @@ export default function SellerStorefront() {
             {Array.from({ length: 8 }).map((_, i) => <SkeletonCard key={i} />)}
           </div>
         ) : products.length === 0 ? (
-          <div className="text-center py-16">
-            <p className="text-4xl mb-4">🏪</p>
+          <div className="rounded-[2rem] border border-[color:var(--border)] bg-white py-16 text-center shadow-[0_18px_46px_rgba(23,32,51,0.06)]">
+            <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-[var(--surface-accent)] text-[color:var(--accent)]">
+              <StoreIcon size={28} />
+            </div>
             <p style={{ color: "var(--text-soft)" }}>No products from this seller yet.</p>
-            <Link to="/" className="text-sm mt-2 block" style={{ color: "var(--accent)" }}>
-              ← Back to home
+            <Link to="/" className="mt-3 inline-flex items-center gap-2 text-sm font-semibold" style={{ color: "var(--accent)" }}>
+              <ArrowLeftIcon size={15} />
+              Back to home
             </Link>
           </div>
         ) : (
@@ -107,10 +105,11 @@ export default function SellerStorefront() {
                 <button
                   disabled={page === 1}
                   onClick={() => setPage((p) => p - 1)}
-                  className="px-4 py-2 rounded-xl text-sm disabled:opacity-30"
-                  style={{ border: "1px solid var(--border)", color: "var(--text)" }}
+                  className="inline-flex items-center gap-2 rounded-full border border-[color:var(--border)] bg-white px-4 py-2.5 text-sm font-semibold disabled:opacity-30"
+                  style={{ color: "var(--text)" }}
                 >
-                  ← Prev
+                  <ArrowLeftIcon size={15} />
+                  Prev
                 </button>
                 <span className="text-sm" style={{ color: "var(--text-soft)" }}>
                   Page {page} of {totalPages}
@@ -118,10 +117,11 @@ export default function SellerStorefront() {
                 <button
                   disabled={page === totalPages}
                   onClick={() => setPage((p) => p + 1)}
-                  className="px-4 py-2 rounded-xl text-sm disabled:opacity-30"
-                  style={{ border: "1px solid var(--border)", color: "var(--text)" }}
+                  className="inline-flex items-center gap-2 rounded-full border border-[color:var(--border)] bg-white px-4 py-2.5 text-sm font-semibold disabled:opacity-30"
+                  style={{ color: "var(--text)" }}
                 >
-                  Next →
+                  Next
+                  <ArrowRightIcon size={15} />
                 </button>
               </div>
             )}

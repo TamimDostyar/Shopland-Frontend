@@ -10,6 +10,7 @@ import {
 import SellerLayout from "../../components/layout/SellerLayout";
 import BackButton from "../../components/ui/BackButton";
 import { useAuth } from "../../hooks/useAuth";
+import { ImageIcon, PackageIcon } from "../../components/ui/icons";
 
 const STATUS_FILTERS = ["All", "Active", "Pending", "Rejected", "Inactive"];
 
@@ -69,10 +70,9 @@ export default function SellerProducts() {
           </h1>
           <Link
             to="/seller/products/new"
-            className="px-4 py-2 rounded-xl text-sm font-medium transition-opacity hover:opacity-90"
-            style={{ background: "var(--accent)", color: "white" }}
+            className="px-5 py-3 rounded-full text-sm font-semibold transition-opacity hover:opacity-90 bg-[var(--accent)] text-white shadow-[0_12px_28px_rgba(255,106,61,0.22)]"
           >
-            + Add Product
+            Add Product
           </Link>
         </div>
 
@@ -82,9 +82,9 @@ export default function SellerProducts() {
             <button
               key={f}
               onClick={() => setStatusFilter(f)}
-              className="px-3 py-1.5 rounded-xl text-xs font-medium transition-all"
+              className="px-4 py-2 rounded-full text-xs font-semibold transition-all"
               style={{
-                background: statusFilter === f ? "rgba(255,125,72,0.12)" : "var(--surface)",
+                background: statusFilter === f ? "rgba(255,125,72,0.12)" : "white",
                 border: `1px solid ${statusFilter === f ? "rgba(255,125,72,0.3)" : "var(--border)"}`,
                 color: statusFilter === f ? "var(--accent)" : "var(--text-soft)",
               }}
@@ -101,11 +101,10 @@ export default function SellerProducts() {
             ))}
           </div>
         ) : products.length === 0 ? (
-          <div
-            className="rounded-2xl p-16 text-center"
-            style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
-          >
-            <p className="text-4xl mb-4">🛍️</p>
+          <div className="rounded-[2rem] border border-[color:var(--border)] bg-white p-16 text-center shadow-[0_18px_46px_rgba(23,32,51,0.06)]">
+            <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-[var(--surface-accent)] text-[color:var(--accent)]">
+              <PackageIcon size={28} />
+            </div>
             <p className="font-medium mb-2" style={{ color: "var(--text-h)" }}>
               No products yet
             </p>
@@ -121,22 +120,26 @@ export default function SellerProducts() {
           <div className="space-y-3">
             {products.map((p) => {
               const badge = getProductBadge(p);
-              const img = p.primary_image ?? p.images?.[0]?.image;
+              const primaryImageUnknown = (p as unknown as { primary_image?: unknown }).primary_image;
+              const img =
+                (typeof primaryImageUnknown === "string"
+                  ? primaryImageUnknown
+                  : (primaryImageUnknown as any)?.image) ??
+                p.images?.[0]?.image;
               return (
                 <div
                   key={p.id}
-                  className="rounded-2xl p-4 flex items-center gap-4"
-                  style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
+                  className="rounded-[1.75rem] border border-[color:var(--border)] bg-white p-4 flex items-center gap-4 shadow-[0_14px_34px_rgba(23,32,51,0.05)]"
                 >
                   {/* Image */}
                   <div
-                    className="size-14 rounded-xl shrink-0 overflow-hidden"
-                    style={{ background: "rgba(255,255,255,0.04)" }}
+                    className="size-14 rounded-2xl shrink-0 overflow-hidden"
+                    style={{ background: "var(--surface-muted)" }}
                   >
                     {img ? (
                       <img src={img} alt={p.name} className="w-full h-full object-cover" />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-xl">🛍️</div>
+                      <div className="w-full h-full flex items-center justify-center text-[color:var(--text-soft)]"><ImageIcon size={18} /></div>
                     )}
                   </div>
 

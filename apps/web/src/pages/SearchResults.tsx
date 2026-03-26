@@ -6,6 +6,7 @@ import MainLayout from "../components/layout/MainLayout";
 import ProductCard from "../components/catalog/ProductCard";
 import SkeletonCard from "../components/catalog/SkeletonCard";
 import BackButton from "../components/ui/BackButton";
+import { ArrowLeftIcon, ArrowRightIcon, SearchIcon } from "../components/ui/icons";
 
 export default function SearchResults() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -40,21 +41,19 @@ export default function SearchResults() {
 
   return (
     <MainLayout>
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Back */}
+      <div className="mx-auto max-w-7xl px-4 py-8">
         <BackButton to="/" label="Back to Home" className="mb-5" />
 
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="mb-6 flex flex-wrap items-end justify-between gap-4 rounded-[2rem] border border-[color:var(--border)] bg-white px-6 py-6 shadow-[0_18px_46px_rgba(23,32,51,0.06)]">
           <div>
-            <h1
-              className="text-2xl font-bold"
-              style={{ fontFamily: "var(--heading)", color: "var(--text-h)" }}
-            >
+            <div className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--text-soft)]">
+              Search results
+            </div>
+            <h1 className="text-3xl font-bold" style={{ fontFamily: "var(--heading)", color: "var(--text-h)" }}>
               {query ? `Results for "${query}"` : "All Products"}
             </h1>
             {data && (
-              <p className="text-sm mt-1" style={{ color: "var(--text-soft)" }}>
+              <p className="mt-1 text-sm" style={{ color: "var(--text-soft)" }}>
                 {data.count} {data.count === 1 ? "product" : "products"} found
               </p>
             )}
@@ -62,10 +61,8 @@ export default function SearchResults() {
           <select
             value={sort}
             onChange={(e) => updateSort(e.target.value)}
-            className="px-3 py-2 rounded-xl text-sm outline-none"
+            className="rounded-full border border-[color:var(--border)] bg-[var(--surface-muted)] px-4 py-3 text-sm font-semibold outline-none"
             style={{
-              background: "var(--surface)",
-              border: "1px solid var(--border)",
               color: "var(--text)",
             }}
           >
@@ -76,34 +73,34 @@ export default function SearchResults() {
           </select>
         </div>
 
-        {/* Results */}
         {isLoading ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
             {Array.from({ length: 8 }).map((_, i) => <SkeletonCard key={i} />)}
           </div>
         ) : products.length === 0 ? (
           <div
-            className="rounded-2xl p-16 text-center"
-            style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
+            className="rounded-[2rem] border border-[color:var(--border)] bg-white p-16 text-center shadow-[0_18px_46px_rgba(23,32,51,0.06)]"
           >
-            <p className="text-4xl mb-4">🔍</p>
-            <p className="font-medium mb-2" style={{ color: "var(--text-h)" }}>
+            <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-[var(--surface-accent)] text-[color:var(--accent)]">
+              <SearchIcon size={28} />
+            </div>
+            <p className="mb-2 font-medium" style={{ color: "var(--text-h)" }}>
               No results for &ldquo;{query}&rdquo;
             </p>
-            <p className="text-sm mb-6" style={{ color: "var(--text-soft)" }}>
+            <p className="mb-6 text-sm" style={{ color: "var(--text-soft)" }}>
               Try a different search term or browse our categories.
             </p>
             <Link
               to="/"
-              className="px-5 py-2.5 rounded-xl font-medium text-sm"
-              style={{ background: "var(--accent)", color: "white" }}
+              className="inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-5 py-3 text-sm font-semibold text-white"
             >
               Browse Home
+              <ArrowRightIcon size={15} />
             </Link>
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
               {products.map((p) => <ProductCard key={p.id} product={p} />)}
             </div>
 
@@ -112,10 +109,10 @@ export default function SearchResults() {
                 <button
                   disabled={page === 1}
                   onClick={() => setPage((p) => p - 1)}
-                  className="px-4 py-2 rounded-xl text-sm disabled:opacity-30"
-                  style={{ border: "1px solid var(--border)", color: "var(--text)" }}
+                  className="inline-flex items-center gap-2 rounded-full border border-[color:var(--border)] bg-white px-4 py-2.5 text-sm font-semibold text-[color:var(--text)] disabled:opacity-30"
                 >
-                  ← Prev
+                  <ArrowLeftIcon size={15} />
+                  Prev
                 </button>
                 <span className="text-sm" style={{ color: "var(--text-soft)" }}>
                   Page {page} of {totalPages}
@@ -123,10 +120,10 @@ export default function SearchResults() {
                 <button
                   disabled={page === totalPages}
                   onClick={() => setPage((p) => p + 1)}
-                  className="px-4 py-2 rounded-xl text-sm disabled:opacity-30"
-                  style={{ border: "1px solid var(--border)", color: "var(--text)" }}
+                  className="inline-flex items-center gap-2 rounded-full border border-[color:var(--border)] bg-white px-4 py-2.5 text-sm font-semibold text-[color:var(--text)] disabled:opacity-30"
                 >
-                  Next →
+                  Next
+                  <ArrowRightIcon size={15} />
                 </button>
               </div>
             )}

@@ -3,10 +3,10 @@ import type { ReactNode } from "react";
 type Kind = "error" | "success" | "info" | "warning";
 
 const styles: Record<Kind, string> = {
-  error: "bg-error/10 border-error/30 text-error",
-  success: "bg-success/10 border-success/30 text-success",
-  info: "bg-accent/10 border-accent/30 text-accent",
-  warning: "bg-yellow-500/10 border-yellow-500/30 text-yellow-400",
+  error: "bg-[var(--danger-soft)] border-[color:rgba(217,75,75,0.22)] text-[color:var(--error)]",
+  success: "bg-[var(--success-soft)] border-[color:rgba(22,155,101,0.22)] text-[color:var(--success)]",
+  info: "bg-[rgba(31,122,255,0.09)] border-[color:rgba(31,122,255,0.18)] text-[color:var(--accent-secondary)]",
+  warning: "bg-[var(--warning-soft)] border-[color:rgba(237,167,35,0.24)] text-[#b97500]",
 };
 
 interface Props {
@@ -19,7 +19,7 @@ export default function Alert({ kind = "error", children, className = "" }: Prop
   return (
     <div
       role="alert"
-      className={`rounded-xl border px-4 py-3 text-sm ${styles[kind]} ${className}`}
+      className={`rounded-2xl border px-4 py-3 text-sm ${styles[kind]} ${className}`}
     >
       {children}
     </div>

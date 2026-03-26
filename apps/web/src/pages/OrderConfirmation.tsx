@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getMyOrder } from "@shopland/shared";
 import MainLayout from "../components/layout/MainLayout";
 import { useAuth } from "../hooks/useAuth";
+import { CheckCircleIcon, TruckIcon } from "../components/ui/icons";
 
 export default function OrderConfirmation() {
   const { orderNumber } = useParams<{ orderNumber: string }>();
@@ -17,12 +18,11 @@ export default function OrderConfirmation() {
   return (
     <MainLayout>
       <div className="max-w-xl mx-auto px-4 py-20 text-center">
-        {/* Success animation */}
         <div
-          className="size-20 rounded-full flex items-center justify-center text-4xl mx-auto mb-6"
-          style={{ background: "rgba(74,222,128,0.12)", border: "2px solid rgba(74,222,128,0.3)" }}
+          className="size-20 rounded-full flex items-center justify-center mx-auto mb-6"
+          style={{ background: "rgba(22,155,101,0.12)", border: "2px solid rgba(22,155,101,0.22)" }}
         >
-          ✅
+          <CheckCircleIcon size={34} style={{ color: "#169b65" }} />
         </div>
 
         <h1
@@ -35,11 +35,7 @@ export default function OrderConfirmation() {
           Your order has been placed. The seller will review it shortly.
         </p>
 
-        {/* Order number */}
-        <div
-          className="rounded-2xl p-6 mb-6 text-left space-y-4"
-          style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
-        >
+        <div className="rounded-[2rem] border border-[color:var(--border)] bg-white p-6 mb-6 text-left space-y-4 shadow-[0_18px_46px_rgba(23,32,51,0.06)]">
           <div>
             <p className="text-xs mb-1" style={{ color: "var(--text-soft)" }}>Order Number</p>
             <p
@@ -54,7 +50,8 @@ export default function OrderConfirmation() {
             <>
               <div>
                 <p className="text-xs mb-1" style={{ color: "var(--text-soft)" }}>Total (Cash on Delivery)</p>
-                <p className="font-bold text-lg" style={{ color: "var(--text-h)" }}>
+                <p className="font-bold text-lg inline-flex items-center gap-2" style={{ color: "var(--text-h)" }}>
+                  <TruckIcon size={18} className="text-[color:var(--accent)]" />
                   ؋{parseFloat(order.total).toLocaleString()}
                 </p>
               </div>

@@ -12,17 +12,17 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClass: Record<Variant, string> = {
   primary:
-    "bg-accent text-white hover:opacity-90 active:opacity-80 disabled:opacity-50",
+    "bg-[var(--accent)] text-white shadow-[0_14px_32px_rgba(255,106,61,0.26)] hover:-translate-y-0.5 hover:brightness-105 active:translate-y-0 disabled:opacity-50",
   ghost:
-    "bg-transparent border border-border text-text hover:border-accent hover:text-accent disabled:opacity-50",
+    "bg-white/70 border border-[color:var(--border)] text-[color:var(--text)] hover:border-[color:var(--accent)] hover:text-[color:var(--accent)] hover:bg-white disabled:opacity-50",
   danger:
-    "bg-error/10 border border-error text-error hover:bg-error/20 disabled:opacity-50",
+    "bg-[var(--danger-soft)] border border-[color:rgba(217,75,75,0.2)] text-[color:var(--error)] hover:bg-[#fde3e3] disabled:opacity-50",
 };
 
 const sizeClass: Record<Size, string> = {
-  sm: "px-3 py-1.5 text-sm rounded-lg",
-  md: "px-4 py-2.5 text-sm rounded-xl",
-  lg: "px-6 py-3 text-base rounded-xl",
+  sm: "px-3.5 py-2 text-sm rounded-xl",
+  md: "px-4.5 py-2.5 text-sm rounded-2xl",
+  lg: "px-6 py-3 text-base rounded-2xl",
 };
 
 export default function Button({
@@ -38,7 +38,7 @@ export default function Button({
     <button
       {...rest}
       disabled={disabled ?? loading}
-      className={`inline-flex items-center justify-center gap-2 font-medium transition-all cursor-pointer ${variantClass[variant]} ${sizeClass[size]} ${className}`}
+      className={`inline-flex items-center justify-center gap-2 font-semibold transition-all duration-200 cursor-pointer ${variantClass[variant]} ${sizeClass[size]} ${className}`}
     >
       {loading ? (
         <span className="size-4 border-2 border-current border-t-transparent rounded-full animate-spin" />

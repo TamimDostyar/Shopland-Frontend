@@ -16,29 +16,9 @@ import BackButton from "../../components/ui/BackButton";
 import { useAuth } from "../../hooks/useAuth";
 import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
+import { CameraIcon, CategoryIcon } from "../../components/ui/icons";
 
 const CONDITIONS = ["new", "used", "refurbished"] as const;
-
-const CATEGORY_ICONS: Record<string, string> = {
-  "electronics": "💻",
-  "clothing-fashion": "👗",
-  "home-kitchen": "🏠",
-  "sports-outdoors": "⚽",
-  "toys-games": "🧸",
-  "beauty-personal-care": "💄",
-  "health-wellness": "💊",
-  "grocery-food": "🛒",
-  "automotive": "🚗",
-  "books-music-movies": "📚",
-  "office-school-supplies": "🖊️",
-  "pet-supplies": "🐾",
-  "baby-kids": "👶",
-  "arts-crafts-sewing": "🎨",
-  "musical-instruments": "🎸",
-  "tools-home-improvement": "🔧",
-  "garden-outdoor": "🌱",
-  "industrial-scientific": "🔬",
-};
 
 export default function AddEditProduct() {
   const { id } = useParams<{ id?: string }>();
@@ -189,7 +169,7 @@ export default function AddEditProduct() {
         <BackButton to="/seller/products" label="Back to Products" className="mb-5" />
 
         <h1
-          className="text-2xl font-bold mb-8"
+          className="text-3xl font-bold mb-8"
           style={{ fontFamily: "var(--heading)", color: "var(--text-h)" }}
         >
           {isEdit ? "Edit Product" : "Add New Product"}
@@ -198,8 +178,7 @@ export default function AddEditProduct() {
         <form onSubmit={(e) => { void handleSubmit(e); }} className="space-y-6">
           {/* Basic Info */}
           <section
-            className="rounded-2xl p-6 space-y-4"
-            style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
+            className="rounded-[1.75rem] border border-[color:var(--border)] bg-white p-6 space-y-4 shadow-[0_18px_46px_rgba(23,32,51,0.06)]"
           >
             <h2 className="font-semibold" style={{ color: "var(--text-h)" }}>Product Details</h2>
 
@@ -332,7 +311,10 @@ export default function AddEditProduct() {
                             color: isSelected ? "var(--accent)" : "var(--text-soft)",
                           }}
                         >
-                          {CATEGORY_ICONS[parent.slug] ?? "📦"} {parent.name}
+                          <span className="inline-flex items-center gap-2">
+                            <CategoryIcon slug={parent.slug} size={14} />
+                            {parent.name}
+                          </span>
                         </button>
                       );
                     })}
@@ -417,8 +399,7 @@ export default function AddEditProduct() {
 
           {/* Images */}
           <section
-            className="rounded-2xl p-6 space-y-4"
-            style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
+            className="rounded-[1.75rem] border border-[color:var(--border)] bg-white p-6 space-y-4 shadow-[0_18px_46px_rgba(23,32,51,0.06)]"
           >
             <h2 className="font-semibold" style={{ color: "var(--text-h)" }}>Product Images</h2>
             <div>
@@ -435,7 +416,9 @@ export default function AddEditProduct() {
                   }}
                   className="hidden"
                 />
-                <span className="text-3xl">📷</span>
+                <span className="flex size-14 items-center justify-center rounded-2xl bg-[var(--surface-accent)] text-[color:var(--accent)]">
+                  <CameraIcon size={24} />
+                </span>
                 <span className="text-sm" style={{ color: "var(--text-soft)" }}>
                   Click to upload images (JPG, PNG, max 5MB each)
                 </span>
