@@ -3,11 +3,13 @@ import { useQuery } from "@tanstack/react-query";
 import { getMyOrder } from "@shopland/shared";
 import MainLayout from "../components/layout/MainLayout";
 import { useAuth } from "../hooks/useAuth";
+import { useLanguage } from "../context/LanguageContext";
 import { CheckCircleIcon, TruckIcon } from "../components/ui/icons";
 
 export default function OrderConfirmation() {
   const { orderNumber } = useParams<{ orderNumber: string }>();
   const { accessToken } = useAuth();
+  const { t } = useLanguage();
 
   const { data: order } = useQuery({
     queryKey: ["order", orderNumber],
@@ -37,15 +39,15 @@ export default function OrderConfirmation() {
           className="text-2xl font-bold mb-2"
           style={{ fontFamily: "var(--heading)", color: "var(--text-h)" }}
         >
-          Order Placed!
+          {t("orders.confirmation_title")}
         </h1>
         <p className="mb-6" style={{ color: "var(--text-soft)" }}>
-          Your order has been placed. The seller will review it shortly.
+          {t("orders.confirmation_subtitle")}
         </p>
 
         <div className="rounded-[2rem] border border-[color:var(--border)] bg-white p-6 mb-6 text-left space-y-4 shadow-[0_18px_46px_rgba(23,32,51,0.06)]">
           <div>
-            <p className="text-xs mb-1" style={{ color: "var(--text-soft)" }}>Order Number</p>
+            <p className="text-xs mb-1" style={{ color: "var(--text-soft)" }}>{t("orders.order_number_label")}</p>
             <p
               className="text-xl font-bold tracking-wide"
               style={{ fontFamily: "var(--heading)", color: "var(--accent)" }}
@@ -57,18 +59,18 @@ export default function OrderConfirmation() {
           {order && (
             <>
               <div>
-                <p className="text-xs mb-1" style={{ color: "var(--text-soft)" }}>Total (Cash on Delivery)</p>
+                <p className="text-xs mb-1" style={{ color: "var(--text-soft)" }}>{t("orders.total_cod")}</p>
                 <p className="font-bold text-lg inline-flex items-center gap-2" style={{ color: "var(--text-h)" }}>
                   <TruckIcon size={18} className="text-[color:var(--accent)]" />
                   ؋{parseFloat(order.total).toLocaleString()}
                 </p>
               </div>
               <div>
-                <p className="text-xs mb-1" style={{ color: "var(--text-soft)" }}>Deliver to</p>
+                <p className="text-xs mb-1" style={{ color: "var(--text-soft)" }}>{t("orders.deliver_to")}</p>
                 <p className="text-sm" style={{ color: "var(--text)" }}>
                   {delivery
                     ? `${delivery.full_name} — ${[delivery.city, delivery.province].filter(Boolean).join(", ")}`
-                    : "Address information unavailable"}
+                    : t("orders.address_unavailable")}
                 </p>
               </div>
             </>
@@ -81,14 +83,14 @@ export default function OrderConfirmation() {
             className="px-5 py-2.5 rounded-xl font-medium text-sm"
             style={{ background: "var(--accent)", color: "white" }}
           >
-            Track Order
+            {t("orders.track_order")}
           </Link>
           <Link
             to="/"
             className="px-5 py-2.5 rounded-xl font-medium text-sm"
             style={{ border: "1px solid var(--border)", color: "var(--text)" }}
           >
-            Continue Shopping
+            {t("orders.continue_shopping")}
           </Link>
         </div>
       </div>

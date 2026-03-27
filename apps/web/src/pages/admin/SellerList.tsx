@@ -58,7 +58,7 @@ export default function SellerList() {
     setActing(true);
     try {
       await approveSeller(accessToken, seller.user.id);
-      setActionMsg(`✓ ${seller.shop_name} approved.`);
+      setActionMsg(`✓ ${seller.shop_name} — ${t("admin.msg_approved")}`);
       setSellers((prev) => prev.filter((s) => s.user.id !== seller.user.id));
     } catch (err) {
       setError(err instanceof ApiError ? err.message : t("admin.action_failed"));
@@ -72,7 +72,7 @@ export default function SellerList() {
     setActing(true);
     try {
       await rejectSeller(accessToken, rejectTarget.user.id, rejectReason);
-      setActionMsg(`✗ ${rejectTarget.shop_name} rejected.`);
+      setActionMsg(`✗ ${rejectTarget.shop_name} — ${t("admin.msg_rejected")}`);
       setSellers((prev) =>
         prev.filter((s) => s.user.id !== rejectTarget.user.id),
       );
@@ -102,7 +102,7 @@ export default function SellerList() {
             <div className="size-8 border-2 border-accent border-t-transparent rounded-full animate-spin" />
           </div>
         ) : sellers.length === 0 ? (
-          <p className="text-muted text-sm py-8">No sellers in this category.</p>
+          <p className="text-muted text-sm py-8">{t("admin.no_sellers")}</p>
         ) : (
           <div className="flex flex-col gap-4">
             {sellers.map((seller) => (
@@ -124,15 +124,15 @@ export default function SellerList() {
       {rejectTarget && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
           <div className="bg-surface border border-border rounded-2xl p-6 w-full max-w-md">
-            <h2 className="text-lg font-bold text-heading mb-1">Reject application</h2>
+            <h2 className="text-lg font-bold text-heading mb-1">{t("admin.reject_application_title")}</h2>
             <p className="text-sm text-muted mb-4">
-              Rejecting <strong className="text-text">{rejectTarget.shop_name}</strong>.
-              The seller will receive this reason by email.
+              <strong className="text-text">{rejectTarget.shop_name}</strong>{" "}
+              — {t("admin.reject_application_desc_suffix")}
             </p>
             <textarea
               value={rejectReason}
               onChange={(e) => setRejectReason(e.target.value)}
-              placeholder="Explain what's missing or incorrect…"
+              placeholder={t("admin.reject_application_placeholder")}
               rows={4}
               className="w-full px-4 py-3 rounded-xl bg-bg border border-border text-text placeholder:text-muted focus:outline-none focus:border-accent transition-colors resize-none mb-4"
             />
@@ -144,14 +144,14 @@ export default function SellerList() {
                 disabled={!rejectReason.trim()}
                 className="flex-1"
               >
-                Confirm rejection
+                {t("admin.confirm_rejection")}
               </Button>
               <Button
                 variant="ghost"
                 onClick={() => { setRejectTarget(null); setRejectReason(""); }}
                 className="flex-1"
               >
-                Cancel
+                {t("common.cancel")}
               </Button>
             </div>
           </div>
@@ -176,6 +176,7 @@ function SellerCard({
   onReject: () => void;
   acting: boolean;
 }) {
+  const { t } = useLanguage();
   const { user } = seller;
   return (
     <div className="bg-surface border border-border rounded-2xl p-5 flex gap-5">
@@ -211,32 +212,32 @@ function SellerCard({
         </div>
 
         <div className="mt-2 grid grid-cols-2 gap-x-6 gap-y-1 text-sm">
-          <Pair label="Owner" value={`${user.first_name} ${user.last_name}`} />
-          <Pair label="Email" value={user.email} />
-          <Pair label="Phone" value={user.phone_number ?? "—"} />
-          <Pair label="Business phone" value={seller.business_phone} />
-          <Pair label="City" value={seller.shop_address_city} />
-          <Pair label="Applied" value={new Date(seller.created_at).toLocaleDateString()} />
+          <Pair label={t("admin.field_owner")} value={`${user.first_name} ${user.last_name}`} />
+          <Pair label={t("admin.field_email")} value={user.email} />
+          <Pair label={t("admin.field_phone")} value={user.phone_number ?? "—"} />
+          <Pair label={t("admin.field_business_phone")} value={seller.business_phone} />
+          <Pair label={t("admin.field_city")} value={seller.shop_address_city} />
+          <Pair label={t("admin.applied_on")} value={new Date(seller.created_at).toLocaleDateString()} />
         </div>
 
         {seller.rejection_reason && (
           <p className="mt-2 text-xs text-error bg-error/5 rounded-lg px-3 py-2">
-            Reason: {seller.rejection_reason}
+            {t("admin.field_reason")} {seller.rejection_reason}
           </p>
         )}
 
         <div className="flex gap-2 mt-4 flex-wrap">
           <Button size="sm" variant="ghost" onClick={onView}>
-            View details & documents →
+            {t("admin.view_details_btn")}
           </Button>
           {status !== "approved" && (
             <Button size="sm" onClick={onApprove} loading={acting}>
-              Approve
+              {t("admin.approve")}
             </Button>
           )}
           {status !== "rejected" && (
             <Button size="sm" variant="danger" onClick={onReject} disabled={acting}>
-              Reject / needs data
+              {t("admin.reject_needs_data")}
             </Button>
           )}
         </div>
@@ -246,11 +247,12 @@ function SellerCard({
 }
 
 function StatusBadge({ status, rejectionReason }: { status: SellerStatus; rejectionReason: string }) {
+  const { t } = useLanguage();
   if (status === "approved")
-    return <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-success/10 text-success">Approved</span>;
+    return <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-success/10 text-success">{t("admin.status_approved")}</span>;
   if (status === "rejected" || rejectionReason)
-    return <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-error/10 text-error">Needs data</span>;
-  return <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-yellow-500/10 text-yellow-400">Pending</span>;
+    return <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-error/10 text-error">{t("admin.status_needs_data")}</span>;
+  return <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-yellow-500/10 text-yellow-400">{t("admin.status_pending")}</span>;
 }
 
 function Pair({ label, value }: { label: string; value: string }) {

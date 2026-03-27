@@ -13,10 +13,23 @@ import SellerLayout from "../../components/layout/SellerLayout";
 import BackButton from "../../components/ui/BackButton";
 import { useAuth } from "../../hooks/useAuth";
 import { useLanguage } from "../../context/LanguageContext";
-import { STATUS_COLORS } from "../buyer/MyOrders";
 
 export default function SellerOrderDetail() {
   const { t } = useLanguage();
+
+  const STATUS_COLORS: Record<string, { bg: string; text: string; label: string }> = {
+    pending: { bg: "rgba(251,191,36,0.12)", text: "#fbbf24", label: t("orders.status_pending") },
+    accepted: { bg: "rgba(96,165,250,0.12)", text: "#60a5fa", label: t("orders.status_accepted") },
+    processing: { bg: "rgba(167,139,250,0.12)", text: "#a78bfa", label: t("orders.status_processing") },
+    ready_for_pickup: { bg: "rgba(52,211,153,0.12)", text: "#34d399", label: t("orders.status_ready") },
+    out_for_delivery: { bg: "rgba(96,165,250,0.12)", text: "#60a5fa", label: t("orders.status_out_delivery") },
+    delivered: { bg: "rgba(74,222,128,0.12)", text: "#4ade80", label: t("orders.status_delivered") },
+    completed: { bg: "rgba(74,222,128,0.12)", text: "#4ade80", label: t("orders.status_completed") },
+    cancelled_by_buyer: { bg: "rgba(248,113,113,0.12)", text: "#f87171", label: t("orders.status_cancelled") },
+    cancelled_by_seller: { bg: "rgba(248,113,113,0.12)", text: "#f87171", label: t("orders.status_cancelled_seller") },
+    cancelled_by_admin: { bg: "rgba(248,113,113,0.12)", text: "#f87171", label: t("orders.status_cancelled_admin") },
+    rejected: { bg: "rgba(248,113,113,0.12)", text: "#f87171", label: t("orders.status_rejected") },
+  };
   const { orderNumber } = useParams<{ orderNumber: string }>();
   const { accessToken } = useAuth();
   const qc = useQueryClient();

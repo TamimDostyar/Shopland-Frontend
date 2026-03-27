@@ -46,7 +46,7 @@ export default function IDReview() {
     setActing(true);
     try {
       await approveUserId(accessToken, user.id);
-      setActionMsg(`✓ ${user.first_name} ${user.last_name}'s ID verified.`);
+      setActionMsg(`✓ ${user.first_name} ${user.last_name} — ${t("admin.msg_id_verified")}`);
       setUsers((prev) => prev.filter((u) => u.id !== user.id));
     } catch (err) {
       setError(err instanceof ApiError ? err.message : t("admin.action_failed"));
@@ -60,7 +60,7 @@ export default function IDReview() {
     setActing(true);
     try {
       await rejectUserId(accessToken, rejectTarget.id, rejectReason);
-      setActionMsg(`✗ ${rejectTarget.first_name} ${rejectTarget.last_name}'s ID rejected.`);
+      setActionMsg(`✗ ${rejectTarget.first_name} ${rejectTarget.last_name} — ${t("admin.msg_rejected")}`);
       setUsers((prev) => prev.filter((u) => u.id !== rejectTarget.id));
       setRejectTarget(null);
       setRejectReason("");
@@ -75,7 +75,7 @@ export default function IDReview() {
     <AdminLayout>
       <div className="max-w-5xl">
         <h1 className="text-2xl font-bold text-heading mb-6" style={{ fontFamily: "var(--font-heading)" }}>
-          ID Review Queue
+          {t("admin.id_review_title")}
         </h1>
 
         {actionMsg && <Alert kind="success" className="mb-4">{actionMsg}</Alert>}
@@ -86,7 +86,7 @@ export default function IDReview() {
             <div className="size-8 border-2 border-accent border-t-transparent rounded-full animate-spin" />
           </div>
         ) : users.length === 0 ? (
-          <p className="text-muted text-sm py-8">No pending ID verifications.</p>
+          <p className="text-muted text-sm py-8">{t("admin.no_pending_ids")}</p>
         ) : (
           <div className="flex flex-col gap-6">
             {users.map((user) => (
@@ -106,15 +106,15 @@ export default function IDReview() {
       {rejectTarget && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
           <div className="bg-surface border border-border rounded-2xl p-6 w-full max-w-md">
-            <h2 className="text-lg font-bold text-heading mb-1">Reject ID</h2>
+            <h2 className="text-lg font-bold text-heading mb-1">{t("admin.reject_id_title")}</h2>
             <p className="text-sm text-muted mb-4">
-              Rejecting <strong className="text-text">{rejectTarget.first_name} {rejectTarget.last_name}</strong>.
-              The user will need to resubmit their documents.
+              {t("admin.reject_id_desc_prefix")} <strong className="text-text">{rejectTarget.first_name} {rejectTarget.last_name}</strong>.{" "}
+              {t("admin.reject_id_desc_suffix")}
             </p>
             <textarea
               value={rejectReason}
               onChange={(e) => setRejectReason(e.target.value)}
-              placeholder="Explain what's wrong (e.g. photo is blurry, ID is expired)…"
+              placeholder={t("admin.reject_id_placeholder")}
               rows={4}
               className="w-full px-4 py-3 rounded-xl bg-bg border border-border text-text placeholder:text-muted focus:outline-none focus:border-accent transition-colors resize-none mb-4"
             />
@@ -126,14 +126,14 @@ export default function IDReview() {
                 disabled={!rejectReason.trim()}
                 className="flex-1"
               >
-                Confirm rejection
+                {t("admin.confirm_rejection")}
               </Button>
               <Button
                 variant="ghost"
                 onClick={() => { setRejectTarget(null); setRejectReason(""); }}
                 className="flex-1"
               >
-                Cancel
+                {t("common.cancel")}
               </Button>
             </div>
           </div>
@@ -154,6 +154,7 @@ function UserCard({
   onApprove: () => void;
   onReject: () => void;
 }) {
+  const { t } = useLanguage();
   return (
     <div className="bg-surface border border-border rounded-2xl p-6">
       {/* Header */}
@@ -181,17 +182,17 @@ function UserCard({
 
       {/* Photos */}
       <div className="grid grid-cols-2 gap-4 mb-5">
-        <DocImage label="Selfie / Profile photo" src={user.profile_photo} />
-        <DocImage label="National ID photo" src={user.national_id_photo} />
+        <DocImage label={t("admin.selfie_label")} src={user.profile_photo} />
+        <DocImage label={t("admin.national_id_photo_label")} src={user.national_id_photo} />
       </div>
 
       {/* Actions */}
       <div className="flex gap-3">
         <Button size="sm" onClick={onApprove} loading={acting}>
-          Verify ID
+          {t("admin.verify_id")}
         </Button>
         <Button size="sm" variant="danger" onClick={onReject} disabled={acting}>
-          Reject / needs resubmission
+          {t("admin.reject_resubmit")}
         </Button>
       </div>
     </div>
@@ -199,6 +200,7 @@ function UserCard({
 }
 
 function DocImage({ label, src }: { label: string; src: string | null | undefined }) {
+  const { t } = useLanguage();
   return (
     <div className="flex flex-col gap-2">
       <p className="text-xs text-muted font-medium">{label}</p>
@@ -209,11 +211,11 @@ function DocImage({ label, src }: { label: string; src: string | null | undefine
             alt={label}
             className="w-full aspect-[4/3] object-cover rounded-xl border border-border hover:border-accent transition-colors cursor-zoom-in"
           />
-          <p className="text-xs text-accent mt-1 text-center">Click to open full size</p>
+          <p className="text-xs text-accent mt-1 text-center">{t("admin.click_full_size")}</p>
         </a>
       ) : (
         <div className="w-full aspect-[4/3] rounded-xl border border-border bg-bg flex items-center justify-center">
-          <span className="text-xs text-muted">No image</span>
+          <span className="text-xs text-muted">{t("admin.no_image")}</span>
         </div>
       )}
     </div>

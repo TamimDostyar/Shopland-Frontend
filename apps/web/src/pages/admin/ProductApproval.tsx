@@ -50,10 +50,10 @@ export default function ProductApproval() {
     setActing(product.id);
     try {
       await approveProduct(accessToken, product.id);
-      setActionMsg(`✓ "${product.name}" approved and is now live.`);
+      setActionMsg(`✓ "${product.name}" — ${t("admin.msg_approved")}`);
       setProducts((prev) => prev.filter((p) => p.id !== product.id));
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Approval failed.");
+      setError(err instanceof ApiError ? err.message : t("admin.approval_failed"));
     } finally {
       setActing(null);
     }
@@ -64,7 +64,7 @@ export default function ProductApproval() {
     setActing(rejectTarget.id);
     try {
       await rejectProduct(accessToken, rejectTarget.id, rejectReason);
-      setActionMsg(`✗ "${rejectTarget.name}" rejected.`);
+      setActionMsg(`✗ "${rejectTarget.name}" — ${t("admin.msg_rejected")}`);
       setProducts((prev) => prev.filter((p) => p.id !== rejectTarget.id));
       setRejectTarget(null);
       setRejectReason("");
@@ -85,14 +85,14 @@ export default function ProductApproval() {
             className="text-2xl font-bold"
             style={{ fontFamily: "var(--font-heading)", color: "var(--text-h)" }}
           >
-            Product Approval Queue
+            {t("admin.product_approval_title")}
           </h1>
           <button
             onClick={() => { void load(); }}
             className="text-sm px-3 py-1.5 rounded-lg transition-colors"
             style={{ color: "var(--text-soft)", border: "1px solid var(--border)" }}
           >
-            ↻ Refresh
+            {t("admin.refresh")}
           </button>
         </div>
 
@@ -110,10 +110,10 @@ export default function ProductApproval() {
           >
             <div className="text-4xl mb-3">✅</div>
             <p className="text-lg font-semibold" style={{ color: "var(--text-h)" }}>
-              All caught up!
+              {t("admin.all_caught_up")}
             </p>
             <p className="text-sm mt-1" style={{ color: "var(--text-soft)" }}>
-              No products are waiting for review.
+              {t("admin.no_pending_products")}
             </p>
           </div>
         ) : (
@@ -140,16 +140,16 @@ export default function ProductApproval() {
             style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
           >
             <h2 className="text-lg font-bold mb-1" style={{ color: "var(--text-h)" }}>
-              Reject product
+              {t("admin.reject_product_title")}
             </h2>
             <p className="text-sm mb-4" style={{ color: "var(--text-soft)" }}>
-              Rejecting <strong style={{ color: "var(--text)" }}>{rejectTarget.name}</strong>.
-              The seller will receive this reason.
+              <strong style={{ color: "var(--text)" }}>{rejectTarget.name}</strong>{" "}
+              — {t("admin.reject_product_desc_suffix")}
             </p>
             <textarea
               value={rejectReason}
               onChange={(e) => setRejectReason(e.target.value)}
-              placeholder="Explain what's wrong (e.g. prohibited item, misleading description)…"
+              placeholder={t("admin.reject_product_placeholder")}
               rows={4}
               className="w-full px-4 py-3 rounded-xl text-sm resize-none outline-none mb-4"
               style={{
@@ -166,14 +166,14 @@ export default function ProductApproval() {
                 disabled={!rejectReason.trim()}
                 className="flex-1"
               >
-                Confirm rejection
+                {t("admin.confirm_rejection")}
               </Button>
               <Button
                 variant="ghost"
                 onClick={() => { setRejectTarget(null); setRejectReason(""); }}
                 className="flex-1"
               >
-                Cancel
+                {t("common.cancel")}
               </Button>
             </div>
           </div>
@@ -196,6 +196,7 @@ function ProductCard({
   onApprove: () => void;
   onReject: () => void;
 }) {
+  const { t } = useLanguage();
   const primaryImage = product.images?.find((i) => i.is_primary) ?? product.images?.[0];
 
   return (
@@ -243,16 +244,16 @@ function ProductCard({
               )}
             </p>
             <p className="text-xs mt-1" style={{ color: "var(--text-soft)" }}>
-              Seller: <strong style={{ color: "var(--text)" }}>{product.seller?.shop_name}</strong>
+              {t("admin.product_seller_label")} <strong style={{ color: "var(--text)" }}>{product.seller?.shop_name}</strong>
               {" · "}{product.city}, {product.province}
-              {" · "}Condition: <span className="capitalize">{product.condition}</span>
+              {" · "}{t("admin.product_condition_label")} <span className="capitalize">{product.condition}</span>
             </p>
           </div>
           <span
             className="text-xs px-2.5 py-1 rounded-full font-semibold shrink-0"
             style={{ background: "rgba(255,193,7,0.1)", color: "#ffc107" }}
           >
-            Pending Review
+            {t("admin.pending_review_badge")}
           </span>
         </div>
 
@@ -267,13 +268,13 @@ function ProductCard({
         {/* Actions */}
         <div className="flex gap-2 mt-4 flex-wrap">
           <Button size="sm" onClick={onApprove} loading={acting}>
-            ✓ Approve
+            {t("admin.approve_btn")}
           </Button>
           <Button size="sm" variant="danger" onClick={onReject} disabled={acting}>
-            ✗ Reject
+            {t("admin.reject_btn")}
           </Button>
           <Button size="sm" variant="ghost" onClick={onView}>
-            Preview listing →
+            {t("admin.preview_listing")}
           </Button>
         </div>
       </div>

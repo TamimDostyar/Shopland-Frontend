@@ -12,17 +12,6 @@ import MainLayout from "../../components/layout/MainLayout";
 import BackButton from "../../components/ui/BackButton";
 import { useAuth } from "../../hooks/useAuth";
 import { useLanguage } from "../../context/LanguageContext";
-import { STATUS_COLORS } from "./MyOrders";
-
-const TIMELINE_STEPS = [
-  { status: "pending", label: "Order Placed" },
-  { status: "accepted", label: "Accepted by Seller" },
-  { status: "processing", label: "Being Prepared" },
-  { status: "ready_for_pickup", label: "Ready for Pickup" },
-  { status: "out_for_delivery", label: "Out for Delivery" },
-  { status: "delivered", label: "Delivered" },
-  { status: "completed", label: "Completed" },
-];
 
 export default function OrderDetail() {
   const { t } = useLanguage();
@@ -31,6 +20,30 @@ export default function OrderDetail() {
   const qc = useQueryClient();
   const [cancelReason, setCancelReason] = useState("");
   const [showCancelForm, setShowCancelForm] = useState(false);
+
+  const TIMELINE_STEPS = [
+    { status: "pending", label: t("orders.timeline_order_placed") },
+    { status: "accepted", label: t("orders.timeline_accepted") },
+    { status: "processing", label: t("orders.timeline_being_prepared") },
+    { status: "ready_for_pickup", label: t("orders.timeline_ready_pickup") },
+    { status: "out_for_delivery", label: t("orders.timeline_out_delivery") },
+    { status: "delivered", label: t("orders.timeline_delivered") },
+    { status: "completed", label: t("orders.timeline_completed") },
+  ];
+
+  const STATUS_COLORS: Record<string, { bg: string; text: string; label: string }> = {
+    pending: { bg: "rgba(251,191,36,0.12)", text: "#fbbf24", label: t("orders.status_pending") },
+    accepted: { bg: "rgba(96,165,250,0.12)", text: "#60a5fa", label: t("orders.status_accepted") },
+    processing: { bg: "rgba(167,139,250,0.12)", text: "#a78bfa", label: t("orders.status_processing") },
+    ready_for_pickup: { bg: "rgba(52,211,153,0.12)", text: "#34d399", label: t("orders.status_ready") },
+    out_for_delivery: { bg: "rgba(96,165,250,0.12)", text: "#60a5fa", label: t("orders.status_out_delivery") },
+    delivered: { bg: "rgba(74,222,128,0.12)", text: "#4ade80", label: t("orders.status_delivered") },
+    completed: { bg: "rgba(74,222,128,0.12)", text: "#4ade80", label: t("orders.status_completed") },
+    cancelled_by_buyer: { bg: "rgba(248,113,113,0.12)", text: "#f87171", label: t("orders.status_cancelled") },
+    cancelled_by_seller: { bg: "rgba(248,113,113,0.12)", text: "#f87171", label: t("orders.status_cancelled_seller") },
+    cancelled_by_admin: { bg: "rgba(248,113,113,0.12)", text: "#f87171", label: t("orders.status_cancelled_admin") },
+    rejected: { bg: "rgba(248,113,113,0.12)", text: "#f87171", label: t("orders.status_rejected") },
+  };
 
   const { data: order, isLoading } = useQuery({
     queryKey: ["order", orderNumber],
@@ -75,8 +88,8 @@ export default function OrderDetail() {
       <MainLayout>
         <div className="max-w-3xl mx-auto px-4 py-20 text-center">
           <p className="text-4xl mb-4">😕</p>
-          <p style={{ color: "var(--text-h)" }}>Order not found</p>
-          <Link to="/orders" style={{ color: "var(--accent)" }}>← Back to orders</Link>
+          <p style={{ color: "var(--text-h)" }}>{t("orders.order_not_found")}</p>
+          <Link to="/orders" style={{ color: "var(--accent)" }}>{t("orders.back_to_orders")}</Link>
         </div>
       </MainLayout>
     );
@@ -108,9 +121,9 @@ export default function OrderDetail() {
       <div className="max-w-3xl mx-auto px-4 py-8">
         {/* Back + Breadcrumb */}
         <div className="flex items-center gap-4 mb-6">
-          <BackButton to="/orders" label="My Orders" />
+          <BackButton to="/orders" label={t("orders.my_orders")} />
           <nav className="flex items-center gap-2 text-sm" style={{ color: "var(--text-soft)" }}>
-            <Link to="/orders" className="hover:underline">My Orders</Link>
+            <Link to="/orders" className="hover:underline">{t("orders.my_orders")}</Link>
             <span>/</span>
             <span style={{ color: "var(--text)" }}>{order.order_number}</span>
           </nav>
@@ -126,7 +139,7 @@ export default function OrderDetail() {
               {order.order_number}
             </h1>
             <p className="text-sm mt-0.5" style={{ color: "var(--text-soft)" }}>
-              Placed on {new Date(order.created_at).toLocaleDateString("en-US", { dateStyle: "medium" })}
+              {t("orders.placed_on")} {new Date(order.created_at).toLocaleDateString("en-US", { dateStyle: "medium" })}
             </p>
           </div>
           <span
@@ -143,7 +156,7 @@ export default function OrderDetail() {
             className="rounded-2xl p-6 mb-6"
             style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
           >
-            <h2 className="font-semibold mb-5" style={{ color: "var(--text-h)" }}>Order Progress</h2>
+            <h2 className="font-semibold mb-5" style={{ color: "var(--text-h)" }}>{t("orders.order_progress")}</h2>
             <div className="space-y-0">
               {TIMELINE_STEPS.map((step, i) => {
                 const isDone = currentStepIdx > i;
@@ -206,7 +219,7 @@ export default function OrderDetail() {
           className="rounded-2xl p-6 mb-6"
           style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
         >
-          <h2 className="font-semibold mb-4" style={{ color: "var(--text-h)" }}>Items</h2>
+          <h2 className="font-semibold mb-4" style={{ color: "var(--text-h)" }}>{t("orders.items_section")}</h2>
           <div className="space-y-4">
             {order.items.map((item) => (
               <div key={item.id} className="flex gap-4">
@@ -225,7 +238,7 @@ export default function OrderDetail() {
                     {item.product_name}
                   </p>
                   <p className="text-xs mt-0.5" style={{ color: "var(--text-soft)" }}>
-                    {(item.seller?.shop_name ?? item.seller_shop ?? "Seller")} · x{item.quantity}
+                    {(item.seller?.shop_name ?? item.seller_shop ?? t("orders.seller_fallback"))} · x{item.quantity}
                   </p>
                 </div>
                 <p className="text-sm font-medium shrink-0" style={{ color: "var(--accent)" }}>
@@ -238,15 +251,15 @@ export default function OrderDetail() {
           {/* Price breakdown */}
           <div className="border-t mt-4 pt-4 space-y-2 text-sm" style={{ borderColor: "var(--border)" }}>
             <div className="flex justify-between">
-              <span style={{ color: "var(--text-soft)" }}>Subtotal</span>
+              <span style={{ color: "var(--text-soft)" }}>{t("orders.subtotal")}</span>
               <span>؋{parseFloat(order.subtotal).toLocaleString()}</span>
             </div>
             <div className="flex justify-between">
-              <span style={{ color: "var(--text-soft)" }}>Delivery</span>
+              <span style={{ color: "var(--text-soft)" }}>{t("orders.delivery")}</span>
               <span>؋{parseFloat(order.delivery_fee).toLocaleString()}</span>
             </div>
             <div className="flex justify-between font-semibold">
-              <span style={{ color: "var(--text-h)" }}>Total</span>
+              <span style={{ color: "var(--text-h)" }}>{t("orders.total")}</span>
               <span style={{ color: "var(--accent)" }}>؋{parseFloat(order.total).toLocaleString()}</span>
             </div>
           </div>
@@ -257,15 +270,15 @@ export default function OrderDetail() {
           className="rounded-2xl p-6 mb-6"
           style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
         >
-          <h2 className="font-semibold mb-3" style={{ color: "var(--text-h)" }}>Delivery Address</h2>
+          <h2 className="font-semibold mb-3" style={{ color: "var(--text-h)" }}>{t("orders.delivery_address")}</h2>
           <p className="text-sm" style={{ color: "var(--text)" }}>
-            {delivery?.full_name ?? "Address unavailable"}
+            {delivery?.full_name ?? t("orders.address_unavailable")}
           </p>
           <p className="text-sm" style={{ color: "var(--text-soft)" }}>
-            {[delivery?.street, delivery?.district].filter(Boolean).join(", ") || "Street unavailable"}
+            {[delivery?.street, delivery?.district].filter(Boolean).join(", ") || t("orders.street_unavailable")}
           </p>
           <p className="text-sm" style={{ color: "var(--text-soft)" }}>
-            {[delivery?.city, delivery?.province].filter(Boolean).join(", ") || "City unavailable"}
+            {[delivery?.city, delivery?.province].filter(Boolean).join(", ") || t("orders.city_unavailable")}
           </p>
           <p className="text-sm mt-1" style={{ color: "var(--text-soft)" }}>
             📞 {order.delivery_phone}
@@ -284,7 +297,7 @@ export default function OrderDetail() {
               {confirmMutation.isPending && (
                 <span className="size-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
               )}
-              ✓ Confirm Delivery Received & Pay
+              {t("orders.confirm_delivery")}
             </button>
           )}
 
@@ -294,7 +307,7 @@ export default function OrderDetail() {
               className="w-full py-3 rounded-xl font-medium text-sm transition-all"
               style={{ border: "1px solid rgba(248,113,113,0.3)", color: "#f87171" }}
             >
-              Cancel Order
+              {t("orders.cancel_order")}
             </button>
           )}
 
@@ -304,13 +317,13 @@ export default function OrderDetail() {
               style={{ background: "rgba(248,113,113,0.05)", border: "1px solid rgba(248,113,113,0.2)" }}
             >
               <p className="text-sm font-medium" style={{ color: "var(--text-h)" }}>
-                Reason for cancellation (optional)
+                {t("orders.cancel_reason")}
               </p>
               <textarea
                 value={cancelReason}
                 onChange={(e) => setCancelReason(e.target.value)}
                 rows={3}
-                placeholder="Tell us why you're cancelling..."
+                placeholder={t("orders.cancel_placeholder")}
                 className="w-full px-4 py-3 rounded-xl text-sm resize-none outline-none"
                 style={{ background: "rgba(255,255,255,0.04)", border: "1px solid var(--border)", color: "var(--text)" }}
               />
@@ -321,14 +334,14 @@ export default function OrderDetail() {
                   className="flex-1 py-2.5 rounded-xl text-sm font-medium"
                   style={{ background: "#f87171", color: "white" }}
                 >
-                  Yes, Cancel
+                  {t("orders.yes_cancel")}
                 </button>
                 <button
                   onClick={() => setShowCancelForm(false)}
                   className="flex-1 py-2.5 rounded-xl text-sm font-medium"
                   style={{ border: "1px solid var(--border)", color: "var(--text)" }}
                 >
-                  Keep Order
+                  {t("orders.keep_order")}
                 </button>
               </div>
             </div>

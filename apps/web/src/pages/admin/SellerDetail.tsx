@@ -45,7 +45,7 @@ export default function SellerDetail() {
     setActing(true);
     try {
       await approveSeller(accessToken, seller.user.id);
-      setActionMsg(`${seller.shop_name} has been approved.`);
+      setActionMsg(`✓ ${seller.shop_name} — ${t("admin.msg_approved")}`);
       setSeller((s) => s ? { ...s, is_approved: true, rejection_reason: "" } : s);
     } catch (err) {
       setError(err instanceof ApiError ? err.message : t("admin.action_failed"));
@@ -59,7 +59,7 @@ export default function SellerDetail() {
     setActing(true);
     try {
       await rejectSeller(accessToken, seller.user.id, rejectReason);
-      setActionMsg(`${seller.shop_name} has been rejected.`);
+      setActionMsg(`✗ ${seller.shop_name} — ${t("admin.msg_rejected")}`);
       setSeller((s) =>
         s ? { ...s, is_approved: false, rejection_reason: rejectReason } : s,
       );
@@ -84,7 +84,7 @@ export default function SellerDetail() {
   if (!seller) {
     return (
       <AdminLayout>
-        <Alert kind="error">Seller not found.</Alert>
+        <Alert kind="error">{t("admin.seller_not_found")}</Alert>
       </AdminLayout>
     );
   }
@@ -104,7 +104,7 @@ export default function SellerDetail() {
           onClick={() => navigate(-1)}
           className="text-sm text-muted hover:text-accent mb-6 flex items-center gap-1 transition-colors"
         >
-          ← Back
+          {t("admin.back")}
         </button>
 
         <div className="flex items-center gap-4 mb-8">
@@ -112,7 +112,9 @@ export default function SellerDetail() {
             <h1 className="text-2xl font-bold text-heading" style={{ fontFamily: "var(--font-heading)" }}>
               {seller.shop_name}
             </h1>
-            <p className="text-muted text-sm">{seller.shop_category} · Applied {new Date(seller.created_at).toLocaleDateString()}</p>
+            <p className="text-muted text-sm">
+              {seller.shop_category} · {t("admin.applied_on")} {new Date(seller.created_at).toLocaleDateString()}
+            </p>
           </div>
           <StatusChip status={currentStatus} />
         </div>
@@ -124,26 +126,26 @@ export default function SellerDetail() {
         {!seller.is_approved && (
           <div className="flex gap-3 mb-8">
             <Button onClick={() => { void handleApprove(); }} loading={acting}>
-              Approve seller
+              {t("admin.approve_seller")}
             </Button>
             <Button
               variant="danger"
               onClick={() => setShowRejectForm((v) => !v)}
               disabled={acting}
             >
-              {showRejectForm ? "Cancel" : "Reject / needs data"}
+              {showRejectForm ? t("common.cancel") : t("admin.reject_needs_data")}
             </Button>
           </div>
         )}
 
         {showRejectForm && (
           <div className="bg-surface border border-error/30 rounded-xl p-4 mb-6 flex flex-col gap-3">
-            <p className="text-sm text-muted">Rejection reason (sent to seller by email):</p>
+            <p className="text-sm text-muted">{t("admin.reject_reason_label")}</p>
             <textarea
               value={rejectReason}
               onChange={(e) => setRejectReason(e.target.value)}
               rows={3}
-              placeholder="e.g. Business license photo is unclear, please resubmit."
+              placeholder={t("admin.reject_reason_placeholder")}
               className="w-full px-4 py-3 rounded-xl bg-bg border border-border text-text placeholder:text-muted focus:outline-none focus:border-error transition-colors resize-none text-sm"
             />
             <Button
@@ -153,49 +155,49 @@ export default function SellerDetail() {
               disabled={!rejectReason.trim()}
               size="sm"
             >
-              Confirm rejection
+              {t("admin.confirm_rejection")}
             </Button>
           </div>
         )}
 
         {seller.rejection_reason && (
           <Alert kind="error" className="mb-6">
-            <strong>Rejection reason:</strong> {seller.rejection_reason}
+            <strong>{t("admin.rejection_reason_prefix")}</strong> {seller.rejection_reason}
           </Alert>
         )}
 
         {/* Two-column layout */}
         <div className="grid grid-cols-2 gap-6">
           {/* Owner / personal */}
-          <Section title="Owner details">
-            <Row label="Full name" value={`${user.first_name} ${user.last_name}`} />
-            <Row label="Father's name" value={user.father_name} />
-            <Row label="Email" value={user.email} />
-            <Row label="Phone" value={user.phone_number ?? "—"} />
-            <Row label="National ID" value={user.national_id ?? "—"} />
-            <Row label="Date of birth" value={user.date_of_birth ?? "—"} />
-            <Row label="ID verified" value={user.is_id_verified ? "Yes ✓" : "No"} />
+          <Section title={t("admin.section_owner")}>
+            <Row label={t("admin.field_full_name")} value={`${user.first_name} ${user.last_name}`} />
+            <Row label={t("admin.field_fathers_name")} value={user.father_name} />
+            <Row label={t("admin.field_email")} value={user.email} />
+            <Row label={t("admin.field_phone")} value={user.phone_number ?? "—"} />
+            <Row label={t("admin.field_national_id")} value={user.national_id ?? "—"} />
+            <Row label={t("admin.field_dob")} value={user.date_of_birth ?? "—"} />
+            <Row label={t("admin.field_id_verified")} value={user.is_id_verified ? t("admin.id_verified_yes") : t("admin.id_verified_no")} />
           </Section>
 
           {/* Shop */}
-          <Section title="Shop details">
-            <Row label="Shop name" value={seller.shop_name} />
-            <Row label="Category" value={seller.shop_category} />
-            <Row label="Business phone" value={seller.business_phone} />
-            <Row label="Address" value={`${seller.shop_address_street}, ${seller.shop_address_district}`} />
-            <Row label="City / Province" value={`${seller.shop_address_city}, ${seller.shop_address_province}`} />
+          <Section title={t("admin.section_shop")}>
+            <Row label={t("admin.field_shop_name")} value={seller.shop_name} />
+            <Row label={t("admin.field_category")} value={seller.shop_category} />
+            <Row label={t("admin.field_business_phone")} value={seller.business_phone} />
+            <Row label={t("admin.field_address")} value={`${seller.shop_address_street}, ${seller.shop_address_district}`} />
+            <Row label={t("admin.field_city_province")} value={`${seller.shop_address_city}, ${seller.shop_address_province}`} />
             {seller.business_description && (
-              <Row label="Description" value={seller.business_description} />
+              <Row label={t("admin.field_description")} value={seller.business_description} />
             )}
           </Section>
         </div>
 
         {/* Documents */}
         <div className="mt-8">
-          <h2 className="text-base font-semibold text-heading mb-4">Documents & Photos</h2>
+          <h2 className="text-base font-semibold text-heading mb-4">{t("admin.docs_photos")}</h2>
           <div className="grid grid-cols-3 gap-4">
-            <DocImage label="Selfie / Profile photo" src={user.profile_photo} />
-            <DocImage label="National ID" src={user.national_id_photo} />
+            <DocImage label={t("admin.selfie_label")} src={user.profile_photo} />
+            <DocImage label={t("admin.field_national_id")} src={user.national_id_photo} />
           </div>
         </div>
       </div>
@@ -222,6 +224,7 @@ function Row({ label, value }: { label: string; value: string }) {
 }
 
 function DocImage({ label, src }: { label: string; src: string | null | undefined }) {
+  const { t } = useLanguage();
   return (
     <div className="flex flex-col gap-2">
       <p className="text-xs text-muted font-medium">{label}</p>
@@ -232,11 +235,11 @@ function DocImage({ label, src }: { label: string; src: string | null | undefine
             alt={label}
             className="w-full aspect-[4/3] object-cover rounded-xl border border-border hover:border-accent transition-colors cursor-zoom-in"
           />
-          <p className="text-xs text-accent mt-1 text-center">Click to open full size</p>
+          <p className="text-xs text-accent mt-1 text-center">{t("admin.click_full_size")}</p>
         </a>
       ) : (
         <div className="w-full aspect-[4/3] rounded-xl border border-border bg-surface flex items-center justify-center">
-          <span className="text-xs text-muted">No image</span>
+          <span className="text-xs text-muted">{t("admin.no_image")}</span>
         </div>
       )}
     </div>
@@ -244,14 +247,20 @@ function DocImage({ label, src }: { label: string; src: string | null | undefine
 }
 
 function StatusChip({ status }: { status: string }) {
+  const { t } = useLanguage();
   const map: Record<string, string> = {
     approved: "bg-success/10 text-success",
     rejected: "bg-error/10 text-error",
     pending: "bg-yellow-500/10 text-yellow-400",
   };
+  const labelMap: Record<string, string> = {
+    approved: t("admin.status_approved"),
+    rejected: t("admin.status_needs_data"),
+    pending: t("admin.status_pending"),
+  };
   return (
     <span className={`ml-auto text-xs font-semibold px-3 py-1 rounded-full ${map[status] ?? ""}`}>
-      {status.charAt(0).toUpperCase() + status.slice(1)}
+      {labelMap[status] ?? status}
     </span>
   );
 }

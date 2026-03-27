@@ -7,9 +7,11 @@ import ProductCard from "../components/catalog/ProductCard";
 import SkeletonCard from "../components/catalog/SkeletonCard";
 import BackButton from "../components/ui/BackButton";
 import { ArrowLeftIcon, ArrowRightIcon, StarIcon, StoreIcon } from "../components/ui/icons";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function SellerStorefront() {
   const { slug } = useParams<{ slug: string }>();
+  const { t } = useLanguage();
   const [sort, setSort] = useState("newest");
   const [page, setPage] = useState(1);
 
@@ -50,12 +52,12 @@ export default function SellerStorefront() {
               <div className="flex items-center gap-1 mt-1">
                 <StarIcon size={14} style={{ color: "#e9a322", fill: "rgba(233,163,34,0.2)" }} />
                 <span className="text-sm" style={{ color: "var(--text-soft)" }}>
-                  {seller?.average_rating?.toFixed(1)} ({seller?.total_reviews} reviews)
+                  {seller?.average_rating?.toFixed(1)} ({seller?.total_reviews} {t("storefront.reviews")})
                 </span>
               </div>
             )}
             <p className="text-sm mt-1" style={{ color: "var(--text-soft)" }}>
-              {data?.count ?? 0} products
+              {data?.count ?? 0} {t("storefront.products")}
             </p>
           </div>
         </div>
@@ -63,7 +65,7 @@ export default function SellerStorefront() {
         {/* Sort */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="font-semibold" style={{ color: "var(--text-h)" }}>
-            All Products
+            {t("storefront.all_products")}
           </h2>
           <select
             value={sort}
@@ -73,10 +75,10 @@ export default function SellerStorefront() {
               color: "var(--text)",
             }}
           >
-            <option value="newest">Newest</option>
-            <option value="most_viewed">Most Popular</option>
-            <option value="price_asc">Price: Low to High</option>
-            <option value="price_desc">Price: High to Low</option>
+            <option value="newest">{t("storefront.sort_newest")}</option>
+            <option value="most_viewed">{t("storefront.sort_popular")}</option>
+            <option value="price_asc">{t("storefront.sort_price_low")}</option>
+            <option value="price_desc">{t("storefront.sort_price_high")}</option>
           </select>
         </div>
 
@@ -89,10 +91,10 @@ export default function SellerStorefront() {
             <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-[var(--surface-accent)] text-[color:var(--accent)]">
               <StoreIcon size={28} />
             </div>
-            <p style={{ color: "var(--text-soft)" }}>No products from this seller yet.</p>
+            <p style={{ color: "var(--text-soft)" }}>{t("storefront.no_products")}</p>
             <Link to="/" className="mt-3 inline-flex items-center gap-2 text-sm font-semibold" style={{ color: "var(--accent)" }}>
               <ArrowLeftIcon size={15} />
-              Back to home
+              {t("storefront.back_home")}
             </Link>
           </div>
         ) : (
@@ -109,10 +111,10 @@ export default function SellerStorefront() {
                   style={{ color: "var(--text)" }}
                 >
                   <ArrowLeftIcon size={15} />
-                  Prev
+                  {t("storefront.prev")}
                 </button>
                 <span className="text-sm" style={{ color: "var(--text-soft)" }}>
-                  Page {page} of {totalPages}
+                  {t("storefront.page")} {page} {t("storefront.page_of")} {totalPages}
                 </span>
                 <button
                   disabled={page === totalPages}
@@ -120,7 +122,7 @@ export default function SellerStorefront() {
                   className="inline-flex items-center gap-2 rounded-full border border-[color:var(--border)] bg-white px-4 py-2.5 text-sm font-semibold disabled:opacity-30"
                   style={{ color: "var(--text)" }}
                 >
-                  Next
+                  {t("storefront.next")}
                   <ArrowRightIcon size={15} />
                 </button>
               </div>
