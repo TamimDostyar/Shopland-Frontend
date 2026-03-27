@@ -36,6 +36,8 @@ export type ProductImage = {
 export type ProductColor = {
   id: string;
   name: string;
+  name_fa?: string;
+  name_ps?: string;
   hex_code: string;
 };
 
@@ -306,7 +308,7 @@ export type UserRole = "buyer" | "seller" | "admin";
 export type VerificationStatus = {
   phone: boolean;
   email: boolean;
-  id: boolean;
+  selfie: boolean;
   seller_approved?: boolean;
 };
 
@@ -317,13 +319,12 @@ export type User = {
   last_name: string;
   father_name: string;
   phone_number: string | null;
-  national_id: string | null;
   date_of_birth: string | null;
   role: UserRole;
   is_active: boolean;
   is_email_verified: boolean;
   is_phone_verified: boolean;
-  is_id_verified: boolean;
+  is_selfie_verified: boolean;
   verification_status: VerificationStatus;
 };
 
@@ -363,8 +364,6 @@ export type BuyerRegistrationData = {
   last_name: string;
   father_name?: string;
   phone_number: string;
-  national_id?: string;
-  national_id_photo?: File | null;
   profile_photo: File;
   date_of_birth: string;
   // Address (field names match backend serializer exactly)
@@ -387,15 +386,13 @@ export type AdminUser = {
   last_name: string;
   father_name: string;
   phone_number: string | null;
-  national_id: string | null;
-  national_id_photo: string | null;
   profile_photo: string | null;
   date_of_birth: string | null;
   role: UserRole;
   is_active: boolean;
   is_email_verified: boolean;
   is_phone_verified: boolean;
-  is_id_verified: boolean;
+  is_selfie_verified: boolean;
   date_joined: string;
   verification_status: VerificationStatus;
 };
@@ -431,8 +428,6 @@ export type SellerRegistrationData = {
   last_name: string;
   father_name?: string;
   phone_number: string;
-  national_id?: string;
-  national_id_photo?: File | null;
   profile_photo: File;
   date_of_birth: string;
   // Shop

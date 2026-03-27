@@ -157,9 +157,6 @@ export default function RegisterSeller() {
         {step === 1 && (
           <>
             <ImageUpload label={t("reg.profile_photo")} onChange={(f) => set("profile_photo", f)} error={errors.profile_photo} />
-            <Alert kind="info">
-              {t("reg.id_not_required_seller")}
-            </Alert>
           </>
         )}
 

@@ -174,9 +174,8 @@ export default function SellerDetail() {
             <Row label={t("admin.field_fathers_name")} value={user.father_name} />
             <Row label={t("admin.field_email")} value={user.email} />
             <Row label={t("admin.field_phone")} value={user.phone_number ?? "—"} />
-            <Row label={t("admin.field_national_id")} value={user.national_id ?? "—"} />
             <Row label={t("admin.field_dob")} value={user.date_of_birth ?? "—"} />
-            <Row label={t("admin.field_id_verified")} value={user.is_id_verified ? t("admin.id_verified_yes") : t("admin.id_verified_no")} />
+            <Row label={t("admin.field_id_verified")} value={user.is_selfie_verified ? t("admin.id_verified_yes") : t("admin.id_verified_no")} />
           </Section>
 
           {/* Shop */}
@@ -197,7 +196,6 @@ export default function SellerDetail() {
           <h2 className="text-base font-semibold text-heading mb-4">{t("admin.docs_photos")}</h2>
           <div className="grid grid-cols-3 gap-4">
             <DocImage label={t("admin.selfie_label")} src={user.profile_photo} />
-            <DocImage label={t("admin.field_national_id")} src={user.national_id_photo} />
           </div>
         </div>
       </div>

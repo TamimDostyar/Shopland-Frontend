@@ -38,33 +38,33 @@ export function rejectSeller(
   );
 }
 
-// ─── ID verification ──────────────────────────────────────────────────────────
+// ─── Selfie verification ───────────────────────────────────────────────────────
 
-export function listPendingIds(token: string): Promise<AdminUser[]> {
+export function listPendingSelfies(token: string): Promise<AdminUser[]> {
   return http.get<AdminUser[]>(
-    "/api/users/admin/users/pending-id-review/",
+    "/api/users/admin/users/pending-selfie-review/",
     token,
   );
 }
 
-export function approveUserId(
+export function approveSelfie(
   token: string,
   userId: string,
 ): Promise<{ detail: string }> {
   return http.post<{ detail: string }>(
-    `/api/users/admin/users/${userId}/verify-id/`,
+    `/api/users/admin/users/${userId}/verify-selfie/`,
     {},
     token,
   );
 }
 
-export function rejectUserId(
+export function rejectSelfie(
   token: string,
   userId: string,
   reason: string,
 ): Promise<{ detail: string }> {
   return http.post<{ detail: string }>(
-    `/api/users/admin/users/${userId}/reject-id/`,
+    `/api/users/admin/users/${userId}/reject-selfie/`,
     { reason },
     token,
   );

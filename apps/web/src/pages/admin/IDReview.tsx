@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import {
-  listPendingIds,
-  approveUserId,
-  rejectUserId,
+  listPendingSelfies,
+  approveSelfie,
+  rejectSelfie,
   ApiError,
   type AdminUser,
 } from "@shopland/shared";
@@ -31,7 +31,7 @@ export default function IDReview() {
     setLoading(true);
     setError("");
     try {
-      setUsers(await listPendingIds(accessToken));
+      setUsers(await listPendingSelfies(accessToken));
     } catch {
       setError(t("admin.error_load_id_queue"));
     } finally {
@@ -45,7 +45,7 @@ export default function IDReview() {
     if (!accessToken) return;
     setActing(true);
     try {
-      await approveUserId(accessToken, user.id);
+      await approveSelfie(accessToken, user.id);
       setActionMsg(`✓ ${user.first_name} ${user.last_name} — ${t("admin.msg_id_verified")}`);
       setUsers((prev) => prev.filter((u) => u.id !== user.id));
     } catch (err) {
@@ -59,7 +59,7 @@ export default function IDReview() {
     if (!accessToken || !rejectTarget || !rejectReason.trim()) return;
     setActing(true);
     try {
-      await rejectUserId(accessToken, rejectTarget.id, rejectReason);
+      await rejectSelfie(accessToken, rejectTarget.id, rejectReason);
       setActionMsg(`✗ ${rejectTarget.first_name} ${rejectTarget.last_name} — ${t("admin.msg_rejected")}`);
       setUsers((prev) => prev.filter((u) => u.id !== rejectTarget.id));
       setRejectTarget(null);
@@ -168,9 +168,6 @@ function UserCard({
           {user.phone_number && <p className="text-sm text-muted">{user.phone_number}</p>}
         </div>
         <div className="flex flex-col items-end gap-1 text-xs text-muted">
-          {user.national_id && (
-            <span>NID: <span className="text-text">{user.national_id}</span></span>
-          )}
           {user.date_of_birth && (
             <span>DOB: <span className="text-text">{user.date_of_birth}</span></span>
           )}
@@ -180,10 +177,9 @@ function UserCard({
         </div>
       </div>
 
-      {/* Photos */}
-      <div className="grid grid-cols-2 gap-4 mb-5">
+      {/* Selfie */}
+      <div className="mb-5">
         <DocImage label={t("admin.selfie_label")} src={user.profile_photo} />
-        <DocImage label={t("admin.national_id_photo_label")} src={user.national_id_photo} />
       </div>
 
       {/* Actions */}

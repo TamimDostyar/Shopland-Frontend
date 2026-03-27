@@ -18,8 +18,6 @@ type FormState = {
   father_name: string;
   phone_number: string;
   date_of_birth: string;
-  national_id: string;
-  national_id_photo: File | null;
   profile_photo: File | null;
   address_label: string;
   address_full_name: string;
@@ -35,7 +33,7 @@ const INITIAL: FormState = {
   email: "", password: "", confirm_password: "",
   first_name: "", last_name: "", father_name: "",
   phone_number: "", date_of_birth: "",
-  national_id: "", national_id_photo: null, profile_photo: null,
+  profile_photo: null,
   address_label: "Home", address_full_name: "", address_phone_number: "",
   address_street: "", address_district: "", address_city: "", address_province: "",
   address_nearby_landmark: "",
@@ -80,8 +78,6 @@ export default function RegisterBuyer() {
         e.confirm_password = t("reg.error_password_match");
     }
     if (step === 1) {
-      if (!form.national_id) e.national_id = t("reg.error_required");
-      if (!form.national_id_photo) e.national_id_photo = t("reg.error_required");
       if (!form.profile_photo) e.profile_photo = t("reg.error_required");
     }
     if (step === 2) {
@@ -102,7 +98,7 @@ export default function RegisterBuyer() {
   }
 
   async function handleSubmit() {
-    if (!form.national_id_photo || !form.profile_photo) return;
+    if (!form.profile_photo) return;
     setApiError("");
     setSubmitting(true);
     try {
@@ -146,8 +142,6 @@ export default function RegisterBuyer() {
 
         {step === 1 && (
           <>
-            <Input label={t("reg.national_id_number")} value={form.national_id} onChange={(e) => set("national_id", e.target.value)} error={errors.national_id} required />
-            <ImageUpload label={t("reg.national_id_photo_label")} onChange={(f) => set("national_id_photo", f)} error={errors.national_id_photo} />
             <ImageUpload label={t("reg.profile_photo")} onChange={(f) => set("profile_photo", f)} error={errors.profile_photo} />
           </>
         )}
@@ -174,7 +168,6 @@ export default function RegisterBuyer() {
               <Row label={t("reg.review_name")} value={`${form.first_name} ${form.last_name}`} />
               <Row label={t("reg.review_email")} value={form.email} />
               <Row label={t("reg.review_phone")} value={form.phone_number} />
-              <Row label={t("reg.review_national_id")} value={form.national_id} />
               <Row label={t("reg.review_address")} value={`${form.address_city}, ${form.address_province}`} />
             </div>
           </div>

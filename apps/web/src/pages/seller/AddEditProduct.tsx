@@ -5,12 +5,14 @@ import toast from "react-hot-toast";
 import {
   getCategories,
   getBrands,
+  getColors,
   createProduct,
   updateProduct,
   getSellerProducts,
   uploadProductImage,
   localizedCategoryName,
   type Category,
+  type ProductColor,
 } from "@shopland/shared";
 import SellerLayout from "../../components/layout/SellerLayout";
 import BackButton from "../../components/ui/BackButton";
@@ -42,10 +44,13 @@ export default function AddEditProduct() {
     stock_quantity: "0",
   });
 
+  const [selectedColors, setSelectedColors] = useState<string[]>([]);
+
   // Two-step category selection state
   const [selectedParentSlug, setSelectedParentSlug] = useState("");
   const [images, setImages] = useState<File[]>([]);
   const [submitting, setSubmitting] = useState(false);
+  const [showPriceWarning, setShowPriceWarning] = useState(false);
 
   const { data: categories, isLoading: categoriesLoading } = useQuery({
     queryKey: ["categories"],
@@ -54,6 +59,10 @@ export default function AddEditProduct() {
   const { data: brands } = useQuery({
     queryKey: ["brands"],
     queryFn: getBrands,
+  });
+  const { data: colors } = useQuery({
+    queryKey: ["colors"],
+    queryFn: getColors,
   });
 
   // The API returns a tree via CategoryTreeSerializer — each top-level item already has children[]
@@ -111,6 +120,7 @@ export default function AddEditProduct() {
           province: p.province,
           stock_quantity: String((p as unknown as { stock_quantity?: number }).stock_quantity ?? 0),
         });
+        setSelectedColors((p.colors ?? []).map((c: ProductColor) => c.id));
       }
     }
   }, [isEdit, productsData, id]);
@@ -122,8 +132,13 @@ export default function AddEditProduct() {
     mutationFn: (data: Record<string, unknown>) => updateProduct(accessToken!, id!, data),
   });
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  function toggleColor(colorId: string) {
+    setSelectedColors((prev) =>
+      prev.includes(colorId) ? prev.filter((c) => c !== colorId) : [...prev, colorId],
+    );
+  }
+
+  async function doSubmit() {
     setSubmitting(true);
     try {
       const payload: Record<string, unknown> = {
@@ -135,6 +150,7 @@ export default function AddEditProduct() {
         city: form.city,
         province: form.province,
         stock_quantity: Math.max(0, parseInt(form.stock_quantity || "0", 10) || 0),
+        colors: selectedColors,
       };
       if (form.discount_price) payload.discount_price = form.discount_price;
       if (form.brand) payload.brand = form.brand;
@@ -164,12 +180,65 @@ export default function AddEditProduct() {
     }
   }
 
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!isEdit) {
+      setShowPriceWarning(true);
+    } else {
+      void doSubmit();
+    }
+  }
+
   function f(key: keyof typeof form, val: string) {
     setForm((prev) => ({ ...prev, [key]: val }));
   }
 
   return (
     <SellerLayout>
+      {/* Overpriced warning dialog */}
+      {showPriceWarning && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+          <div
+            className="w-full max-w-sm rounded-[1.75rem] p-6 space-y-4 shadow-[0_24px_64px_rgba(23,32,51,0.18)]"
+            style={{ background: "var(--surface, #fff)", border: "1px solid var(--border)" }}
+          >
+            <div className="flex items-center gap-3">
+              <span
+                className="flex size-10 flex-shrink-0 items-center justify-center rounded-2xl text-xl"
+                style={{ background: "rgba(255,193,7,0.12)", color: "#f59e0b" }}
+              >
+                ⚠
+              </span>
+              <h2 className="font-semibold text-base" style={{ color: "var(--text-h)" }}>
+                {t("seller.overpriced_warning_title")}
+              </h2>
+            </div>
+            <p className="text-sm leading-relaxed" style={{ color: "var(--text-soft)" }}>
+              {t("seller.overpriced_warning_body")}
+            </p>
+            <div className="flex flex-col gap-2 pt-1">
+              <Button
+                onClick={() => {
+                  setShowPriceWarning(false);
+                  void doSubmit();
+                }}
+                className="w-full"
+              >
+                {t("seller.overpriced_confirm")}
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => setShowPriceWarning(false)}
+                className="w-full"
+              >
+                {t("seller.overpriced_cancel")}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="max-w-2xl">
         <BackButton to="/seller/products" label={t("seller.back_to_products")} className="mb-5" />
 
@@ -180,7 +249,7 @@ export default function AddEditProduct() {
           {isEdit ? t("seller.edit_product") : t("seller.add_new_product")}
         </h1>
 
-        <form onSubmit={(e) => { void handleSubmit(e); }} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           {/* Basic Info */}
           <section
             className="rounded-[1.75rem] border border-[color:var(--border)] bg-white p-6 space-y-4 shadow-[0_18px_46px_rgba(23,32,51,0.06)]"
@@ -237,7 +306,7 @@ export default function AddEditProduct() {
                 {CONDITIONS.map((c) => (
                   <label
                     key={c}
-                    className="flex items-center gap-2 cursor-pointer px-3 py-2 rounded-xl text-sm"
+                    className="flex items-center gap-2 cursor-pointer px-3 py-2 rounded-xl text-sm capitalize"
                     style={{
                       border: `1px solid ${form.condition === c ? "var(--accent)" : "var(--border)"}`,
                       background: form.condition === c ? "rgba(255,125,72,0.06)" : "transparent",
@@ -252,7 +321,7 @@ export default function AddEditProduct() {
                       onChange={() => f("condition", c)}
                       style={{ accentColor: "var(--accent)" }}
                     />
-                    {t(`product.condition_${c}`)}
+                    {c}
                   </label>
                 ))}
               </div>
@@ -377,6 +446,60 @@ export default function AddEditProduct() {
                 ))}
               </select>
             </div>
+
+            {/* Colors */}
+            {colors && colors.length > 0 && (
+              <div>
+                <label className="block text-sm mb-2" style={{ color: "var(--text-soft)" }}>
+                  {locale === "fa" ? "رنگ‌های موجود" : locale === "ps" ? "شتون رنگونه" : "Available Colors"}
+                  {selectedColors.length > 0 && (
+                    <span
+                      className="ml-2 text-xs px-1.5 py-0.5 rounded-full"
+                      style={{ background: "rgba(255,125,72,0.12)", color: "var(--accent)" }}
+                    >
+                      {selectedColors.length} selected
+                    </span>
+                  )}
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {colors.map((color) => {
+                    const isSelected = selectedColors.includes(color.id);
+                    return (
+                      <button
+                        key={color.id}
+                        type="button"
+                        title={(locale === "fa" && color.name_fa) ? color.name_fa : (locale === "ps" && color.name_ps) ? color.name_ps : color.name}
+                        onClick={() => toggleColor(color.id)}
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all"
+                        style={{
+                          border: `2px solid ${isSelected ? "var(--accent)" : "var(--border)"}`,
+                          background: isSelected ? "rgba(255,125,72,0.06)" : "transparent",
+                          color: isSelected ? "var(--accent)" : "var(--text-soft)",
+                        }}
+                      >
+                        <span
+                          className="size-3.5 rounded-full flex-shrink-0"
+                          style={{
+                            background: color.hex_code,
+                            border: color.hex_code.toUpperCase() === "#FFFFFF"
+                              ? "1px solid var(--border)"
+                              : "none",
+                          }}
+                        />
+                        {(locale === "fa" && color.name_fa) ? color.name_fa
+                          : (locale === "ps" && color.name_ps) ? color.name_ps
+                          : color.name}
+                        {isSelected && (
+                          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                            <path d="M1.5 5L4 7.5L8.5 2.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             <div className="grid grid-cols-2 gap-4">
               <Input
