@@ -10,8 +10,10 @@ import AdminLayout from "../../components/layout/AdminLayout";
 import Alert from "../../components/ui/Alert";
 import Button from "../../components/ui/Button";
 import { useAuth } from "../../hooks/useAuth";
+import { useLanguage } from "../../context/LanguageContext";
 
 export default function IDReview() {
+  const { t } = useLanguage();
   const { accessToken } = useAuth();
 
   const [users, setUsers] = useState<AdminUser[]>([]);
@@ -31,11 +33,11 @@ export default function IDReview() {
     try {
       setUsers(await listPendingIds(accessToken));
     } catch {
-      setError("Failed to load ID review queue.");
+      setError(t("admin.error_load_id_queue"));
     } finally {
       setLoading(false);
     }
-  }, [accessToken]);
+  }, [accessToken, t]);
 
   useEffect(() => { void load(); }, [load]);
 
@@ -47,7 +49,7 @@ export default function IDReview() {
       setActionMsg(`✓ ${user.first_name} ${user.last_name}'s ID verified.`);
       setUsers((prev) => prev.filter((u) => u.id !== user.id));
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Action failed.");
+      setError(err instanceof ApiError ? err.message : t("admin.action_failed"));
     } finally {
       setActing(false);
     }
@@ -63,7 +65,7 @@ export default function IDReview() {
       setRejectTarget(null);
       setRejectReason("");
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Action failed.");
+      setError(err instanceof ApiError ? err.message : t("admin.action_failed"));
     } finally {
       setActing(false);
     }

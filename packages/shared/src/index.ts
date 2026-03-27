@@ -1,5 +1,6 @@
 export * from "./types";
 export * from "./constants";
+export { UI_TRANSLATIONS, type TranslationKey } from "./i18n/translations";
 export * from "./utils";
 export * from "./http";
 export * from "./utils/tokens";

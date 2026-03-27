@@ -1,12 +1,15 @@
 import type { ReactNode } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
+import { APP_NAME } from "@shopland/shared";
 import { useAuth } from "../../hooks/useAuth";
+import { useLanguage } from "../../context/LanguageContext";
 
 interface Props {
   children: ReactNode;
 }
 
 export default function AppLayout({ children }: Props) {
+  const { t, dir } = useLanguage();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -16,15 +19,14 @@ export default function AppLayout({ children }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-bg flex">
-      {/* Sidebar */}
+    <div dir={dir} className="min-h-screen bg-bg flex">
       <aside className="w-56 border-r border-border flex flex-col py-6 px-4 gap-1 shrink-0">
         <Link
           to="/"
           className="text-lg font-bold text-heading mb-6 block"
           style={{ fontFamily: "var(--font-heading)" }}
         >
-          Shopland
+          {APP_NAME}
         </Link>
 
         <NavLink
@@ -37,7 +39,7 @@ export default function AppLayout({ children }: Props) {
             }`
           }
         >
-          Profile
+          {t("account.profile")}
         </NavLink>
 
         <NavLink
@@ -50,7 +52,7 @@ export default function AppLayout({ children }: Props) {
             }`
           }
         >
-          Addresses
+          {t("account.addresses")}
         </NavLink>
 
         {user?.role === "admin" && (
@@ -58,7 +60,7 @@ export default function AppLayout({ children }: Props) {
             to="/admin"
             className="px-3 py-2 rounded-lg text-sm text-accent hover:bg-accent/10 transition-colors mt-2 font-medium"
           >
-            Admin Panel →
+            {t("account.admin_panel_arrow")}
           </Link>
         )}
 
@@ -68,12 +70,11 @@ export default function AppLayout({ children }: Props) {
             onClick={() => { void handleLogout(); }}
             className="w-full text-left px-3 py-2 rounded-lg text-sm text-muted hover:text-error hover:bg-error/5 transition-colors"
           >
-            Sign out
+            {t("nav.signout")}
           </button>
         </div>
       </aside>
 
-      {/* Main content */}
       <main className="flex-1 p-8 overflow-y-auto">{children}</main>
     </div>
   );

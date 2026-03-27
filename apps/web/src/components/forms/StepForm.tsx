@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Button from "../ui/Button";
+import { useLanguage } from "../../context/LanguageContext";
 
 interface Props {
   steps: string[];
@@ -22,6 +23,7 @@ export default function StepForm({
   submitting,
   nextDisabled,
 }: Props) {
+  const { t } = useLanguage();
   const isLast = currentStep === steps.length - 1;
   const progress = ((currentStep + 1) / steps.length) * 100;
 
@@ -55,7 +57,7 @@ export default function StepForm({
       <div className="flex gap-3 pt-1">
         {currentStep > 0 && (
           <Button variant="ghost" onClick={onBack} className="flex-1">
-            Back
+            {t("common.back")}
           </Button>
         )}
         {isLast ? (
@@ -65,11 +67,11 @@ export default function StepForm({
             disabled={nextDisabled}
             className="flex-1"
           >
-            Submit
+            {t("common.submit")}
           </Button>
         ) : (
           <Button onClick={onNext} disabled={nextDisabled} className="flex-1">
-            Continue
+            {t("common.continue")}
           </Button>
         )}
       </div>

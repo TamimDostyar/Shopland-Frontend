@@ -4,6 +4,8 @@ import {
   getProducts,
   getCategories,
   getApiBaseUrl,
+  localizedCategoryName,
+  localizedProductName,
   type Category,
   type Locale,
   type Product,
@@ -36,12 +38,6 @@ function getProductImage(product: Product): string | null {
     product.images?.[0]?.image;
 
   return resolveMediaUrl(rawImg);
-}
-
-function localizedCategoryName(cat: { name: string; name_fa?: string; name_ps?: string }, locale: Locale): string {
-  if (locale === "fa" && cat.name_fa) return cat.name_fa;
-  if (locale === "ps" && cat.name_ps) return cat.name_ps;
-  return cat.name;
 }
 
 export default function Home() {
@@ -268,13 +264,15 @@ function SectionHeader({
   title,
   subtitle,
   seeAllLink,
-  seeAllLabel = "See all",
+  seeAllLabel,
 }: {
   title: string;
   subtitle?: string;
   seeAllLink?: string;
   seeAllLabel?: string;
 }) {
+  const { t } = useLanguage();
+  const resolvedSeeAll = seeAllLabel ?? t("home.see_all");
   return (
     <div className="flex flex-wrap items-end justify-between gap-3 mb-6">
       <div>
@@ -296,7 +294,7 @@ function SectionHeader({
           className="inline-flex items-center gap-2 rounded-full bg-[var(--surface-accent)] px-4 py-2 text-sm font-semibold transition-colors hover:opacity-90"
           style={{ color: "var(--accent)" }}
         >
-          {seeAllLabel}
+          {resolvedSeeAll}
           <ArrowRightIcon size={14} />
         </Link>
       )}
@@ -360,8 +358,10 @@ function FeaturedShowcaseCard({
   locale: Locale;
   featuredFallback: string;
 }) {
+  const { t } = useLanguage();
   const img = product ? getProductImage(product) : null;
   const price = product ? parseFloat(product.discount_price ?? product.price) : null;
+  const displayName = product ? localizedProductName(product, locale) : "";
 
   if (!product) {
     return (
@@ -387,7 +387,7 @@ function FeaturedShowcaseCard({
       {img ? (
         <img
           src={img}
-          alt={product.name}
+          alt={displayName}
           className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
       ) : (
@@ -399,11 +399,11 @@ function FeaturedShowcaseCard({
           {catName}
         </div>
         <div className={`${large ? "mt-3 max-w-md text-2xl sm:text-3xl" : compact ? "mt-2 text-base" : "mt-3 text-lg"} font-bold leading-tight text-white`}>
-          {product.name}
+          {displayName}
         </div>
         <div className="mt-2 flex items-center justify-between gap-3">
           <div className="text-sm font-medium text-white/80">
-            {product.seller?.shop_name ?? "Shopland Seller"}
+            {product.seller?.shop_name ?? t("product.seller_fallback")}
           </div>
           {price !== null && (
             <div className="rounded-full bg-white px-3 py-1.5 text-sm font-bold text-[color:var(--text-h)]">

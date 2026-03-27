@@ -1,19 +1,22 @@
 import { Link } from "react-router-dom";
 import AuthLayout from "../components/layout/AuthLayout";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function Register() {
+  const { t } = useLanguage();
+
   return (
-    <AuthLayout title="Create your account" subtitle="Choose your account type to get started">
+    <AuthLayout title={t("register.title")} subtitle={t("register.subtitle")}>
       <div className="flex flex-col gap-4">
         <Link
           to="/register/buyer"
           className="group flex flex-col gap-1 p-5 rounded-xl border border-border bg-surface hover:border-accent transition-colors"
         >
           <span className="text-base font-semibold text-heading group-hover:text-accent transition-colors">
-            Buyer
+            {t("register.buyer")}
           </span>
           <span className="text-sm text-muted">
-            Browse and purchase products from Afghan sellers across the country.
+            {t("register.buyer_desc")}
           </span>
         </Link>
 
@@ -22,17 +25,17 @@ export default function Register() {
           className="group flex flex-col gap-1 p-5 rounded-xl border border-border bg-surface hover:border-accent transition-colors"
         >
           <span className="text-base font-semibold text-heading group-hover:text-accent transition-colors">
-            Seller
+            {t("register.seller")}
           </span>
           <span className="text-sm text-muted">
-            Open your shop and reach buyers across Afghanistan.
+            {t("register.seller_desc")}
           </span>
         </Link>
 
         <p className="text-center text-sm text-muted mt-2">
-          Already have an account?{" "}
+          {t("register.have_account")}{" "}
           <Link to="/login" className="text-accent hover:underline">
-            Sign in
+            {t("register.signin")}
           </Link>
         </p>
       </div>

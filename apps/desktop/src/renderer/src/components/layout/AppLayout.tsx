@@ -1,12 +1,14 @@
 import type { ReactNode } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
+import { useLanguage } from "../../context/LanguageContext";
 
 interface Props {
   children: ReactNode;
 }
 
 export default function AppLayout({ children }: Props) {
+  const { t, dir } = useLanguage();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -16,7 +18,7 @@ export default function AppLayout({ children }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-bg flex">
+    <div className="min-h-screen bg-bg flex" dir={dir}>
       <aside className="w-56 border-r border-border flex flex-col py-6 px-4 gap-1 shrink-0">
         <Link
           to="/"
@@ -34,7 +36,7 @@ export default function AppLayout({ children }: Props) {
             }`
           }
         >
-          Profile
+          {t("account.profile")}
         </NavLink>
 
         <NavLink
@@ -45,7 +47,7 @@ export default function AppLayout({ children }: Props) {
             }`
           }
         >
-          Addresses
+          {t("account.addresses")}
         </NavLink>
 
         <div className="mt-auto">
@@ -54,7 +56,7 @@ export default function AppLayout({ children }: Props) {
             onClick={() => { void handleLogout(); }}
             className="w-full text-left px-3 py-2 rounded-lg text-sm text-muted hover:text-error hover:bg-error/5 transition-colors"
           >
-            Sign out
+            {t("nav.signout")}
           </button>
         </div>
       </aside>

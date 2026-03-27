@@ -1,13 +1,12 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
+import { APP_NAME, COMING_SOON, LOCALES } from "@shopland/shared";
 import type { Locale } from "@shopland/shared";
-import { APP_NAME, COMING_SOON, DEFAULT_LOCALE, LOCALES } from "@shopland/shared";
 import "../App.css";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function Landing() {
-  const [locale, setLocale] = useState<Locale>(DEFAULT_LOCALE);
+  const { locale, setLocale, t, dir } = useLanguage();
   const content = COMING_SOON[locale];
-  const dir = LOCALES[locale].dir;
   const localeKeys = Object.keys(LOCALES) as Locale[];
 
   return (
@@ -27,9 +26,9 @@ export default function Landing() {
               to="/login"
               className="text-sm text-muted hover:text-accent transition-colors"
             >
-              Sign in
+              {t("landing.sign_in")}
             </Link>
-            <nav className="lang-switcher" aria-label="Language">
+            <nav className="lang-switcher" aria-label={t("landing.lang_aria")}>
               {localeKeys.map((key) => (
                 <button
                   key={key}
@@ -60,7 +59,7 @@ export default function Landing() {
 
           <div className="flex gap-3 mt-8 flex-wrap">
             <Link to="/register" className="cta" style={{ textDecoration: "none", display: "inline-block" }}>
-              Get started
+              {t("landing.get_started")}
             </Link>
             <Link
               to="/login"
@@ -76,7 +75,7 @@ export default function Landing() {
                 transition: "border-color 0.2s",
               }}
             >
-              Sign in
+              {t("landing.sign_in")}
             </Link>
           </div>
         </main>

@@ -14,6 +14,7 @@ import {
 import SellerLayout from "../../components/layout/SellerLayout";
 import BackButton from "../../components/ui/BackButton";
 import { useAuth } from "../../hooks/useAuth";
+import { useLanguage } from "../../context/LanguageContext";
 import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
 import { CameraIcon, CategoryIcon } from "../../components/ui/icons";
@@ -21,6 +22,7 @@ import { CameraIcon, CategoryIcon } from "../../components/ui/icons";
 const CONDITIONS = ["new", "used", "refurbished"] as const;
 
 export default function AddEditProduct() {
+  const { t } = useLanguage();
   const { id } = useParams<{ id?: string }>();
   const isEdit = !!id;
   const { accessToken } = useAuth();
@@ -150,10 +152,10 @@ export default function AddEditProduct() {
         await uploadProductImage(accessToken!, productId, fd);
       }
 
-      toast.success(isEdit ? "Product updated!" : "Product submitted for review!");
+      toast.success(isEdit ? t("seller.toast_product_updated") : t("seller.toast_product_submitted"));
       navigate("/seller/products");
     } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : "Failed to save product");
+      toast.error(err instanceof Error ? err.message : t("seller.toast_save_failed"));
     } finally {
       setSubmitting(false);
     }

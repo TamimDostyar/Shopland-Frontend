@@ -1,7 +1,7 @@
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import type { Locale } from "@shopland/shared";
-import { LOCALES } from "@shopland/shared";
+import { APP_NAME, LOCALES } from "@shopland/shared";
 import { useAuth } from "../../hooks/useAuth";
 import { useCart } from "../../hooks/useCart";
 import { useLanguage } from "../../context/LanguageContext";
@@ -172,10 +172,10 @@ export default function MainLayout({ children }: Props) {
                   className="text-base font-bold leading-none text-[color:var(--text-h)] md:text-lg"
                   style={{ fontFamily: "var(--heading)" }}
                 >
-                  Shopland
+                  {APP_NAME}
                 </div>
                 <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[color:var(--text-soft)] md:text-[11px]">
-                  Marketplace
+                  {t("auth.logo_marketplace")}
                 </div>
               </div>
             </Link>
@@ -212,7 +212,7 @@ export default function MainLayout({ children }: Props) {
               <div className="relative" ref={langRef}>
                 <button
                   onClick={() => setLangOpen((o) => !o)}
-                  aria-label="Switch language"
+                  aria-label={t("nav.switch_language_aria")}
                   className="inline-flex items-center gap-1.5 rounded-full border border-[color:var(--border)] bg-white px-2.5 py-2.5 text-sm font-semibold text-[color:var(--text-h)] shadow-[0_12px_28px_rgba(23,32,51,0.05)] transition-all hover:-translate-y-0.5 md:px-3 md:py-3"
                 >
                   <GlobeIcon size={16} />
@@ -389,7 +389,7 @@ export default function MainLayout({ children }: Props) {
                 </div>
                 <div>
                   <div className="text-lg font-bold" style={{ fontFamily: "var(--heading)" }}>
-                    Shopland
+                    {APP_NAME}
                   </div>
                   <div className="text-xs uppercase tracking-[0.18em] text-white/70">
                     {t("footer.tagline")}

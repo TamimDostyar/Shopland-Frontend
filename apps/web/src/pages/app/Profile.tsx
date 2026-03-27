@@ -7,8 +7,10 @@ import Alert from "../../components/ui/Alert";
 import Button from "../../components/ui/Button";
 import BackButton from "../../components/ui/BackButton";
 import { useAuth } from "../../hooks/useAuth";
+import { useLanguage } from "../../context/LanguageContext";
 
 export default function Profile() {
+  const { t } = useLanguage();
   const { user, setTokensAndUser, refreshUser } = useAuth();
   const navigate = useNavigate();
   const [emailVerifyError, setEmailVerifyError] = useState("");
@@ -32,20 +34,20 @@ export default function Profile() {
       await refreshUser();
       setEmailVerifySuccess(true);
     } catch (err) {
-      setEmailVerifyError(err instanceof ApiError ? err.message : "Google verification failed.");
+      setEmailVerifyError(err instanceof ApiError ? err.message : t("profile.google_verify_api_error"));
     }
   }
 
   return (
     <MainLayout>
       <div className="max-w-3xl mx-auto px-4 py-8">
-        <BackButton to="/" label="Back to Home" className="mb-5" />
+        <BackButton to="/" label={t("profile.back")} className="mb-5" />
 
         <h1
           className="text-2xl font-bold mb-6"
           style={{ fontFamily: "var(--heading)", color: "var(--text-h)" }}
         >
-          My Profile
+          {t("profile.title")}
         </h1>
 
         {/* Verification banners */}
@@ -53,21 +55,21 @@ export default function Profile() {
           {!vs.email && (
             <div className="rounded-2xl border border-yellow-400/30 bg-yellow-400/8 px-4 py-3 text-sm" style={{ color: "var(--text)" }}>
               <p className="font-semibold mb-2" style={{ color: "var(--text-h)" }}>
-                Email not verified
+                {t("profile.email_not_verified")}
               </p>
               {emailVerifySuccess ? (
-                <p className="text-green-400 font-medium">Email verified!</p>
+                <p className="text-green-400 font-medium">{t("profile.email_verified")}</p>
               ) : (
                 <>
                   <p className="mb-3" style={{ color: "var(--text-soft)" }}>
-                    Sign in with Google using <strong>{user.email}</strong> to verify your email instantly.
+                    {t("profile.google_verify_p1")} <strong>{user.email}</strong> {t("profile.google_verify_p2")}
                   </p>
                   {emailVerifyError && (
                     <p className="mb-2 text-red-400 text-xs">{emailVerifyError}</p>
                   )}
                   <GoogleLogin
                     onSuccess={(resp) => { if (resp.credential) void handleGoogleVerify(resp.credential); }}
-                    onError={() => setEmailVerifyError("Google sign-in failed.")}
+                    onError={() => setEmailVerifyError(t("profile.google_failed"))}
                     text="signin_with"
                     shape="pill"
                     size="medium"
@@ -78,12 +80,12 @@ export default function Profile() {
           )}
           {!vs.id && (
             <Alert kind="info">
-              ID verification is under review. You&apos;ll be notified once it&apos;s complete.
+              {t("profile.id_under_review")}
             </Alert>
           )}
           {user.role === "seller" && vs.seller_approved === false && (
             <Alert kind="info">
-              Your seller application is pending approval. We&apos;ll review it shortly.
+              {t("profile.seller_pending")}
             </Alert>
           )}
         </div>
@@ -113,20 +115,20 @@ export default function Profile() {
           <hr style={{ borderColor: "var(--border)" }} />
 
           <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
-            <InfoRow label="Email" value={user.email} />
-            <InfoRow label="Phone" value={user.phone_number ?? "—"} />
-            <InfoRow label="Father's name" value={user.father_name} />
-            <InfoRow label="Date of birth" value={user.date_of_birth ?? "—"} />
+            <InfoRow label={t("profile.email")} value={user.email} />
+            <InfoRow label={t("profile.phone")} value={user.phone_number ?? "—"} />
+            <InfoRow label={t("profile.fathers_name")} value={user.father_name} />
+            <InfoRow label={t("profile.dob")} value={user.date_of_birth ?? "—"} />
           </div>
 
           <hr style={{ borderColor: "var(--border)" }} />
 
           <div className="flex gap-3 flex-wrap">
-            <VerBadge label="Phone" ok={vs.phone} />
-            <VerBadge label="Email" ok={vs.email} />
-            <VerBadge label="ID" ok={vs.id} />
+            <VerBadge label={t("profile.badge_phone")} ok={vs.phone} />
+            <VerBadge label={t("profile.badge_email")} ok={vs.email} />
+            <VerBadge label={t("profile.badge_id")} ok={vs.id} />
             {user.role === "seller" && (
-              <VerBadge label="Seller approved" ok={vs.seller_approved ?? false} />
+              <VerBadge label={t("profile.badge_seller")} ok={vs.seller_approved ?? false} />
             )}
           </div>
         </div>
@@ -134,14 +136,14 @@ export default function Profile() {
         {/* Quick links */}
         <div className="flex flex-wrap gap-3">
           <Button variant="ghost" onClick={() => navigate("/profile/addresses")}>
-            Manage Addresses →
+            {t("profile.manage_addresses")}
           </Button>
           <Button variant="ghost" onClick={() => navigate("/orders")}>
-            My Orders →
+            {t("profile.my_orders")}
           </Button>
           {(user.role === "seller") && (
             <Button variant="ghost" onClick={() => navigate("/seller")}>
-              Seller Dashboard →
+              {t("profile.seller_dashboard")}
             </Button>
           )}
         </div>

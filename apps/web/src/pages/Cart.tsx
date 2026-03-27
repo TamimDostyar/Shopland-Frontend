@@ -14,9 +14,11 @@ import MainLayout from "../components/layout/MainLayout";
 import BackButton from "../components/ui/BackButton";
 import { useAuth } from "../hooks/useAuth";
 import { useCart } from "../hooks/useCart";
+import { useLanguage } from "../context/LanguageContext";
 import { AlertTriangleIcon, CartIcon, ImageIcon, TruckIcon } from "../components/ui/icons";
 
 export default function Cart() {
+  const { t } = useLanguage();
   const { accessToken, isAuthenticated } = useAuth();
   const { refreshCart } = useCart();
   const navigate = useNavigate();
@@ -36,7 +38,7 @@ export default function Cart() {
       qc.setQueryData(["cart"], updatedCart);
       await refreshCart();
     },
-    onError: () => toast.error("Could not update quantity"),
+    onError: () => toast.error(t("cart.error_qty")),
   });
 
   const removeMutation = useMutation({
@@ -44,7 +46,7 @@ export default function Cart() {
     onSuccess: async (updatedCart) => {
       qc.setQueryData(["cart"], updatedCart);
       await refreshCart();
-      toast.success("Item removed");
+      toast.success(t("cart.removed"));
     },
     onError: async () => {
       await qc.invalidateQueries({ queryKey: ["cart"] });
@@ -58,7 +60,7 @@ export default function Cart() {
       await qc.invalidateQueries({ queryKey: ["cart"] });
       await refreshCart();
       setclearConfirm(false);
-      toast.success("Cart cleared");
+      toast.success(t("cart.cleared"));
     },
   });
 
@@ -70,17 +72,17 @@ export default function Cart() {
             <CartIcon size={28} />
           </div>
           <h2 className="text-xl font-bold mb-2" style={{ color: "var(--text-h)" }}>
-            Sign in to view your cart
+            {t("cart.signin_title")}
           </h2>
           <p className="text-sm mb-6" style={{ color: "var(--text-soft)" }}>
-            Log in to access your saved cart items.
+            {t("cart.signin_desc")}
           </p>
           <Link
             to="/login"
             className="px-5 py-2.5 rounded-xl font-medium text-sm inline-block"
             style={{ background: "var(--accent)", color: "white" }}
           >
-            Log In
+            {t("cart.login")}
           </Link>
         </div>
       </MainLayout>
@@ -109,16 +111,16 @@ export default function Cart() {
   return (
     <MainLayout>
       <div className="max-w-5xl mx-auto px-4 py-8">
-        <BackButton to="/" label="Continue Shopping" className="mb-5" />
+        <BackButton to="/" label={t("cart.continue_shopping")} className="mb-5" />
 
         <h1
           className="text-2xl font-bold mb-8"
           style={{ fontFamily: "var(--heading)", color: "var(--text-h)" }}
         >
-          Shopping Cart
+          {t("cart.title")}
           {items.length > 0 && (
             <span className="ml-3 text-base font-normal" style={{ color: "var(--text-soft)" }}>
-              ({items.length} {items.length === 1 ? "item" : "items"})
+              ({items.length} {items.length === 1 ? t("cart.item") : t("cart.items")})
             </span>
           )}
         </h1>
@@ -129,17 +131,17 @@ export default function Cart() {
               <CartIcon size={28} />
             </div>
             <p className="font-medium mb-2" style={{ color: "var(--text-h)" }}>
-              Your cart is empty
+              {t("cart.empty_title")}
             </p>
             <p className="text-sm mb-6" style={{ color: "var(--text-soft)" }}>
-              Browse products and add items to your cart.
+              {t("cart.empty_desc")}
             </p>
             <Link
               to="/"
               className="px-5 py-2.5 rounded-xl font-medium text-sm inline-block"
               style={{ background: "var(--accent)", color: "white" }}
             >
-              Browse Products
+              {t("cart.browse")}
             </Link>
           </div>
         ) : (
@@ -164,14 +166,14 @@ export default function Cart() {
                   onClick={() => setclearConfirm(true)}
                   className="mt-2 rounded-full bg-[var(--danger-soft)] px-4 py-2 text-sm font-semibold text-[color:var(--error)] transition-colors hover:bg-[#fde3e3]"
                 >
-                  Clear cart
+                  {t("cart.clear")}
                 </button>
               ) : (
                 <div
                   className="rounded-[1.5rem] p-4 flex items-center gap-4 border border-[color:rgba(217,75,75,0.18)] bg-[var(--danger-soft)]"
                 >
                   <p className="text-sm flex-1" style={{ color: "var(--text)" }}>
-                    Are you sure you want to clear the cart?
+                    {t("cart.clear_confirm")}
                   </p>
                   <button
                     onClick={() => clearMutation.mutate()}
@@ -179,14 +181,14 @@ export default function Cart() {
                     className="px-3 py-1.5 rounded-lg text-xs font-medium"
                     style={{ background: "#f87171", color: "white" }}
                   >
-                    Yes, Clear
+                    {t("cart.clear_yes")}
                   </button>
                   <button
                     onClick={() => setclearConfirm(false)}
                     className="px-3 py-1.5 rounded-lg text-xs font-medium"
                     style={{ border: "1px solid var(--border)", color: "var(--text)" }}
                   >
-                    Cancel
+                    {t("cart.cancel")}
                   </button>
                 </div>
               )}
@@ -195,24 +197,24 @@ export default function Cart() {
             {/* Summary */}
             <div className="rounded-[2rem] border border-[color:var(--border)] bg-white p-6 h-fit sticky top-24 space-y-4 shadow-[0_18px_46px_rgba(23,32,51,0.06)]">
               <h2 className="font-semibold" style={{ color: "var(--text-h)" }}>
-                Order Summary
+                {t("cart.order_summary")}
               </h2>
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between">
-                  <span style={{ color: "var(--text-soft)" }}>Subtotal</span>
+                  <span style={{ color: "var(--text-soft)" }}>{t("cart.subtotal")}</span>
                   <span style={{ color: "var(--text)" }}>
                     ؋{parseFloat(cart?.subtotal ?? "0").toLocaleString()}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span style={{ color: "var(--text-soft)" }}>Delivery</span>
-                  <span style={{ color: "var(--text-soft)" }}>Calculated at checkout</span>
+                  <span style={{ color: "var(--text-soft)" }}>{t("cart.delivery")}</span>
+                  <span style={{ color: "var(--text-soft)" }}>{t("cart.delivery_calculated")}</span>
                 </div>
                 <div
                   className="border-t pt-3 flex justify-between font-semibold"
                   style={{ borderColor: "var(--border)" }}
                 >
-                  <span style={{ color: "var(--text-h)" }}>Total</span>
+                  <span style={{ color: "var(--text-h)" }}>{t("cart.total")}</span>
                   <span style={{ color: "var(--accent)" }}>
                     ؋{parseFloat(cart?.total ?? "0").toLocaleString()}
                   </span>
@@ -223,7 +225,7 @@ export default function Cart() {
                 onClick={() => navigate("/checkout")}
                 className="w-full rounded-full bg-[var(--accent)] py-3.5 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(255,106,61,0.22)] transition-opacity hover:opacity-90"
               >
-                Proceed to Checkout
+                {t("cart.checkout")}
               </button>
 
               <div
@@ -233,7 +235,7 @@ export default function Cart() {
                 <div className="flex size-10 items-center justify-center rounded-2xl bg-white text-[color:var(--success)]">
                   <TruckIcon size={18} />
                 </div>
-                Cash on delivery available at checkout.
+                {t("cart.cod_note")}
               </div>
             </div>
           </div>
@@ -254,6 +256,7 @@ function CartItemRow({
   onRemove: () => void;
   disabled: boolean;
 }) {
+  const { t } = useLanguage();
   const [showRemoveConfirm, setShowRemoveConfirm] = useState(false);
   const price = parseFloat(item.product.discount_price ?? item.product.price);
   const maxQty = item.product.available_quantity;
@@ -295,7 +298,7 @@ function CartItemRow({
         {!item.product.in_stock && (
           <p className="text-xs mt-1 inline-flex items-center gap-1.5 font-semibold" style={{ color: "#f87171" }}>
             <AlertTriangleIcon size={14} />
-            Item is out of stock
+            {t("cart.out_of_stock")}
           </p>
         )}
 
@@ -336,7 +339,7 @@ function CartItemRow({
               onClick={() => setShowRemoveConfirm(true)}
               className="ml-auto rounded-full bg-[var(--danger-soft)] px-3 py-1.5 text-xs font-semibold text-[color:var(--error)] transition-colors hover:bg-[#fde3e3]"
             >
-              Remove
+              {t("cart.remove")}
             </button>
           ) : (
             <div className="ml-auto flex items-center gap-2">
@@ -345,14 +348,14 @@ function CartItemRow({
                 className="text-xs px-2 py-1 rounded-lg"
                 style={{ background: "#f87171", color: "white" }}
               >
-                Yes
+                {t("cart.remove_yes")}
               </button>
               <button
                 onClick={() => setShowRemoveConfirm(false)}
                 className="text-xs px-2 py-1 rounded-lg"
                 style={{ border: "1px solid var(--border)", color: "var(--text)" }}
               >
-                No
+                {t("cart.remove_no")}
               </button>
             </div>
           )}

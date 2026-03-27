@@ -5,8 +5,10 @@ import AuthLayout from "../components/layout/AuthLayout";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import Alert from "../components/ui/Alert";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function ResetPassword() {
+  const { t } = useLanguage();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const token = searchParams.get("token") ?? "";
@@ -18,11 +20,11 @@ export default function ResetPassword() {
 
   if (!token) {
     return (
-      <AuthLayout title="Reset password" backTo="/login" backLabel="Back to Sign in">
+      <AuthLayout title={t("reset.title")} backTo="/login" backLabel={t("reset.back_signin")}>
         <Alert kind="error">
-          Invalid or missing reset token.{" "}
+          {t("reset.invalid_token")}{" "}
           <Link to="/forgot-password" className="underline">
-            Request a new link
+            {t("reset.request_new")}
           </Link>
           .
         </Alert>
@@ -34,7 +36,7 @@ export default function ResetPassword() {
     e.preventDefault();
     setError("");
     if (newPassword !== confirmPassword) {
-      setError("Passwords do not match.");
+      setError(t("reset.error_mismatch"));
       return;
     }
     setLoading(true);
@@ -42,19 +44,24 @@ export default function ResetPassword() {
       await confirmPasswordReset(token, newPassword, confirmPassword);
       navigate("/login", { state: { passwordReset: true }, replace: true });
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Reset failed. The link may have expired.");
+      setError(err instanceof ApiError ? err.message : t("reset.error_failed"));
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <AuthLayout title="Reset password" subtitle="Enter your new password below" backTo="/login" backLabel="Back to Sign in">
+    <AuthLayout
+      title={t("reset.title")}
+      subtitle={t("reset.subtitle")}
+      backTo="/login"
+      backLabel={t("reset.back_signin")}
+    >
       <form onSubmit={(e) => { void handleSubmit(e); }} className="flex flex-col gap-4">
         {error && <Alert kind="error">{error}</Alert>}
 
         <Input
-          label="New password"
+          label={t("reset.new_password")}
           type="password"
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
@@ -63,7 +70,7 @@ export default function ResetPassword() {
         />
 
         <Input
-          label="Confirm new password"
+          label={t("reset.confirm_password")}
           type="password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
@@ -72,7 +79,7 @@ export default function ResetPassword() {
         />
 
         <Button type="submit" loading={loading} className="w-full mt-2">
-          Reset password
+          {t("reset.submit")}
         </Button>
       </form>
     </AuthLayout>

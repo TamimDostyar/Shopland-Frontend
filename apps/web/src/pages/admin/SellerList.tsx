@@ -12,16 +12,18 @@ import AdminLayout from "../../components/layout/AdminLayout";
 import Alert from "../../components/ui/Alert";
 import Button from "../../components/ui/Button";
 import { useAuth } from "../../hooks/useAuth";
-
-const STATUS_LABELS: Record<SellerStatus, string> = {
-  pending: "Pending Applications",
-  approved: "Approved Sellers",
-  rejected: "Rejected / Needs More Data",
-};
+import { useLanguage } from "../../context/LanguageContext";
 
 export default function SellerList() {
+  const { t } = useLanguage();
   const { status = "pending" } = useParams<{ status: SellerStatus }>();
   const { accessToken } = useAuth();
+
+  const STATUS_LABELS: Record<SellerStatus, string> = {
+    pending: t("admin.nav_pending_sellers"),
+    approved: t("admin.nav_approved_sellers"),
+    rejected: t("admin.nav_rejected_sellers"),
+  };
   const navigate = useNavigate();
 
   const [sellers, setSellers] = useState<AdminSeller[]>([]);
@@ -43,11 +45,11 @@ export default function SellerList() {
       const data = await listSellers(accessToken, status as SellerStatus);
       setSellers(data);
     } catch {
-      setError("Failed to load sellers.");
+      setError(t("admin.error_load_sellers"));
     } finally {
       setLoading(false);
     }
-  }, [accessToken, status]);
+  }, [accessToken, status, t]);
 
   useEffect(() => { void load(); }, [load]);
 
@@ -59,7 +61,7 @@ export default function SellerList() {
       setActionMsg(`✓ ${seller.shop_name} approved.`);
       setSellers((prev) => prev.filter((s) => s.user.id !== seller.user.id));
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Action failed.");
+      setError(err instanceof ApiError ? err.message : t("admin.action_failed"));
     } finally {
       setActing(false);
     }
@@ -77,7 +79,7 @@ export default function SellerList() {
       setRejectTarget(null);
       setRejectReason("");
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Action failed.");
+      setError(err instanceof ApiError ? err.message : t("admin.action_failed"));
     } finally {
       setActing(false);
     }
@@ -87,7 +89,7 @@ export default function SellerList() {
     <AdminLayout>
       <div className="max-w-5xl">
         <h1 className="text-2xl font-bold text-heading mb-6" style={{ fontFamily: "var(--font-heading)" }}>
-          {STATUS_LABELS[status as SellerStatus] ?? "Sellers"}
+          {STATUS_LABELS[status as SellerStatus] ?? t("admin.sellers_heading_fallback")}
         </h1>
 
         {actionMsg && (

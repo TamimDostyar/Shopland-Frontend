@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { getApiBaseUrl, type Product } from "@shopland/shared";
+import { getApiBaseUrl, localizedCategoryName, localizedProductName, type Product } from "@shopland/shared";
+import { useLanguage } from "../../context/LanguageContext";
 import { ImageIcon, LocationIcon, StarIcon } from "../ui/icons";
 
 interface Props {
@@ -19,6 +20,7 @@ function resolveMediaUrl(url: string | null | undefined): string | null {
 }
 
 export default function ProductCard({ product }: Props) {
+  const { t, locale } = useLanguage();
   const price = parseFloat(product.price);
   const discountPrice = product.discount_price
     ? parseFloat(product.discount_price)
@@ -31,7 +33,11 @@ export default function ProductCard({ product }: Props) {
     (typeof primaryImageUnknown === "string" ? primaryImageUnknown : (primaryImageUnknown as any)?.image) ??
     product.images?.[0]?.image;
   const img = resolveMediaUrl(rawImg);
-  const sellerName = product.seller?.shop_name ?? "Shopland Seller";
+  const sellerName = product.seller?.shop_name ?? t("product.seller_fallback");
+  const title = localizedProductName(product, locale);
+  const categoryLabel = product.category
+    ? localizedCategoryName(product.category, locale)
+    : t("product.category_fallback");
 
   return (
     <Link
@@ -48,7 +54,7 @@ export default function ProductCard({ product }: Props) {
         {img ? (
           <img
             src={img}
-            alt={product.name}
+            alt={title}
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             loading="lazy"
           />
@@ -76,7 +82,7 @@ export default function ProductCard({ product }: Props) {
             <span
               className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-[color:var(--error)]"
             >
-              Out of Stock
+              {t("product.out_of_stock")}
             </span>
           </div>
         )}
@@ -85,7 +91,7 @@ export default function ProductCard({ product }: Props) {
       <div className="p-3 sm:p-4">
         <div className="mb-3 flex items-center justify-between gap-2">
           <span className="rounded-full bg-[var(--surface-muted)] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--text-soft)]">
-            {product.category?.name ?? "Product"}
+            {categoryLabel}
           </span>
           {product.city && (
             <span className="inline-flex items-center gap-1 rounded-full bg-[var(--surface-accent)] px-2.5 py-1 text-[11px] font-semibold text-[color:var(--accent)]">
@@ -99,7 +105,7 @@ export default function ProductCard({ product }: Props) {
           className="mb-2 line-clamp-2 min-h-[2.6rem] text-[13px] font-semibold leading-snug sm:min-h-[2.9rem] sm:text-[15px]"
           style={{ color: "var(--text-h)" }}
         >
-          {product.name}
+          {title}
         </p>
 
         <div className="mb-2 flex items-end gap-2">
@@ -118,7 +124,7 @@ export default function ProductCard({ product }: Props) {
             {sellerName}
           </p>
           <span className="text-xs font-semibold text-[color:var(--accent)]">
-            View item
+            {t("product.view_item")}
           </span>
         </div>
 

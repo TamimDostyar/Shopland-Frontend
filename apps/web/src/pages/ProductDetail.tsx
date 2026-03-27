@@ -7,12 +7,15 @@ import {
   getProduct,
   addToCart,
   getProducts,
+  localizedCategoryName,
+  localizedProductName,
 } from "@shopland/shared";
 import MainLayout from "../components/layout/MainLayout";
 import ProductCard from "../components/catalog/ProductCard";
 import BackButton from "../components/ui/BackButton";
 import { useAuth } from "../hooks/useAuth";
 import { useCart } from "../hooks/useCart";
+import { useLanguage } from "../context/LanguageContext";
 import {
   ImageIcon,
   LocationIcon,
@@ -22,6 +25,7 @@ import {
 } from "../components/ui/icons";
 
 export default function ProductDetail() {
+  const { t, locale } = useLanguage();
   const { slug } = useParams<{ slug: string }>();
   const { accessToken, isAuthenticated, user } = useAuth();
   const { refreshCart } = useCart();
@@ -49,7 +53,7 @@ export default function ProductDetail() {
       return;
     }
     if (user?.role !== "buyer") {
-      toast.error("Only buyer accounts can add items to the cart.");
+      toast.error(t("product.buyer_required_toast"));
       return;
     }
     if (!accessToken || !product) return;
@@ -57,12 +61,12 @@ export default function ProductDetail() {
     try {
       await addToCart(accessToken, product.id, qty);
       await refreshCart();
-      toast.success("Added to cart!");
+      toast.success(t("product.added"));
     } catch (err) {
       if (err instanceof ApiError) {
         toast.error(err.message);
       } else {
-        toast.error("Failed to add to cart");
+        toast.error(t("product.add_failed"));
       }
     } finally {
       setAdding(false);
@@ -78,16 +82,18 @@ export default function ProductDetail() {
             <ImageIcon size={28} />
           </div>
           <h2 className="text-xl font-bold mb-2" style={{ color: "var(--text-h)" }}>
-            Product not found
+            {t("product.not_found")}
           </h2>
           <Link to="/" className="text-sm font-semibold" style={{ color: "var(--accent)" }}>
-            Back to home
+            {t("product.back_home")}
           </Link>
         </div>
       </MainLayout>
     );
   }
 
+  const displayName = localizedProductName(product, locale);
+  const categoryLabel = localizedCategoryName(product.category, locale);
   const price = parseFloat(product.price);
   const discountPrice = product.discount_price ? parseFloat(product.discount_price) : null;
   const displayPrice = discountPrice ?? price;
@@ -103,7 +109,7 @@ export default function ProductDetail() {
           <BackButton />
           <nav className="flex items-center gap-2 text-sm" style={{ color: "var(--text-soft)" }}>
             <Link to="/" style={{ color: "var(--text-soft)" }} className="hover:underline">
-              Home
+              {t("category.home_breadcrumb")}
             </Link>
             <span>/</span>
             <Link
@@ -111,11 +117,11 @@ export default function ProductDetail() {
               style={{ color: "var(--text-soft)" }}
               className="hover:underline"
             >
-              {product.category.name}
+              {categoryLabel}
             </Link>
             <span>/</span>
             <span style={{ color: "var(--text)" }} className="truncate max-w-[200px]">
-              {product.name}
+              {displayName}
             </span>
           </nav>
         </div>
@@ -128,7 +134,7 @@ export default function ProductDetail() {
               {allImages[selectedImg] ? (
                 <img
                   src={allImages[selectedImg].image}
-                  alt={product.name}
+                  alt={displayName}
                   className="w-full h-full object-cover"
                 />
               ) : (
@@ -177,7 +183,7 @@ export default function ProductDetail() {
               className="text-2xl font-bold leading-tight"
               style={{ fontFamily: "var(--heading)", color: "var(--text-h)" }}
             >
-              {product.name}
+              {displayName}
             </h1>
 
             {(product.average_rating ?? 0) > 0 && (
@@ -192,7 +198,7 @@ export default function ProductDetail() {
                   ))}
                 </div>
                 <span className="text-sm" style={{ color: "var(--text-soft)" }}>
-                  {product.average_rating?.toFixed(1)} ({product.review_count} reviews)
+                  {product.average_rating?.toFixed(1)} ({product.review_count} {t("product.reviews")})
                 </span>
               </div>
             )}
@@ -282,7 +288,7 @@ export default function ProductDetail() {
                   {adding ? (
                     <span className="size-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   ) : null}
-                  {user && user.role !== "buyer" ? "Buyer Account Required" : "Add to Cart"}
+                  {user && user.role !== "buyer" ? t("product.buyer_required_title") : t("product.add_to_cart")}
                 </button>
               </div>
             )}

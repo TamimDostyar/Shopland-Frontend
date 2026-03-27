@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
+import { useMemo } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
+import { useLanguage } from "../../context/LanguageContext";
 import {
   ArrowLeftIcon,
   CheckCircleIcon,
@@ -9,22 +11,30 @@ import {
   ShieldIcon,
   UserIcon,
 } from "../ui/icons";
+import type { TranslationKey } from "@shopland/shared";
+
 
 interface Props {
   children: ReactNode;
 }
 
-const NAV = [
-  { to: "/admin/products", label: "Product approvals", icon: PackageIcon },
-  { to: "/admin/sellers/pending", label: "Pending sellers", icon: ClockIcon },
-  { to: "/admin/sellers/approved", label: "Approved sellers", icon: CheckCircleIcon },
-  { to: "/admin/sellers/rejected", label: "Rejected sellers", icon: UserIcon },
-  { to: "/admin/id-review", label: "ID review queue", icon: ShieldIcon },
+const NAV_CONFIG: { to: string; labelKey: TranslationKey; icon: typeof PackageIcon }[] = [
+  { to: "/admin/products", labelKey: "admin.nav_product_approvals", icon: PackageIcon },
+  { to: "/admin/sellers/pending", labelKey: "admin.nav_pending_sellers", icon: ClockIcon },
+  { to: "/admin/sellers/approved", labelKey: "admin.nav_approved_sellers", icon: CheckCircleIcon },
+  { to: "/admin/sellers/rejected", labelKey: "admin.nav_rejected_sellers", icon: UserIcon },
+  { to: "/admin/id-review", labelKey: "admin.nav_id_review", icon: ShieldIcon },
 ];
 
 export default function AdminLayout({ children }: Props) {
+  const { t, dir, locale } = useLanguage();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+
+  const nav = useMemo(
+    () => NAV_CONFIG.map((item) => ({ ...item, label: t(item.labelKey) })),
+    [locale, t],
+  );
 
   async function handleLogout() {
     await logout();
@@ -32,7 +42,7 @@ export default function AdminLayout({ children }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(180deg,#f7f8fb,#edf3f9)] lg:flex">
+    <div dir={dir} className="min-h-screen bg-[linear-gradient(180deg,#f7f8fb,#edf3f9)] lg:flex">
       <aside className="flex shrink-0 flex-col border-r border-[color:var(--border)] bg-[rgba(255,255,255,0.88)] px-4 py-6 backdrop-blur-xl lg:w-72">
         <div className="rounded-[1.75rem] bg-[linear-gradient(135deg,#172033,#243457)] p-5 text-white">
           <button
@@ -40,21 +50,21 @@ export default function AdminLayout({ children }: Props) {
             className="mb-5 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-2 text-sm font-semibold text-white/80 transition-colors hover:bg-white/16"
           >
             <ArrowLeftIcon size={14} />
-            Back
+            {t("common.back")}
           </button>
           <p className="mb-1 text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
-            Admin Panel
+            {t("admin.panel_badge")}
           </p>
           <p className="text-2xl font-bold" style={{ fontFamily: "var(--font-heading)" }}>
-            Shopland Control
+            {t("admin.control_title")}
           </p>
           <p className="mt-3 text-sm text-white/72">
-            Review catalog quality, seller onboarding, and identity verification from one place.
+            {t("admin.control_subtitle")}
           </p>
         </div>
 
         <nav className="flex flex-1 flex-col gap-2 py-6">
-          {NAV.map(({ to, label, icon: Icon }) => (
+          {nav.map(({ to, label, icon: Icon }) => (
             <NavLink
               key={to}
               to={to}
@@ -73,20 +83,20 @@ export default function AdminLayout({ children }: Props) {
         </nav>
 
         <div className="mt-auto rounded-[1.5rem] border border-[color:var(--border)] bg-white p-4 shadow-[0_16px_40px_rgba(23,32,51,0.05)]">
-          <div className="mb-3 text-sm font-semibold text-[color:var(--text-h)]">Signed in as admin</div>
+          <div className="mb-3 text-sm font-semibold text-[color:var(--text-h)]">{t("admin.signed_in")}</div>
           <p className="mb-3 truncate text-xs text-[color:var(--text-soft)]">{user?.email}</p>
           <Link
             to="/"
             className="mb-2 flex w-full items-center gap-2 rounded-xl border border-[color:var(--border)] bg-white px-3 py-2 text-left text-sm font-semibold text-[color:var(--text-h)] transition-colors hover:bg-[var(--surface-muted)]"
           >
             <ArrowLeftIcon size={14} />
-            Back to Home
+            {t("login.back_home")}
           </Link>
           <button
             onClick={() => { void handleLogout(); }}
             className="w-full rounded-xl bg-[var(--danger-soft)] px-3 py-2 text-left text-sm font-semibold text-[color:var(--error)] transition-colors hover:bg-[#fde3e3]"
           >
-            Sign out
+            {t("nav.signout")}
           </button>
         </div>
       </aside>

@@ -7,6 +7,7 @@ import MainLayout from "../components/layout/MainLayout";
 import BackButton from "../components/ui/BackButton";
 import { useAuth } from "../hooks/useAuth";
 import { useCart } from "../hooks/useCart";
+import { useLanguage } from "../context/LanguageContext";
 import {
   CartIcon,
   CheckCircleIcon,
@@ -17,8 +18,17 @@ import {
   ShieldIcon,
   TruckIcon,
 } from "../components/ui/icons";
+import type { TranslationKey } from "@shopland/shared";
+
+const CHECKOUT_ITEM_REASONS: Record<string, TranslationKey> = {
+  no_stock_record: "checkout.item_error_no_stock_record",
+  insufficient_stock: "checkout.item_error_insufficient_stock",
+  product_inactive: "checkout.item_error_product_inactive",
+  product_not_approved: "checkout.item_error_product_not_approved",
+};
 
 export default function Checkout() {
+  const { t } = useLanguage();
   const { accessToken, user } = useAuth();
   const { refreshCart } = useCart();
   const navigate = useNavigate();
@@ -61,20 +71,17 @@ export default function Checkout() {
     },
     onError: (err: unknown) => {
       if (err instanceof ApiError && Array.isArray(err.data.item_errors)) {
-        const reasons: Record<string, string> = {
-          no_stock_record: "no stock record set up",
-          insufficient_stock: "not enough stock",
-          product_inactive: "product is inactive",
-          product_not_approved: "product not yet approved",
-        };
         const lines = (err.data.item_errors as Array<{ reason: string }>)
-          .map((e) => reasons[e.reason] ?? e.reason)
+          .map((e) => {
+            const key = CHECKOUT_ITEM_REASONS[e.reason];
+            return key ? t(key) : e.reason;
+          })
           .join(", ");
-        toast.error(`Cannot checkout: ${lines}`);
+        toast.error(`${t("checkout.error_cannot_prefix")} ${lines}`);
       } else {
         const msg = err instanceof ApiError
           ? (err.data.error as string) || err.message
-          : "Checkout failed";
+          : t("checkout.error_failed");
         toast.error(msg);
       }
     },
@@ -94,15 +101,15 @@ export default function Checkout() {
             <ShieldIcon size={28} />
           </div>
           <h2 className="text-xl font-bold mb-2" style={{ color: "var(--text-h)" }}>
-            Verification Required
+            {t("checkout.verification_required")}
           </h2>
           <p className="text-sm mb-6" style={{ color: "var(--text-soft)" }}>
-            You need to verify your email and ID before placing an order.
+            {t("checkout.verification_desc")}
           </p>
           <div className="space-y-2 text-sm mb-6">
             {[
-              { label: "Email", ok: vs.email },
-              { label: "ID", ok: vs.id },
+              { label: t("checkout.verification_email"), ok: vs.email },
+              { label: t("checkout.verification_id"), ok: vs.id },
             ].map(({ label, ok }) => (
               <div key={label} className="flex items-center gap-2 justify-center">
                 {ok ? (
@@ -119,7 +126,7 @@ export default function Checkout() {
             className="px-5 py-2.5 rounded-xl font-medium text-sm inline-block"
             style={{ background: "var(--accent)", color: "white" }}
           >
-            Go to Profile
+            {t("checkout.go_profile")}
           </Link>
         </div>
       </MainLayout>
@@ -133,8 +140,8 @@ export default function Checkout() {
           <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-[var(--surface-accent)] text-[color:var(--accent)]">
             <CartIcon size={28} />
           </div>
-          <p className="font-medium mb-4" style={{ color: "var(--text-h)" }}>Your cart is empty</p>
-          <Link to="/" className="text-sm font-semibold" style={{ color: "var(--accent)" }}>Browse Products</Link>
+          <p className="font-medium mb-4" style={{ color: "var(--text-h)" }}>{t("checkout.empty_cart")}</p>
+          <Link to="/" className="text-sm font-semibold" style={{ color: "var(--accent)" }}>{t("checkout.browse")}</Link>
         </div>
       </MainLayout>
     );
@@ -145,13 +152,13 @@ export default function Checkout() {
   return (
     <MainLayout>
       <div className="max-w-4xl mx-auto px-4 py-8">
-        <BackButton to="/cart" label="Back to Cart" className="mb-5" />
+        <BackButton to="/cart" label={t("checkout.back")} className="mb-5" />
 
         <h1
           className="text-3xl font-bold mb-8"
           style={{ fontFamily: "var(--heading)", color: "var(--text-h)" }}
         >
-          Checkout
+          {t("checkout.title")}
         </h1>
 
         <div className="grid md:grid-cols-5 gap-8">
@@ -159,19 +166,19 @@ export default function Checkout() {
             <section className="rounded-[2rem] border border-[color:var(--border)] bg-white p-6 shadow-[0_18px_46px_rgba(23,32,51,0.06)]">
               <h2 className="font-semibold mb-4 inline-flex items-center gap-2" style={{ color: "var(--text-h)" }}>
                 <LocationIcon size={18} className="text-[color:var(--accent)]" />
-                Delivery Address
+                {t("checkout.delivery_address")}
               </h2>
               {!addresses || addresses.length === 0 ? (
                 <div>
                   <p className="text-sm mb-3" style={{ color: "var(--text-soft)" }}>
-                    No saved addresses.
+                    {t("checkout.no_addresses")}
                   </p>
                   <Link
                     to="/profile/addresses"
                     className="text-sm font-semibold"
                     style={{ color: "var(--accent)" }}
                   >
-                    Add an address
+                    {t("checkout.add_address")}
                   </Link>
                 </div>
               ) : (
@@ -202,7 +209,7 @@ export default function Checkout() {
                       />
                       <div className="text-sm">
                         <p className="font-medium" style={{ color: "var(--text-h)" }}>
-                          {addr.label} {addr.is_default && <span style={{ color: "var(--accent)" }}>• Default</span>}
+                          {addr.label} {addr.is_default && <span style={{ color: "var(--accent)" }}>• {t("checkout.default_badge")}</span>}
                         </p>
                         <p style={{ color: "var(--text-soft)" }}>
                           {addr.full_name} — {addr.phone_number}
@@ -218,7 +225,7 @@ export default function Checkout() {
                     className="text-sm"
                     style={{ color: "var(--accent)" }}
                   >
-                    + Add new address
+                    {t("checkout.add_new_address")}
                   </Link>
                 </div>
               )}
@@ -227,13 +234,13 @@ export default function Checkout() {
             <section className="rounded-[2rem] border border-[color:var(--border)] bg-white p-6 shadow-[0_18px_46px_rgba(23,32,51,0.06)]">
               <h2 className="font-semibold mb-4 inline-flex items-center gap-2" style={{ color: "var(--text-h)" }}>
                 <PhoneIcon size={18} className="text-[color:var(--accent)]" />
-                Delivery Phone
+                {t("checkout.delivery_phone")}
               </h2>
               <input
                 type="tel"
                 value={deliveryPhone}
                 onChange={(e) => setDeliveryPhone(e.target.value)}
-                placeholder="+93XXXXXXXXX"
+                placeholder={t("checkout.phone_placeholder")}
                 className="w-full rounded-2xl border border-[color:var(--border)] bg-[var(--surface-muted)] px-4 py-3 text-sm outline-none"
                 style={{
                   color: "var(--text)",
@@ -244,7 +251,7 @@ export default function Checkout() {
             <section className="rounded-[2rem] border border-[color:var(--border)] bg-white p-6 shadow-[0_18px_46px_rgba(23,32,51,0.06)]">
               <h2 className="font-semibold mb-4 inline-flex items-center gap-2" style={{ color: "var(--text-h)" }}>
                 <TruckIcon size={18} className="text-[color:var(--accent)]" />
-                Payment Method
+                {t("checkout.payment_method")}
               </h2>
               <div
                 className="rounded-[1.5rem] p-4 flex items-center gap-3"
@@ -255,10 +262,10 @@ export default function Checkout() {
                 </div>
                 <div>
                   <p className="font-medium text-sm" style={{ color: "var(--text-h)" }}>
-                    Cash on Delivery
+                    {t("checkout.cod")}
                   </p>
                   <p className="text-xs mt-0.5" style={{ color: "var(--text-soft)" }}>
-                    You will pay ؋{parseFloat(cart?.total ?? "0").toLocaleString()} in cash when your order is delivered.
+                    {t("checkout.cod_desc")}
                   </p>
                 </div>
               </div>
@@ -267,12 +274,12 @@ export default function Checkout() {
             <section className="rounded-[2rem] border border-[color:var(--border)] bg-white p-6 shadow-[0_18px_46px_rgba(23,32,51,0.06)]">
               <h2 className="font-semibold mb-4 inline-flex items-center gap-2" style={{ color: "var(--text-h)" }}>
                 <NoteIcon size={18} className="text-[color:var(--accent)]" />
-                Buyer Notes (optional)
+                {t("checkout.notes")}
               </h2>
               <textarea
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                placeholder="Any special instructions for the seller or driver?"
+                placeholder={t("checkout.notes_placeholder")}
                 rows={3}
                 className="w-full rounded-2xl border border-[color:var(--border)] bg-[var(--surface-muted)] px-4 py-3 text-sm outline-none resize-none"
                 style={{
@@ -285,7 +292,7 @@ export default function Checkout() {
           <div className="md:col-span-2">
             <div className="rounded-[2rem] border border-[color:var(--border)] bg-white p-6 sticky top-24 space-y-4 shadow-[0_18px_46px_rgba(23,32,51,0.06)]">
               <h2 className="font-semibold" style={{ color: "var(--text-h)" }}>
-                Order Summary
+                {t("checkout.order_summary")}
               </h2>
 
               <div className="space-y-3 max-h-48 overflow-y-auto">
@@ -322,18 +329,18 @@ export default function Checkout() {
 
               <div className="space-y-2 text-sm border-t pt-3" style={{ borderColor: "var(--border)" }}>
                 <div className="flex justify-between">
-                  <span style={{ color: "var(--text-soft)" }}>Subtotal</span>
+                  <span style={{ color: "var(--text-soft)" }}>{t("checkout.subtotal")}</span>
                   <span>؋{parseFloat(cart?.subtotal ?? "0").toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span style={{ color: "var(--text-soft)" }}>Delivery</span>
-                  <span style={{ color: "var(--text-soft)" }}>TBD</span>
+                  <span style={{ color: "var(--text-soft)" }}>{t("checkout.delivery")}</span>
+                  <span style={{ color: "var(--text-soft)" }}>{t("checkout.delivery_tbd")}</span>
                 </div>
                 <div
                   className="flex justify-between font-semibold border-t pt-2"
                   style={{ borderColor: "var(--border)" }}
                 >
-                  <span style={{ color: "var(--text-h)" }}>Total</span>
+                  <span style={{ color: "var(--text-h)" }}>{t("checkout.total")}</span>
                   <span style={{ color: "var(--accent)" }}>
                     ؋{parseFloat(cart?.total ?? "0").toLocaleString()}
                   </span>
@@ -348,16 +355,16 @@ export default function Checkout() {
                 {checkoutMutation.isPending && (
                   <span className="size-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                 )}
-                Place Order
+                {t("checkout.place_order")}
               </button>
 
               <p className="text-xs text-center" style={{ color: "var(--text-soft)" }}>
-                By placing this order you agree to our Terms of Service
+                {t("checkout.agree_terms")}
               </p>
 
               {selectedAddress && (
                 <p className="text-xs" style={{ color: "var(--text-soft)" }}>
-                  Delivering to: {selectedAddress.city}, {selectedAddress.province}
+                  {t("checkout.delivering_to")} {selectedAddress.city}, {selectedAddress.province}
                 </p>
               )}
             </div>

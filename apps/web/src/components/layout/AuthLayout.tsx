@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { APP_NAME } from "@shopland/shared";
 import LegalLinks from "../legal/LegalLinks";
 import { useLanguage } from "../../context/LanguageContext";
 import { ArrowLeftIcon, ShieldIcon, SparklesIcon, StoreIcon } from "../ui/icons";
@@ -9,12 +10,14 @@ interface Props {
   subtitle?: string;
   children: ReactNode;
   backTo?: string;
+  /** Defaults to translated “Back” */
   backLabel?: string;
 }
 
-export default function AuthLayout({ title, subtitle, children, backTo, backLabel = "Back" }: Props) {
+export default function AuthLayout({ title, subtitle, children, backTo, backLabel }: Props) {
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const resolvedBack = backLabel ?? t("common.back");
 
   return (
     <div className="min-h-screen bg-bg px-4 py-8">
@@ -40,10 +43,10 @@ export default function AuthLayout({ title, subtitle, children, backTo, backLabe
               </div>
               <div>
                 <div className="text-3xl font-bold text-[color:var(--text-h)]" style={{ fontFamily: "var(--font-heading)" }}>
-                  Shopland
+                  {APP_NAME}
                 </div>
                 <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--text-soft)]">
-                  Marketplace
+                  {t("auth.logo_marketplace")}
                 </div>
               </div>
             </Link>
@@ -83,10 +86,10 @@ export default function AuthLayout({ title, subtitle, children, backTo, backLabe
               </div>
               <div>
                 <div className="text-xl font-bold text-[color:var(--text-h)]" style={{ fontFamily: "var(--font-heading)" }}>
-                  Shopland
+                  {APP_NAME}
                 </div>
                 <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--text-soft)]">
-                  Accounts
+                  {t("auth.logo_accounts")}
                 </div>
               </div>
             </Link>
@@ -103,7 +106,7 @@ export default function AuthLayout({ title, subtitle, children, backTo, backLabe
               className="mb-5 inline-flex items-center gap-2 rounded-full border border-[color:var(--border)] bg-white px-4 py-2 text-sm font-semibold text-[color:var(--text-soft)] transition-all hover:-translate-x-0.5 hover:border-[color:var(--accent)] hover:text-[color:var(--accent)]"
             >
               <ArrowLeftIcon size={14} />
-              {backLabel}
+              {resolvedBack}
             </button>
           )}
 

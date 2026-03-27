@@ -11,6 +11,7 @@ import {
 import MainLayout from "../../components/layout/MainLayout";
 import BackButton from "../../components/ui/BackButton";
 import { useAuth } from "../../hooks/useAuth";
+import { useLanguage } from "../../context/LanguageContext";
 import { STATUS_COLORS } from "./MyOrders";
 
 const TIMELINE_STEPS = [
@@ -24,6 +25,7 @@ const TIMELINE_STEPS = [
 ];
 
 export default function OrderDetail() {
+  const { t } = useLanguage();
   const { orderNumber } = useParams<{ orderNumber: string }>();
   const { accessToken } = useAuth();
   const qc = useQueryClient();
@@ -40,7 +42,7 @@ export default function OrderDetail() {
     mutationFn: () => cancelOrder(accessToken!, orderNumber!, cancelReason || undefined),
     onSuccess: async () => {
       await qc.invalidateQueries({ queryKey: ["order", orderNumber] });
-      toast.success("Order cancelled");
+      toast.success(t("orders.toast_cancelled"));
       setShowCancelForm(false);
     },
     onError: (e: Error) => toast.error(e.message),
@@ -50,7 +52,7 @@ export default function OrderDetail() {
     mutationFn: () => confirmDelivery(accessToken!, orderNumber!),
     onSuccess: async () => {
       await qc.invalidateQueries({ queryKey: ["order", orderNumber] });
-      toast.success("Delivery confirmed! Thank you.");
+      toast.success(t("orders.toast_delivery_confirmed"));
     },
     onError: (e: Error) => toast.error(e.message),
   });

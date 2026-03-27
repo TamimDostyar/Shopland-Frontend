@@ -5,8 +5,10 @@ import AuthLayout from "../components/layout/AuthLayout";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import Alert from "../components/ui/Alert";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function ForgotPassword() {
+  const { t } = useLanguage();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
@@ -20,24 +22,22 @@ export default function ForgotPassword() {
       await requestPasswordReset(email);
       setSent(true);
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Something went wrong. Please try again.");
+      setError(err instanceof ApiError ? err.message : t("forgot.error_failed"));
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <AuthLayout title="Forgot password" subtitle="Enter your email to receive a reset link">
+    <AuthLayout title={t("forgot.title")} subtitle={t("forgot.subtitle")}>
       {sent ? (
-        <Alert kind="success">
-          If an account with that email exists, a reset link has been sent. Check your inbox.
-        </Alert>
+        <Alert kind="success">{t("forgot.success")}</Alert>
       ) : (
         <form onSubmit={(e) => { void handleSubmit(e); }} className="flex flex-col gap-4">
           {error && <Alert kind="error">{error}</Alert>}
 
           <Input
-            label="Email"
+            label={t("forgot.email")}
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -46,13 +46,13 @@ export default function ForgotPassword() {
           />
 
           <Button type="submit" loading={loading} className="w-full mt-2">
-            Send reset link
+            {t("forgot.submit")}
           </Button>
 
           <p className="text-center text-sm text-muted">
-            Remembered it?{" "}
+            {t("forgot.remembered")}{" "}
             <Link to="/login" className="text-accent hover:underline">
-              Sign in
+              {t("forgot.signin")}
             </Link>
           </p>
         </form>

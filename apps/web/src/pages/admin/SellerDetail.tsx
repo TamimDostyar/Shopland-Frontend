@@ -11,8 +11,10 @@ import AdminLayout from "../../components/layout/AdminLayout";
 import Alert from "../../components/ui/Alert";
 import Button from "../../components/ui/Button";
 import { useAuth } from "../../hooks/useAuth";
+import { useLanguage } from "../../context/LanguageContext";
 
 export default function SellerDetail() {
+  const { t } = useLanguage();
   const { id } = useParams<{ id: string }>();
   const { accessToken } = useAuth();
   const navigate = useNavigate();
@@ -30,11 +32,11 @@ export default function SellerDetail() {
     try {
       setSeller(await getSeller(accessToken, id));
     } catch {
-      setError("Failed to load seller.");
+      setError(t("admin.error_load_seller"));
     } finally {
       setLoading(false);
     }
-  }, [accessToken, id]);
+  }, [accessToken, id, t]);
 
   useEffect(() => { void load(); }, [load]);
 
@@ -46,7 +48,7 @@ export default function SellerDetail() {
       setActionMsg(`${seller.shop_name} has been approved.`);
       setSeller((s) => s ? { ...s, is_approved: true, rejection_reason: "" } : s);
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Action failed.");
+      setError(err instanceof ApiError ? err.message : t("admin.action_failed"));
     } finally {
       setActing(false);
     }
@@ -63,7 +65,7 @@ export default function SellerDetail() {
       );
       setShowRejectForm(false);
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Action failed.");
+      setError(err instanceof ApiError ? err.message : t("admin.action_failed"));
     } finally {
       setActing(false);
     }

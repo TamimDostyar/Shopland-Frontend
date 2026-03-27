@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useLanguage } from "../../context/LanguageContext";
 
 interface LegalLinksProps {
   className?: string;
@@ -11,13 +12,15 @@ export default function LegalLinks({
   linkClassName = "",
   separatorClassName = "",
 }: LegalLinksProps) {
+  const { t } = useLanguage();
+
   return (
     <div className={`flex flex-wrap items-center gap-3 ${className}`.trim()}>
       <Link
         to="/privacy"
         className={`text-sm font-medium text-[color:var(--text-soft)] transition-colors hover:text-[color:var(--accent)] ${linkClassName}`.trim()}
       >
-        Privacy Policy
+        {t("footer.privacy")}
       </Link>
       <span className={`text-[color:var(--border-strong, var(--border))] ${separatorClassName}`.trim()}>
         •
@@ -26,7 +29,7 @@ export default function LegalLinks({
         to="/terms"
         className={`text-sm font-medium text-[color:var(--text-soft)] transition-colors hover:text-[color:var(--accent)] ${linkClassName}`.trim()}
       >
-        Terms &amp; Conditions
+        {t("footer.terms")}
       </Link>
     </div>
   );

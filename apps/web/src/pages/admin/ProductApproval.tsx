@@ -12,8 +12,10 @@ import Button from "../../components/ui/Button";
 import Alert from "../../components/ui/Alert";
 import BackButton from "../../components/ui/BackButton";
 import { useAuth } from "../../hooks/useAuth";
+import { useLanguage } from "../../context/LanguageContext";
 
 export default function ProductApproval() {
+  const { t } = useLanguage();
   const { accessToken } = useAuth();
   const navigate = useNavigate();
 
@@ -35,11 +37,11 @@ export default function ProductApproval() {
       const data = await getPendingProducts(accessToken);
       setProducts(data.results ?? (data as unknown as Product[]));
     } catch {
-      setError("Failed to load pending products.");
+      setError(t("admin.error_load_products"));
     } finally {
       setLoading(false);
     }
-  }, [accessToken]);
+  }, [accessToken, t]);
 
   useEffect(() => { void load(); }, [load]);
 
@@ -67,7 +69,7 @@ export default function ProductApproval() {
       setRejectTarget(null);
       setRejectReason("");
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Rejection failed.");
+      setError(err instanceof ApiError ? err.message : t("admin.rejection_failed"));
     } finally {
       setActing(null);
     }

@@ -12,9 +12,11 @@ import {
 import SellerLayout from "../../components/layout/SellerLayout";
 import BackButton from "../../components/ui/BackButton";
 import { useAuth } from "../../hooks/useAuth";
+import { useLanguage } from "../../context/LanguageContext";
 import { STATUS_COLORS } from "../buyer/MyOrders";
 
 export default function SellerOrderDetail() {
+  const { t } = useLanguage();
   const { orderNumber } = useParams<{ orderNumber: string }>();
   const { accessToken } = useAuth();
   const qc = useQueryClient();
@@ -34,22 +36,35 @@ export default function SellerOrderDetail() {
 
   const acceptMutation = useMutation({
     mutationFn: () => acceptOrder(accessToken!, orderNumber!),
-    onSuccess: async () => { await invalidate(); toast.success("Order accepted"); },
+    onSuccess: async () => {
+      await invalidate();
+      toast.success(t("seller.toast_order_accepted"));
+    },
     onError: (e: Error) => toast.error(e.message),
   });
   const rejectMutation = useMutation({
     mutationFn: () => rejectOrder(accessToken!, orderNumber!, rejectReason),
-    onSuccess: async () => { await invalidate(); toast.success("Order rejected"); setShowRejectForm(false); },
+    onSuccess: async () => {
+      await invalidate();
+      toast.success(t("seller.toast_order_rejected"));
+      setShowRejectForm(false);
+    },
     onError: (e: Error) => toast.error(e.message),
   });
   const processingMutation = useMutation({
     mutationFn: () => markProcessing(accessToken!, orderNumber!),
-    onSuccess: async () => { await invalidate(); toast.success("Marked as preparing"); },
+    onSuccess: async () => {
+      await invalidate();
+      toast.success(t("seller.toast_preparing"));
+    },
     onError: (e: Error) => toast.error(e.message),
   });
   const readyMutation = useMutation({
     mutationFn: () => markReady(accessToken!, orderNumber!),
-    onSuccess: async () => { await invalidate(); toast.success("Marked as ready"); },
+    onSuccess: async () => {
+      await invalidate();
+      toast.success(t("seller.toast_ready"));
+    },
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -69,8 +84,8 @@ export default function SellerOrderDetail() {
     return (
       <SellerLayout>
         <div className="text-center py-20">
-          <p style={{ color: "var(--text-soft)" }}>Order not found</p>
-          <Link to="/seller/orders" style={{ color: "var(--accent)" }}>← Back to orders</Link>
+          <p style={{ color: "var(--text-soft)" }}>{t("seller.order_not_found")}</p>
+          <Link to="/seller/orders" style={{ color: "var(--accent)" }}>{t("seller.back_to_orders")}</Link>
         </div>
       </SellerLayout>
     );
@@ -92,9 +107,9 @@ export default function SellerOrderDetail() {
     <SellerLayout>
       <div className="max-w-3xl">
         <div className="flex items-center gap-4 mb-6">
-          <BackButton to="/seller/orders" label="Orders" />
+          <BackButton to="/seller/orders" label={t("seller.orders_title")} />
           <nav className="flex items-center gap-2 text-sm" style={{ color: "var(--text-soft)" }}>
-            <Link to="/seller/orders" className="hover:underline">Orders</Link>
+            <Link to="/seller/orders" className="hover:underline">{t("seller.orders_title")}</Link>
             <span>/</span>
             <span style={{ color: "var(--text)" }}>{order.order_number}</span>
           </nav>
@@ -111,17 +126,18 @@ export default function SellerOrderDetail() {
 
         {/* Buyer Info */}
         <div className="rounded-2xl p-5 mb-5" style={{ background: "var(--surface)", border: "1px solid var(--border)" }}>
-          <h2 className="font-semibold mb-3" style={{ color: "var(--text-h)" }}>Buyer Info</h2>
+          <h2 className="font-semibold mb-3" style={{ color: "var(--text-h)" }}>{t("seller.detail_buyer_info")}</h2>
           <p className="text-sm" style={{ color: "var(--text)" }}>
-            Delivering to: {[delivery?.city, delivery?.province].filter(Boolean).join(", ") || "Address unavailable"}
+            {t("checkout.delivering_to")}{" "}
+            {[delivery?.city, delivery?.province].filter(Boolean).join(", ") || t("seller.address_unavailable")}
           </p>
           {isAccepted && (
             <>
               <p className="text-sm mt-1" style={{ color: "var(--text-soft)" }}>
-                {delivery?.full_name ?? "Address unavailable"}
+                {delivery?.full_name ?? t("seller.address_unavailable")}
               </p>
               <p className="text-sm" style={{ color: "var(--text-soft)" }}>
-                {[delivery?.street, delivery?.district].filter(Boolean).join(", ") || "Street unavailable"}
+                {[delivery?.street, delivery?.district].filter(Boolean).join(", ") || t("seller.detail_street_unavailable")}
               </p>
               <p className="text-sm" style={{ color: "var(--text-soft)" }}>
                 📞 {order.delivery_phone}
@@ -130,14 +146,14 @@ export default function SellerOrderDetail() {
           )}
           {!isAccepted && (
             <p className="text-xs mt-1" style={{ color: "var(--text-soft)" }}>
-              Full address shown after accepting the order.
+              {t("seller.detail_address_after_accept")}
             </p>
           )}
         </div>
 
         {/* Items */}
         <div className="rounded-2xl p-5 mb-5" style={{ background: "var(--surface)", border: "1px solid var(--border)" }}>
-          <h2 className="font-semibold mb-4" style={{ color: "var(--text-h)" }}>Items</h2>
+          <h2 className="font-semibold mb-4" style={{ color: "var(--text-h)" }}>{t("seller.detail_items")}</h2>
           <div className="space-y-3">
             {order.items.map((item) => (
               <div key={item.id} className="flex items-center gap-3">
@@ -152,14 +168,14 @@ export default function SellerOrderDetail() {
             ))}
           </div>
           <div className="border-t mt-4 pt-4 flex justify-between font-semibold text-sm" style={{ borderColor: "var(--border)" }}>
-            <span style={{ color: "var(--text-h)" }}>Total</span>
+            <span style={{ color: "var(--text-h)" }}>{t("seller.detail_total")}</span>
             <span style={{ color: "var(--accent)" }}>؋{parseFloat(order.total).toLocaleString()}</span>
           </div>
         </div>
 
         {order.buyer_notes && (
           <div className="rounded-2xl p-5 mb-5" style={{ background: "var(--surface)", border: "1px solid var(--border)" }}>
-            <h2 className="font-semibold mb-2" style={{ color: "var(--text-h)" }}>Buyer Notes</h2>
+            <h2 className="font-semibold mb-2" style={{ color: "var(--text-h)" }}>{t("seller.detail_buyer_notes")}</h2>
             <p className="text-sm" style={{ color: "var(--text-soft)" }}>{order.buyer_notes}</p>
           </div>
         )}
@@ -174,25 +190,25 @@ export default function SellerOrderDetail() {
                 className="flex-1 py-3 rounded-xl font-medium text-sm transition-opacity hover:opacity-90 disabled:opacity-50"
                 style={{ background: "#4ade80", color: "#060816" }}
               >
-                ✓ Accept Order
+                ✓ {t("seller.cta_accept_order")}
               </button>
               <button
                 onClick={() => setShowRejectForm(true)}
                 className="flex-1 py-3 rounded-xl font-medium text-sm"
                 style={{ border: "1px solid rgba(248,113,113,0.3)", color: "#f87171" }}
               >
-                ✗ Reject Order
+                ✗ {t("seller.cta_reject_order")}
               </button>
             </div>
           )}
           {order.status === "pending" && showRejectForm && (
             <div className="rounded-2xl p-5 space-y-3" style={{ background: "rgba(248,113,113,0.05)", border: "1px solid rgba(248,113,113,0.2)" }}>
-              <p className="font-medium text-sm" style={{ color: "var(--text-h)" }}>Reason for rejection (required)</p>
+              <p className="font-medium text-sm" style={{ color: "var(--text-h)" }}>{t("seller.reject_reason_required_label")}</p>
               <textarea
                 value={rejectReason}
                 onChange={(e) => setRejectReason(e.target.value)}
                 rows={3}
-                placeholder="e.g. Item out of stock, Cannot fulfill..."
+                placeholder={t("seller.reject_reason_placeholder")}
                 className="w-full px-4 py-3 rounded-xl text-sm resize-none outline-none"
                 style={{ background: "rgba(255,255,255,0.04)", border: "1px solid var(--border)", color: "var(--text)" }}
               />
@@ -203,14 +219,14 @@ export default function SellerOrderDetail() {
                   className="flex-1 py-2.5 rounded-xl text-sm font-medium disabled:opacity-40"
                   style={{ background: "#f87171", color: "white" }}
                 >
-                  Confirm Rejection
+                  {t("seller.confirm_rejection")}
                 </button>
                 <button
                   onClick={() => setShowRejectForm(false)}
                   className="flex-1 py-2.5 rounded-xl text-sm"
                   style={{ border: "1px solid var(--border)", color: "var(--text)" }}
                 >
-                  Cancel
+                  {t("cart.cancel")}
                 </button>
               </div>
             </div>
@@ -222,7 +238,7 @@ export default function SellerOrderDetail() {
               className="w-full py-3 rounded-xl font-medium text-sm transition-opacity hover:opacity-90 disabled:opacity-50"
               style={{ background: "rgba(167,139,250,0.15)", color: "#a78bfa", border: "1px solid rgba(167,139,250,0.3)" }}
             >
-              📦 Mark as Preparing
+              📦 {t("seller.mark_preparing")}
             </button>
           )}
           {order.status === "processing" && (
@@ -232,7 +248,7 @@ export default function SellerOrderDetail() {
               className="w-full py-3 rounded-xl font-medium text-sm transition-opacity hover:opacity-90 disabled:opacity-50"
               style={{ background: "rgba(52,211,153,0.12)", color: "#34d399", border: "1px solid rgba(52,211,153,0.3)" }}
             >
-              ✅ Mark as Ready for Pickup
+              ✅ {t("seller.mark_ready_pickup")}
             </button>
           )}
         </div>

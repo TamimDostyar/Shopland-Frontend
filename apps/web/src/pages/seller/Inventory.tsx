@@ -10,9 +10,11 @@ import {
 import SellerLayout from "../../components/layout/SellerLayout";
 import BackButton from "../../components/ui/BackButton";
 import { useAuth } from "../../hooks/useAuth";
+import { useLanguage } from "../../context/LanguageContext";
 import { PackageIcon } from "../../components/ui/icons";
 
 export default function Inventory() {
+  const { t } = useLanguage();
   const { accessToken } = useAuth();
   const qc = useQueryClient();
   const [restockModal, setRestockModal] = useState<StockInfo | null>(null);
@@ -45,12 +47,12 @@ export default function Inventory() {
       adjustStock(accessToken!, id, qty, adjustReason || undefined),
     onSuccess: async () => {
       await qc.invalidateQueries({ queryKey: ["inventory"] });
-      toast.success("Stock adjusted");
+      toast.success(t("seller.toast_stock_adjusted"));
       setAdjustModal(null);
       setAdjustQty("");
       setAdjustReason("");
     },
-    onError: () => toast.error("Failed to adjust stock"),
+    onError: () => toast.error(t("seller.toast_adjust_failed")),
   });
 
   const all: StockInfo[] = data?.results ?? [];

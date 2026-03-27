@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
@@ -13,21 +13,33 @@ import {
 import SellerLayout from "../../components/layout/SellerLayout";
 import BackButton from "../../components/ui/BackButton";
 import { useAuth } from "../../hooks/useAuth";
+import { useLanguage } from "../../context/LanguageContext";
 import { STATUS_COLORS } from "../buyer/MyOrders";
 
-const TABS = [
-  { label: "New", filter: (o: Order) => o.status === "pending" },
-  { label: "Active", filter: (o: Order) => ["accepted", "processing", "ready_for_pickup", "out_for_delivery"].includes(o.status) },
-  { label: "Completed", filter: (o: Order) => ["delivered", "completed"].includes(o.status) },
-  { label: "Cancelled", filter: (o: Order) => o.status.startsWith("cancelled") || o.status === "rejected" },
-];
-
 export default function SellerOrders() {
+  const { t } = useLanguage();
   const { accessToken } = useAuth();
   const qc = useQueryClient();
   const [tab, setTab] = useState(0);
   const [rejectModal, setRejectModal] = useState<string | null>(null);
   const [rejectReason, setRejectReason] = useState("");
+
+  const TABS = useMemo(
+    () => [
+      { label: t("seller.orders_tab_new"), filter: (o: Order) => o.status === "pending" },
+      {
+        label: t("orders.tab_active"),
+        filter: (o: Order) =>
+          ["accepted", "processing", "ready_for_pickup", "out_for_delivery"].includes(o.status),
+      },
+      { label: t("orders.tab_completed"), filter: (o: Order) => ["delivered", "completed"].includes(o.status) },
+      {
+        label: t("orders.tab_cancelled"),
+        filter: (o: Order) => o.status.startsWith("cancelled") || o.status === "rejected",
+      },
+    ],
+    [t],
+  );
 
   const { data, isLoading } = useQuery({
     queryKey: ["seller-orders-all"],
@@ -47,7 +59,7 @@ export default function SellerOrders() {
         }
       : null);
 
-    return [delivery?.city, delivery?.province].filter(Boolean).join(", ") || "Address unavailable";
+    return [delivery?.city, delivery?.province].filter(Boolean).join(", ") || t("seller.address_unavailable");
   }
 
   async function invalidate() {
@@ -56,22 +68,35 @@ export default function SellerOrders() {
 
   const acceptMutation = useMutation({
     mutationFn: (n: string) => acceptOrder(accessToken!, n),
-    onSuccess: async () => { await invalidate(); toast.success("Order accepted"); },
+    onSuccess: async () => {
+      await invalidate();
+      toast.success(t("seller.toast_order_accepted"));
+    },
     onError: (e: Error) => toast.error(e.message),
   });
   const rejectMutation = useMutation({
     mutationFn: ({ n, r }: { n: string; r: string }) => rejectOrder(accessToken!, n, r),
-    onSuccess: async () => { await invalidate(); toast.success("Order rejected"); setRejectModal(null); },
+    onSuccess: async () => {
+      await invalidate();
+      toast.success(t("seller.toast_order_rejected"));
+      setRejectModal(null);
+    },
     onError: (e: Error) => toast.error(e.message),
   });
   const processingMutation = useMutation({
     mutationFn: (n: string) => markProcessing(accessToken!, n),
-    onSuccess: async () => { await invalidate(); toast.success("Marked as preparing"); },
+    onSuccess: async () => {
+      await invalidate();
+      toast.success(t("seller.toast_preparing"));
+    },
     onError: (e: Error) => toast.error(e.message),
   });
   const readyMutation = useMutation({
     mutationFn: (n: string) => markReady(accessToken!, n),
-    onSuccess: async () => { await invalidate(); toast.success("Marked as ready"); },
+    onSuccess: async () => {
+      await invalidate();
+      toast.success(t("seller.toast_ready"));
+    },
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -80,13 +105,13 @@ export default function SellerOrders() {
   return (
     <SellerLayout>
       <div className="max-w-4xl">
-        <BackButton to="/seller" label="Dashboard" className="mb-5" />
+        <BackButton to="/seller" label={t("seller.orders_back_dashboard")} className="mb-5" />
 
         <h1
           className="mb-6 text-2xl font-bold"
           style={{ fontFamily: "var(--heading)", color: "var(--text-h)" }}
         >
-          Orders
+          {t("seller.orders_title")}
         </h1>
 
         {/* Tabs */}
@@ -94,9 +119,9 @@ export default function SellerOrders() {
           className="mb-6 grid grid-cols-2 gap-1 rounded-xl p-1 sm:grid-cols-4"
           style={{ background: "var(--surface)" }}
         >
-          {TABS.map((t, i) => (
+          {TABS.map((tabDef, i) => (
             <button
-              key={t.label}
+              key={tabDef.label}
               onClick={() => setTab(i)}
               className="relative min-w-0 rounded-lg px-3 py-2 text-sm font-medium transition-all"
               style={{
@@ -105,7 +130,7 @@ export default function SellerOrders() {
                 border: tab === i ? "1px solid rgba(255,125,72,0.2)" : "1px solid transparent",
               }}
             >
-              {t.label}
+              {tabDef.label}
               {i === 0 && newCount > 0 && (
                 <span
                   className="absolute -top-1 -right-1 size-4 rounded-full text-xs font-bold flex items-center justify-center"
@@ -130,7 +155,7 @@ export default function SellerOrders() {
             style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
           >
             <p className="text-4xl mb-4">🧾</p>
-            <p style={{ color: "var(--text-soft)" }}>No {TABS[tab].label.toLowerCase()} orders.</p>
+            <p style={{ color: "var(--text-soft)" }}>{t("seller.orders_empty")}</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -179,7 +204,7 @@ export default function SellerOrders() {
                     ))}
                     {(order.items?.length ?? 0) > 3 && (
                       <p className="text-xs" style={{ color: "var(--text-soft)" }}>
-                        +{order.items.length - 3} more items
+                        +{order.items.length - 3} {t("orders.more_items")}
                       </p>
                     )}
                   </div>
@@ -194,7 +219,7 @@ export default function SellerOrders() {
                           className="w-full rounded-xl px-4 py-2 text-sm font-medium transition-opacity hover:opacity-90 disabled:opacity-50 sm:w-auto"
                           style={{ background: "#4ade80", color: "#060816" }}
                         >
-                          ✓ Accept
+                          ✓ {t("seller.order_accept")}
                         </button>
                         <button
                           onClick={() => {
@@ -204,7 +229,7 @@ export default function SellerOrders() {
                           className="w-full rounded-xl px-4 py-2 text-sm font-medium transition-all hover:opacity-90 sm:w-auto"
                           style={{ background: "rgba(248,113,113,0.12)", color: "#f87171", border: "1px solid rgba(248,113,113,0.2)" }}
                         >
-                          ✗ Reject
+                          ✗ {t("seller.order_reject")}
                         </button>
                       </>
                     )}
@@ -215,7 +240,7 @@ export default function SellerOrders() {
                         className="w-full rounded-xl px-4 py-2 text-sm font-medium transition-opacity hover:opacity-90 disabled:opacity-50 sm:w-auto"
                         style={{ background: "rgba(167,139,250,0.15)", color: "#a78bfa", border: "1px solid rgba(167,139,250,0.3)" }}
                       >
-                        📦 Mark as Preparing
+                        📦 {t("seller.mark_preparing")}
                       </button>
                     )}
                     {order.status === "processing" && (
@@ -225,7 +250,7 @@ export default function SellerOrders() {
                         className="w-full rounded-xl px-4 py-2 text-sm font-medium transition-opacity hover:opacity-90 disabled:opacity-50 sm:w-auto"
                         style={{ background: "rgba(52,211,153,0.12)", color: "#34d399", border: "1px solid rgba(52,211,153,0.3)" }}
                       >
-                        ✅ Mark as Ready for Pickup
+                        ✅ {t("seller.mark_ready_pickup")}
                       </button>
                     )}
                     <Link
@@ -233,7 +258,7 @@ export default function SellerOrders() {
                       className="w-full rounded-xl px-4 py-2 text-center text-sm transition-all hover:bg-white/5 sm:w-auto"
                       style={{ border: "1px solid var(--border)", color: "var(--text)" }}
                     >
-                      View Details
+                      {t("seller.view_details")}
                     </Link>
                   </div>
                 </div>
@@ -251,13 +276,13 @@ export default function SellerOrders() {
             style={{ background: "#0b0f1f", border: "1px solid var(--border)" }}
           >
             <h3 className="font-semibold mb-4" style={{ color: "var(--text-h)" }}>
-              Reason for Rejection
+              {t("seller.reject_modal_title")}
             </h3>
             <textarea
               value={rejectReason}
               onChange={(e) => setRejectReason(e.target.value)}
               rows={3}
-              placeholder="e.g. Item is out of stock, Cannot fulfill this order..."
+              placeholder={t("seller.reject_reason_placeholder")}
               className="w-full px-4 py-3 rounded-xl text-sm resize-none outline-none mb-4"
               style={{
                 background: "rgba(255,255,255,0.04)",
@@ -275,14 +300,14 @@ export default function SellerOrders() {
                 className="flex-1 py-2.5 rounded-xl text-sm font-medium disabled:opacity-40"
                 style={{ background: "#f87171", color: "white" }}
               >
-                Reject Order
+                {t("seller.reject_order")}
               </button>
               <button
                 onClick={() => setRejectModal(null)}
                 className="flex-1 py-2.5 rounded-xl text-sm"
                 style={{ border: "1px solid var(--border)", color: "var(--text)" }}
               >
-                Cancel
+                {t("cart.cancel")}
               </button>
             </div>
           </div>

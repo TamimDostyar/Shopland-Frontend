@@ -10,6 +10,7 @@ import {
 import SellerLayout from "../../components/layout/SellerLayout";
 import BackButton from "../../components/ui/BackButton";
 import { useAuth } from "../../hooks/useAuth";
+import { useLanguage } from "../../context/LanguageContext";
 import { ImageIcon, PackageIcon } from "../../components/ui/icons";
 
 const STATUS_FILTERS = ["All", "Active", "Pending", "Rejected", "Inactive"];
@@ -30,11 +31,11 @@ export default function SellerProducts() {
     mutationFn: (id: string) => deleteProduct(accessToken!, id),
     onSuccess: async () => {
       await qc.invalidateQueries({ queryKey: ["seller-products"] });
-      toast.success("Product deleted");
+      toast.success(t("seller.toast_product_deleted"));
       setDeleteConfirm(null);
     },
     onError: (err: unknown) => {
-      const msg = err instanceof Error ? err.message : "Failed to delete product";
+      const msg = err instanceof Error ? err.message : t("seller.toast_delete_failed");
       toast.error(msg);
     },
   });

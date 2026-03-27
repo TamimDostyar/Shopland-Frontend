@@ -12,8 +12,8 @@ import type { Locale, LocaleMeta } from "./types";
 
 export const LOCALES: Record<Locale, LocaleMeta> = {
   en: { label: "English", dir: "ltr" },
-  fa: { label: "دری", dir: "rtl" },
-  ps: { label: "پښتو", dir: "rtl" },
+  fa: { label: "دری (افغانستان)", dir: "rtl" },
+  ps: { label: "پښتو (افغانستان)", dir: "rtl" },
 } as const;
 
 export const DEFAULT_LOCALE: Locale = "fa";

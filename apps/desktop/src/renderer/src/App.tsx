@@ -2,6 +2,7 @@ import React from "react";
 import { RouterProvider } from "react-router-dom";
 import { setApiBaseUrl } from "@shopland/shared";
 import { AuthProvider } from "./context/AuthContext";
+import { LanguageProvider } from "./context/LanguageContext";
 import { router } from "./router";
 
 setApiBaseUrl(
@@ -12,8 +13,10 @@ setApiBaseUrl(
 
 export default function App(): React.JSX.Element {
   return (
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
+    <LanguageProvider>
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
+    </LanguageProvider>
   );
 }
