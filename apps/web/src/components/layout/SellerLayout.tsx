@@ -45,7 +45,7 @@ export default function SellerLayout({ children }: { children: ReactNode }) {
           boxShadow: "0 22px 60px rgba(23,32,51,0.08)",
         }}
       >
-        <div className="rounded-[1.75rem] bg-[linear-gradient(135deg,#172033,#243457)] p-4 text-white sm:p-5">
+        <div className="hidden lg:block rounded-[1.75rem] bg-[linear-gradient(135deg,#172033,#243457)] p-4 text-white sm:p-5">
           <div className="mb-4 flex items-center gap-3">
             <div className="flex size-11 items-center justify-center rounded-2xl bg-white/10">
               <StoreIcon size={20} />
@@ -84,7 +84,7 @@ export default function SellerLayout({ children }: { children: ReactNode }) {
           ))}
         </nav>
 
-        <div className="rounded-[1.5rem] border border-[color:var(--border)] bg-white p-4 shadow-[0_16px_40px_rgba(23,32,51,0.05)]">
+        <div className="hidden lg:block rounded-[1.5rem] border border-[color:var(--border)] bg-white p-4 shadow-[0_16px_40px_rgba(23,32,51,0.05)]">
           <div className="mb-4 flex items-center gap-3">
             <div className="flex size-11 items-center justify-center rounded-2xl bg-[var(--surface-accent)] text-[color:var(--accent)]">
               <TruckIcon size={18} />

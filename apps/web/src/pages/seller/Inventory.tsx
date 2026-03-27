@@ -106,10 +106,10 @@ export default function Inventory() {
           </div>
         ) : (
           <div
-            className="rounded-2xl overflow-hidden"
+            className="overflow-x-auto rounded-2xl"
             style={{ border: "1px solid var(--border)" }}
           >
-            <table className="w-full text-sm">
+            <table className="w-full min-w-[640px] text-sm">
               <thead>
                 <tr style={{ background: "var(--surface)", borderBottom: "1px solid var(--border)" }}>
                   {["Product", "Total", "Reserved", "Available", "Threshold", "Status", "Actions"].map((h) => (

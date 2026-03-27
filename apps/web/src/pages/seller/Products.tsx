@@ -131,45 +131,48 @@ export default function SellerProducts() {
               return (
                 <div
                   key={p.id}
-                  className="rounded-[1.75rem] border border-[color:var(--border)] bg-white p-4 flex items-center gap-4 shadow-[0_14px_34px_rgba(23,32,51,0.05)]"
+                  className="rounded-[1.75rem] border border-[color:var(--border)] bg-white p-4 shadow-[0_14px_34px_rgba(23,32,51,0.05)]"
                 >
-                  {/* Image */}
-                  <div
-                    className="size-14 rounded-2xl shrink-0 overflow-hidden"
-                    style={{ background: "var(--surface-muted)" }}
-                  >
-                    {img ? (
-                      <img src={img} alt={p.name} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-[color:var(--text-soft)]"><ImageIcon size={18} /></div>
-                    )}
-                  </div>
+                  {/* Top row: image + info + badge */}
+                  <div className="flex items-center gap-3">
+                    {/* Image */}
+                    <div
+                      className="size-14 rounded-2xl shrink-0 overflow-hidden"
+                      style={{ background: "var(--surface-muted)" }}
+                    >
+                      {img ? (
+                        <img src={img} alt={p.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-[color:var(--text-soft)]"><ImageIcon size={18} /></div>
+                      )}
+                    </div>
 
-                  {/* Info */}
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-sm truncate" style={{ color: "var(--text-h)" }}>
-                      {p.name}
-                    </p>
-                    <p className="text-xs mt-0.5" style={{ color: "var(--text-soft)" }}>
-                      ؋{parseFloat(p.price).toLocaleString()} · {p.category.name}
-                    </p>
-                    {p.rejection_reason && (
-                      <p className="text-xs mt-1" style={{ color: "#f87171" }}>
-                        Rejected: {p.rejection_reason}
+                    {/* Info */}
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-sm truncate" style={{ color: "var(--text-h)" }}>
+                        {p.name}
                       </p>
-                    )}
+                      <p className="text-xs mt-0.5" style={{ color: "var(--text-soft)" }}>
+                        ؋{parseFloat(p.price).toLocaleString()} · {p.category.name}
+                      </p>
+                      {p.rejection_reason && (
+                        <p className="text-xs mt-1" style={{ color: "#f87171" }}>
+                          Rejected: {p.rejection_reason}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Badge */}
+                    <span
+                      className="px-2.5 py-1 rounded-full text-xs font-medium shrink-0"
+                      style={{ background: badge.bg, color: badge.text }}
+                    >
+                      {badge.label}
+                    </span>
                   </div>
 
-                  {/* Badge */}
-                  <span
-                    className="px-2.5 py-1 rounded-full text-xs font-medium shrink-0"
-                    style={{ background: badge.bg, color: badge.text }}
-                  >
-                    {badge.label}
-                  </span>
-
-                  {/* Actions */}
-                  <div className="flex items-center gap-2 shrink-0">
+                  {/* Actions row — full width on mobile, right-aligned */}
+                  <div className="flex items-center justify-end gap-2 mt-3">
                     <Link
                       to={`/seller/products/${p.id}/edit`}
                       className="px-3 py-1.5 rounded-lg text-xs transition-all hover:bg-white/5"

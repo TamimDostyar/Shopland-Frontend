@@ -105,9 +105,9 @@ export default function ProductDetail() {
   return (
     <MainLayout>
       <div className="mx-auto max-w-7xl px-4 py-8">
-        <div className="flex items-center gap-4 mb-8">
+        <div className="flex flex-wrap items-center gap-2 mb-6">
           <BackButton />
-          <nav className="flex items-center gap-2 text-sm" style={{ color: "var(--text-soft)" }}>
+          <nav className="hidden sm:flex items-center gap-2 text-sm" style={{ color: "var(--text-soft)" }}>
             <Link to="/" style={{ color: "var(--text-soft)" }} className="hover:underline">
               {t("category.home_breadcrumb")}
             </Link>
@@ -205,7 +205,7 @@ export default function ProductDetail() {
 
             <div className="flex items-end gap-3">
               <span
-                className="text-4xl font-bold"
+                className="text-3xl font-bold sm:text-4xl"
                 style={{ color: "var(--text-h)" }}
               >
                 ؋{displayPrice.toLocaleString()}

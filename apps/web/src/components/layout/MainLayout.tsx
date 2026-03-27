@@ -308,15 +308,17 @@ export default function MainLayout({ children }: Props) {
                 </div>
               ) : (
                 <div className="flex items-center gap-2">
+                  {/* Sign in: icon-only on mobile, text on sm+ — prevents header overflow on narrow screens */}
                   <Link
                     to="/login"
-                    className="rounded-full border border-[color:var(--border)] bg-white px-3 py-2.5 text-sm font-semibold text-[color:var(--text-h)] shadow-[0_12px_28px_rgba(23,32,51,0.05)] md:px-4 md:py-3"
+                    className="inline-flex items-center justify-center gap-1.5 rounded-full border border-[color:var(--border)] bg-white px-2.5 py-2.5 text-sm font-semibold text-[color:var(--text-h)] shadow-[0_12px_28px_rgba(23,32,51,0.05)] transition-all hover:-translate-y-0.5 sm:px-3 md:px-4 md:py-3"
                   >
-                    {t("nav.signin")}
+                    <UserIcon size={16} />
+                    <span className="hidden sm:inline">{t("nav.signin")}</span>
                   </Link>
                   <Link
                     to="/register"
-                    className="rounded-full bg-[var(--accent)] px-3 py-2.5 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(255,106,61,0.24)] md:px-5 md:py-3"
+                    className="rounded-full bg-[var(--accent)] px-3 py-2.5 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(255,106,61,0.24)] transition-all hover:-translate-y-0.5 md:px-5 md:py-3"
                   >
                     <span className="hidden sm:inline">{t("nav.create_account")}</span>
                     <span className="sm:hidden">{t("nav.join")}</span>
