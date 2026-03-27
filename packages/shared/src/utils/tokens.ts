@@ -1,9 +1,3 @@
-/**
- * Platform-agnostic token storage interface.
- * Web/desktop use cookies by default.
- * Mobile provides an AsyncStorage adapter via `configureTokenStorage`.
- */
-
 export type TokenStorage = {
   getItem(key: string): string | null | Promise<string | null>;
   setItem(key: string, value: string): void | Promise<void>;
@@ -13,8 +7,6 @@ export type TokenStorage = {
 const ACCESS_KEY = "shopland_access";
 const REFRESH_KEY = "shopland_refresh";
 
-// 7 days — long enough to cover the refresh token lifetime.
-// Actual token expiry is enforced by JWT validation on the backend.
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 
 const cookieStorage: TokenStorage | null =
