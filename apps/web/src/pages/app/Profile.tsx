@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import { googleAuth, ApiError } from "@shopland/shared";
@@ -13,6 +13,11 @@ export default function Profile() {
   const navigate = useNavigate();
   const [emailVerifyError, setEmailVerifyError] = useState("");
   const [emailVerifySuccess, setEmailVerifySuccess] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => { void refreshUser(); }, 30_000);
+    return () => clearInterval(interval);
+  }, [refreshUser]);
 
   if (!user) return null;
   if (user.role === "admin") return <Navigate to="/admin" replace />;

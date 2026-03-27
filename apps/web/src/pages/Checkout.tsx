@@ -84,7 +84,7 @@ export default function Checkout() {
 
   const items = cart?.items ?? [];
   const vs = user.verification_status;
-  const isVerified = vs.phone && vs.email && vs.id;
+  const isVerified = vs.email && vs.id;
 
   if (!isVerified) {
     return (
@@ -97,11 +97,10 @@ export default function Checkout() {
             Verification Required
           </h2>
           <p className="text-sm mb-6" style={{ color: "var(--text-soft)" }}>
-            You need to verify your phone, email, and ID before placing an order.
+            You need to verify your email and ID before placing an order.
           </p>
           <div className="space-y-2 text-sm mb-6">
             {[
-              { label: "Phone", ok: vs.phone },
               { label: "Email", ok: vs.email },
               { label: "ID", ok: vs.id },
             ].map(({ label, ok }) => (
