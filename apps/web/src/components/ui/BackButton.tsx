@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useLanguage } from "../../context/LanguageContext";
 import { ArrowLeftIcon } from "./icons";
 
 interface Props {
@@ -7,8 +8,10 @@ interface Props {
   className?: string;
 }
 
-export default function BackButton({ to, label = "Back", className = "" }: Props) {
+export default function BackButton({ to, label, className = "" }: Props) {
   const navigate = useNavigate();
+  const { t } = useLanguage();
+  const displayLabel = label ?? t("common.back");
 
   function handleClick() {
     if (to) navigate(to);
@@ -21,7 +24,7 @@ export default function BackButton({ to, label = "Back", className = "" }: Props
       className={`inline-flex items-center gap-2 rounded-full border border-[color:var(--border)] bg-white/80 px-4 py-2 text-sm font-semibold text-[color:var(--text-soft)] shadow-[0_8px_24px_rgba(23,32,51,0.05)] transition-all hover:-translate-x-0.5 hover:border-[color:var(--accent)] hover:text-[color:var(--accent)] ${className}`}
     >
       <ArrowLeftIcon size={16} />
-      {label}
+      {displayLabel}
     </button>
   );
 }

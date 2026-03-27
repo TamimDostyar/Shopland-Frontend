@@ -94,6 +94,12 @@ export default function ProductDetail() {
 
   const displayName = localizedProductName(product, locale);
   const categoryLabel = localizedCategoryName(product.category, locale);
+  const conditionLabel =
+    product.condition === "new"
+      ? t("product.condition_new")
+      : product.condition === "used"
+        ? t("product.condition_used")
+        : t("product.condition_refurbished");
   const price = parseFloat(product.price);
   const discountPrice = product.discount_price ? parseFloat(product.discount_price) : null;
   const displayPrice = discountPrice ?? price;
@@ -166,9 +172,9 @@ export default function ProductDetail() {
           <div className="space-y-6">
             <div className="flex flex-wrap gap-2">
               <span
-                className="rounded-full bg-[var(--surface-muted)] px-3 py-1.5 text-xs font-semibold capitalize text-[color:var(--text-soft)]"
+                className="rounded-full bg-[var(--surface-muted)] px-3 py-1.5 text-xs font-semibold text-[color:var(--text-soft)]"
               >
-                {product.condition}
+                {conditionLabel}
               </span>
               {product.city && (
                 <span
@@ -222,7 +228,7 @@ export default function ProductDetail() {
                     className="rounded-full bg-[var(--surface-accent)] px-3 py-1 text-sm font-bold"
                     style={{ background: "rgba(255,125,72,0.15)", color: "var(--accent)" }}
                   >
-                    -{Math.round((1 - discountPrice / price) * 100)}% OFF
+                    -{Math.round((1 - discountPrice / price) * 100)}% {t("product.off")}
                   </span>
                 </>
               )}
@@ -235,10 +241,10 @@ export default function ProductDetail() {
                   style={{ color: "#4ade80" }}
                 >
                   <span className="size-2 rounded-full bg-green-400" />
-                  In Stock
+                  {t("product.in_stock")}
                   {(product.available_quantity ?? 0) > 0 && product.available_quantity! <= 10 && (
                     <span style={{ color: "var(--text-soft)" }}>
-                      only {product.available_quantity} left
+                      {t("product.only_left")} {product.available_quantity} {t("product.only_left_suffix")}
                     </span>
                   )}
                 </span>
@@ -248,7 +254,7 @@ export default function ProductDetail() {
                   style={{ color: "#f87171" }}
                 >
                   <span className="size-2 rounded-full bg-red-400" />
-                  Out of Stock
+                  {t("product.out_of_stock")}
                 </span>
               )}
             </div>
@@ -295,7 +301,7 @@ export default function ProductDetail() {
 
             {user && user.role !== "buyer" && (
               <p className="text-sm" style={{ color: "var(--text-soft)" }}>
-                You are signed in as `{user.role}`. Only buyer accounts can add products to the cart and place orders.
+                {t("product.buyer_required_desc")}
               </p>
             )}
 
@@ -318,7 +324,7 @@ export default function ProductDetail() {
                 </Link>
                 {(product.seller.average_rating ?? 0) > 0 && (
                   <p className="text-xs mt-0.5" style={{ color: "var(--text-soft)" }}>
-                    Rated {product.seller.average_rating?.toFixed(1)} ({product.seller.total_reviews} reviews)
+                    {t("product.rated")} {product.seller.average_rating?.toFixed(1)} ({product.seller.total_reviews} {t("product.reviews")})
                   </p>
                 )}
               </div>
@@ -327,7 +333,7 @@ export default function ProductDetail() {
                 className="text-sm px-3 py-1.5 rounded-xl transition-colors hover:bg-white/5"
                 style={{ border: "1px solid var(--border)", color: "var(--text)" }}
               >
-                View Shop
+                {t("product.view_shop")}
               </Link>
             </div>
 
@@ -338,7 +344,7 @@ export default function ProductDetail() {
                 <TruckIcon size={18} />
               </div>
               <p className="text-sm" style={{ color: "var(--text-soft)" }}>
-                Cash on delivery available. Pay when your order arrives.
+                {t("product.cod_note")}
               </p>
             </div>
 
@@ -352,7 +358,7 @@ export default function ProductDetail() {
             className="text-lg font-bold mb-4"
             style={{ fontFamily: "var(--heading)", color: "var(--text-h)" }}
           >
-            Product Description
+            {t("product.description")}
           </h2>
           <p className="leading-relaxed whitespace-pre-line" style={{ color: "var(--text)" }}>
             {product.description}
@@ -365,7 +371,7 @@ export default function ProductDetail() {
               className="mb-6 text-2xl font-bold"
               style={{ fontFamily: "var(--heading)", color: "var(--text-h)" }}
             >
-              Related Products
+              {t("product.related")}
             </h2>
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
               {related.results
