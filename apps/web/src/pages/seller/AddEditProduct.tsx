@@ -321,7 +321,7 @@ export default function AddEditProduct() {
                       onChange={() => f("condition", c)}
                       style={{ accentColor: "var(--accent)" }}
                     />
-                    {c}
+                    {t(`product.condition_${c}` as Parameters<typeof t>[0])}
                   </label>
                 ))}
               </div>
@@ -451,13 +451,13 @@ export default function AddEditProduct() {
             {colors && colors.length > 0 && (
               <div>
                 <label className="block text-sm mb-2" style={{ color: "var(--text-soft)" }}>
-                  {locale === "fa" ? "رنگ‌های موجود" : locale === "ps" ? "شتون رنگونه" : "Available Colors"}
+                  {t("seller.available_colors")}
                   {selectedColors.length > 0 && (
                     <span
                       className="ml-2 text-xs px-1.5 py-0.5 rounded-full"
                       style={{ background: "rgba(255,125,72,0.12)", color: "var(--accent)" }}
                     >
-                      {selectedColors.length} selected
+                      {selectedColors.length} {t("seller.colors_selected")}
                     </span>
                   )}
                 </label>

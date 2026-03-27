@@ -817,6 +817,10 @@ const en = {
   "storefront.page_of": "of",
   "storefront.products": "products",
   "storefront.reviews": "reviews",
+
+  // Product colors & condition
+  "seller.available_colors": "Available Colors",
+  "seller.colors_selected": "selected",
 } as const;
 
 const fa: Record<keyof typeof en, string> = {
@@ -1562,6 +1566,8 @@ const fa: Record<keyof typeof en, string> = {
   "storefront.page_of": "از",
   "storefront.products": "محصول",
   "storefront.reviews": "نظر",
+  "seller.available_colors": "رنگ‌های موجود",
+  "seller.colors_selected": "انتخاب شده",
 };
 
 const ps: Record<keyof typeof en, string> = {
@@ -2307,6 +2313,8 @@ const ps: Record<keyof typeof en, string> = {
   "storefront.page_of": "څخه",
   "storefront.products": "محصولات",
   "storefront.reviews": "نظرونه",
+  "seller.available_colors": "شتون رنګونه",
+  "seller.colors_selected": "غوره شوي",
 };
 
 export const UI_TRANSLATIONS: Record<Locale, Record<keyof typeof en, string>> = { en, fa, ps };
