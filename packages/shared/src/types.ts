@@ -309,6 +309,7 @@ export type VerificationStatus = {
   phone: boolean;
   email: boolean;
   selfie: boolean;
+  id: boolean;
   seller_approved?: boolean;
 };
 
