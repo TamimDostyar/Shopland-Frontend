@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import AuthLayout from "../components/layout/AuthLayout";
 import { ArrowRightIcon, ShieldIcon, StoreIcon, UserIcon } from "../components/ui/icons";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function Register() {
+  const { t } = useLanguage();
   return (
-    <AuthLayout title="Create your account" subtitle="Choose your account type to get started">
+    <AuthLayout title={t("register.title")} subtitle={t("register.subtitle")}>
       <div className="flex flex-col gap-4">
         <Link
           to="/register/buyer"
@@ -16,12 +18,12 @@ export default function Register() {
           <div className="flex-1">
             <div className="flex items-center justify-between gap-3">
               <span className="text-base font-semibold text-heading group-hover:text-accent transition-colors">
-                Buyer
+                {t("register.buyer")}
               </span>
               <ArrowRightIcon size={16} className="text-[color:var(--text-soft)] group-hover:text-[color:var(--accent)]" />
             </div>
             <span className="mt-1 block text-sm text-muted">
-              Browse and purchase products from Afghan sellers across the country.
+              {t("register.buyer_desc")}
             </span>
           </div>
         </Link>
@@ -36,12 +38,12 @@ export default function Register() {
           <div className="flex-1">
             <div className="flex items-center justify-between gap-3">
               <span className="text-base font-semibold text-heading group-hover:text-accent transition-colors">
-                Seller
+                {t("register.seller")}
               </span>
               <ArrowRightIcon size={16} className="text-[color:var(--text-soft)] group-hover:text-[color:var(--accent)]" />
             </div>
             <span className="mt-1 block text-sm text-muted">
-              Open your shop and reach buyers across Afghanistan.
+              {t("register.seller_desc")}
             </span>
           </div>
         </Link>
@@ -49,15 +51,15 @@ export default function Register() {
         <div className="rounded-[1.5rem] bg-[var(--surface-muted)] p-4 text-sm text-[color:var(--text-soft)]">
           <div className="mb-1 inline-flex items-center gap-2 font-semibold text-[color:var(--text-h)]">
             <ShieldIcon size={16} className="text-[color:var(--accent)]" />
-            Account verification
+            {t("register.account_verification")}
           </div>
-          Every account type follows a verified flow to keep the marketplace safer.
+          {t("register.verification_desc")}
         </div>
 
         <p className="text-center text-sm text-muted mt-2">
-          Already have an account?{" "}
+          {t("register.have_account")}{" "}
           <Link to="/login" className="text-accent hover:underline">
-            Sign in
+            {t("register.signin")}
           </Link>
         </p>
       </div>

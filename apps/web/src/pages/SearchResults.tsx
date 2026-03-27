@@ -7,9 +7,11 @@ import ProductCard from "../components/catalog/ProductCard";
 import SkeletonCard from "../components/catalog/SkeletonCard";
 import BackButton from "../components/ui/BackButton";
 import { ArrowLeftIcon, ArrowRightIcon, SearchIcon } from "../components/ui/icons";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function SearchResults() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { t } = useLanguage();
   const query = searchParams.get("q") ?? "";
   const sortParam = (searchParams.get("sort") ?? "newest") as string;
   const [sort, setSort] = useState(sortParam);
@@ -42,19 +44,19 @@ export default function SearchResults() {
   return (
     <MainLayout>
       <div className="mx-auto max-w-7xl px-4 py-8">
-        <BackButton to="/" label="Back to Home" className="mb-5" />
+        <BackButton to="/" label={t("search.back_home")} className="mb-5" />
 
         <div className="mb-6 flex flex-wrap items-end justify-between gap-4 rounded-[2rem] border border-[color:var(--border)] bg-white px-6 py-6 shadow-[0_18px_46px_rgba(23,32,51,0.06)]">
           <div>
             <div className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--text-soft)]">
-              Search results
+              {t("search.results_label")}
             </div>
             <h1 className="text-3xl font-bold" style={{ fontFamily: "var(--heading)", color: "var(--text-h)" }}>
-              {query ? `Results for "${query}"` : "All Products"}
+              {query ? `${t("search.results_for")} "${query}"` : t("search.all_products")}
             </h1>
             {data && (
               <p className="mt-1 text-sm" style={{ color: "var(--text-soft)" }}>
-                {data.count} {data.count === 1 ? "product" : "products"} found
+                {data.count} {data.count === 1 ? t("search.count_product") : t("search.count_products")}
               </p>
             )}
           </div>
@@ -66,10 +68,10 @@ export default function SearchResults() {
               color: "var(--text)",
             }}
           >
-            <option value="newest">Newest</option>
-            <option value="most_viewed">Most Popular</option>
-            <option value="price_asc">Price: Low to High</option>
-            <option value="price_desc">Price: High to Low</option>
+            <option value="newest">{t("search.sort_newest")}</option>
+            <option value="most_viewed">{t("search.sort_popular")}</option>
+            <option value="price_asc">{t("search.sort_price_asc")}</option>
+            <option value="price_desc">{t("search.sort_price_desc")}</option>
           </select>
         </div>
 
@@ -85,16 +87,16 @@ export default function SearchResults() {
               <SearchIcon size={28} />
             </div>
             <p className="mb-2 font-medium" style={{ color: "var(--text-h)" }}>
-              No results for &ldquo;{query}&rdquo;
+              {t("search.no_results")} &ldquo;{query}&rdquo;
             </p>
             <p className="mb-6 text-sm" style={{ color: "var(--text-soft)" }}>
-              Try a different search term or browse our categories.
+              {t("search.no_results_hint")}
             </p>
             <Link
               to="/"
               className="inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-5 py-3 text-sm font-semibold text-white"
             >
-              Browse Home
+              {t("search.browse_home")}
               <ArrowRightIcon size={15} />
             </Link>
           </div>
@@ -112,17 +114,17 @@ export default function SearchResults() {
                   className="inline-flex items-center gap-2 rounded-full border border-[color:var(--border)] bg-white px-4 py-2.5 text-sm font-semibold text-[color:var(--text)] disabled:opacity-30"
                 >
                   <ArrowLeftIcon size={15} />
-                  Prev
+                  {t("search.prev")}
                 </button>
                 <span className="text-sm" style={{ color: "var(--text-soft)" }}>
-                  Page {page} of {totalPages}
+                  {page} {t("search.page_of")} {totalPages}
                 </span>
                 <button
                   disabled={page === totalPages}
                   onClick={() => setPage((p) => p + 1)}
                   className="inline-flex items-center gap-2 rounded-full border border-[color:var(--border)] bg-white px-4 py-2.5 text-sm font-semibold text-[color:var(--text)] disabled:opacity-30"
                 >
-                  Next
+                  {t("search.next")}
                   <ArrowRightIcon size={15} />
                 </button>
               </div>

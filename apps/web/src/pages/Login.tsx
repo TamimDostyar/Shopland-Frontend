@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import { ApiError, googleAuth } from "@shopland/shared";
 import AuthLayout from "../components/layout/AuthLayout";
@@ -7,11 +7,15 @@ import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import Alert from "../components/ui/Alert";
 import { useAuth } from "../hooks/useAuth";
+import { useLanguage } from "../context/LanguageContext";
 import { isGmailAddress } from "../utils/email";
 
 export default function Login() {
   const { login, setTokensAndUser, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { t } = useLanguage();
+  const passwordReset = (location.state as { passwordReset?: boolean } | null)?.passwordReset;
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,7 +30,7 @@ export default function Login() {
     e.preventDefault();
     setError("");
     if (!isGmailAddress(email)) {
-      setError("Please use a Gmail address ending in @gmail.com.");
+      setError(t("login.error_gmail"));
       return;
     }
     setLoading(true);
@@ -34,7 +38,7 @@ export default function Login() {
       await login(email, password);
       navigate("/", { replace: true });
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Login failed. Please try again.");
+      setError(err instanceof ApiError ? err.message : t("login.error_failed"));
     } finally {
       setLoading(false);
     }
@@ -49,19 +53,20 @@ export default function Login() {
       await setTokensAndUser(res.access, res.refresh, res.user);
       navigate("/", { replace: true });
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Google sign-in failed.");
+      setError(err instanceof ApiError ? err.message : t("login.error_google"));
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <AuthLayout title="Welcome back" subtitle="Sign in to your Shopland account" backTo="/" backLabel="Back to Home">
+    <AuthLayout title={t("login.title")} subtitle={t("login.subtitle")} backTo="/" backLabel={t("login.back_home")}>
       <form onSubmit={(e) => { void handleSubmit(e); }} className="flex flex-col gap-4">
+        {passwordReset && <Alert kind="success">{t("login.password_reset_success")}</Alert>}
         {error && <Alert kind="error">{error}</Alert>}
 
         <Input
-          label="Email"
+          label={t("login.email")}
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -70,29 +75,36 @@ export default function Login() {
           required
         />
 
-        <Input
-          label="Password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          autoComplete="current-password"
-          required
-        />
+        <div className="flex flex-col gap-1">
+          <Input
+            label={t("login.password")}
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
+            required
+          />
+          <div className="text-right">
+            <Link to="/forgot-password" className="text-xs text-[color:var(--text-soft)] hover:underline">
+              {t("login.forgot_password")}
+            </Link>
+          </div>
+        </div>
 
         <Button type="submit" loading={loading} className="w-full mt-2">
-          Sign in
+          {t("login.submit")}
         </Button>
 
         <div className="flex items-center gap-3">
           <div className="flex-1 border-t border-[color:var(--border)]" />
-          <span className="text-xs text-[color:var(--text-soft)]">or</span>
+          <span className="text-xs text-[color:var(--text-soft)]">{t("login.or")}</span>
           <div className="flex-1 border-t border-[color:var(--border)]" />
         </div>
 
         <div className="flex justify-center">
           <GoogleLogin
             onSuccess={(resp) => { void handleGoogleSuccess(resp); }}
-            onError={() => setError("Google sign-in failed.")}
+            onError={() => setError(t("login.error_google"))}
             useOneTap={false}
             shape="pill"
             text="signin_with"
@@ -100,13 +112,13 @@ export default function Login() {
         </div>
 
         <div className="rounded-[1.4rem] bg-[var(--surface-muted)] px-4 py-3 text-xs text-[color:var(--text-soft)]">
-          Use a Gmail address for Shopland sign-in and registration. Other email providers are not accepted.
+          {t("login.gmail_note")}
         </div>
 
         <p className="text-center text-sm text-muted">
-          No account?{" "}
+          {t("login.no_account")}{" "}
           <Link to="/register" className="text-accent hover:underline">
-            Register
+            {t("login.register")}
           </Link>
         </p>
       </form>

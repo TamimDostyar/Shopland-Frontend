@@ -382,3 +382,15 @@ export function CategoryIcon({
 
   return <PackageIcon size={size} {...props} />;
 }
+
+export function GlobeIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <circle cx="12" cy="12" r="8" />
+      <path d="M12 4c-2.5 2-4 5-4 8s1.5 6 4 8" />
+      <path d="M12 4c2.5 2 4 5 4 8s-1.5 6-4 8" />
+      <path d="M4.4 9h15.2" />
+      <path d="M4.4 15h15.2" />
+    </IconBase>
+  );
+}

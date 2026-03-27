@@ -5,11 +5,13 @@ import {
   getCategories,
   getApiBaseUrl,
   type Category,
+  type Locale,
   type Product,
 } from "@shopland/shared";
 import MainLayout from "../components/layout/MainLayout";
 import ProductCard from "../components/catalog/ProductCard";
 import SkeletonCard from "../components/catalog/SkeletonCard";
+import { useLanguage } from "../context/LanguageContext";
 import {
   ArrowRightIcon,
   CategoryIcon,
@@ -36,7 +38,15 @@ function getProductImage(product: Product): string | null {
   return resolveMediaUrl(rawImg);
 }
 
+function localizedCategoryName(cat: { name: string; name_fa?: string; name_ps?: string }, locale: Locale): string {
+  if (locale === "fa" && cat.name_fa) return cat.name_fa;
+  if (locale === "ps" && cat.name_ps) return cat.name_ps;
+  return cat.name;
+}
+
 export default function Home() {
+  const { t, locale } = useLanguage();
+
   const { data: categoriesData, isLoading: catLoading } = useQuery({
     queryKey: ["categories"],
     queryFn: () => getCategories(),
@@ -67,82 +77,82 @@ export default function Home() {
             <div className="mb-4 flex flex-wrap items-center justify-between gap-3 px-2 pt-2">
               <div>
                 <div className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent)]">
-                  Featured picks
+                  {t("home.featured_label")}
                 </div>
                 <h1
                   className="mt-1 text-3xl font-bold sm:text-4xl"
                   style={{ fontFamily: "var(--heading)", color: "var(--text-h)" }}
                 >
-                  Shop today&apos;s standout products
+                  {t("home.featured_title")}
                 </h1>
               </div>
               <Link
                 to="/search"
                 className="inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-5 py-3 text-sm font-semibold text-white shadow-[0_16px_34px_rgba(255,106,61,0.26)]"
               >
-                Browse all
+                {t("home.browse_all")}
                 <ArrowRightIcon size={16} />
               </Link>
             </div>
 
             <div className="grid gap-4 md:grid-cols-[1.25fr_0.75fr]">
-              <FeaturedShowcaseCard product={showcaseProducts[0]} large />
+              <FeaturedShowcaseCard product={showcaseProducts[0]} large locale={locale} featuredFallback={t("home.featured_fallback")} />
               <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-1">
                 {showcaseProducts.slice(1, 3).map((product) => (
-                  <FeaturedShowcaseCard key={product.id} product={product} />
+                  <FeaturedShowcaseCard key={product.id} product={product} locale={locale} featuredFallback={t("home.featured_fallback")} />
                 ))}
                 {showcaseProducts.length < 3 &&
                   Array.from({ length: 3 - showcaseProducts.length }).map((_, index) => (
-                    <FeaturedShowcaseCard key={`placeholder-top-${index}`} />
+                    <FeaturedShowcaseCard key={`placeholder-top-${index}`} locale={locale} featuredFallback={t("home.featured_fallback")} />
                   ))}
               </div>
             </div>
 
             <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {showcaseProducts.slice(3, 6).map((product) => (
-                <FeaturedShowcaseCard key={product.id} product={product} compact />
+                <FeaturedShowcaseCard key={product.id} product={product} compact locale={locale} featuredFallback={t("home.featured_fallback")} />
               ))}
               {showcaseProducts.length < 6 &&
                 Array.from({ length: 6 - showcaseProducts.length }).map((_, index) => (
-                  <FeaturedShowcaseCard key={`placeholder-bottom-${index}`} compact />
+                  <FeaturedShowcaseCard key={`placeholder-bottom-${index}`} compact locale={locale} featuredFallback={t("home.featured_fallback")} />
                 ))}
             </div>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
             {showcaseProducts.slice(6, 8).map((product) => (
-              <FeaturedShowcaseCard key={product.id} product={product} />
+              <FeaturedShowcaseCard key={product.id} product={product} locale={locale} featuredFallback={t("home.featured_fallback")} />
             ))}
             {showcaseProducts.length < 8 &&
               Array.from({ length: 8 - showcaseProducts.length }).map((_, index) => (
-                <FeaturedShowcaseCard key={`placeholder-side-${index}`} />
+                <FeaturedShowcaseCard key={`placeholder-side-${index}`} locale={locale} featuredFallback={t("home.featured_fallback")} />
               ))}
             <div className="rounded-[1.75rem] border border-[color:var(--border)] bg-[linear-gradient(135deg,#fff4ec,#eef5ff)] p-6 shadow-[0_18px_46px_rgba(23,32,51,0.06)]">
               <div className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent)]">
-                Shop more
+                {t("home.shop_more_label")}
               </div>
               <h2
                 className="mt-2 text-2xl font-bold"
                 style={{ fontFamily: "var(--heading)", color: "var(--text-h)" }}
               >
-                Browse all categories and latest deals
+                {t("home.shop_more_title")}
               </h2>
               <p className="mt-3 text-sm text-[color:var(--text-soft)]">
-                More products, faster scanning, and a homepage that feels like a real marketplace.
+                {t("home.shop_more_desc")}
               </p>
               <div className="mt-5 flex flex-wrap gap-3">
                 <Link
                   to="/search?sort=most_viewed"
                   className="inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-5 py-3 text-sm font-semibold text-white shadow-[0_16px_34px_rgba(255,106,61,0.22)]"
                 >
-                  Best sellers
+                  {t("home.best_sellers")}
                   <ArrowRightIcon size={15} />
                 </Link>
                 <Link
                   to="/search?sort=newest"
                   className="inline-flex items-center gap-2 rounded-full border border-[color:var(--border)] bg-white px-5 py-3 text-sm font-semibold text-[color:var(--text-h)]"
                 >
-                  New arrivals
+                  {t("home.new_arrivals")}
                 </Link>
               </div>
             </div>
@@ -155,17 +165,17 @@ export default function Home() {
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <div>
               <div className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--text-soft)]">
-                Shop by department
+                {t("home.department_label")}
               </div>
               <h2 className="text-2xl font-bold text-[color:var(--text-h)]" style={{ fontFamily: "var(--heading)" }}>
-                Explore the catalog faster
+                {t("home.department_title")}
               </h2>
             </div>
             <Link
               to="/search"
               className="inline-flex items-center gap-2 rounded-full bg-[var(--surface-accent)] px-4 py-2 text-sm font-semibold text-[color:var(--accent)]"
             >
-              Browse full catalog
+              {t("home.browse_catalog")}
               <ArrowRightIcon size={15} />
             </Link>
           </div>
@@ -181,68 +191,71 @@ export default function Home() {
               : categories
                   .filter((c: Category) => !c.parent)
                   .slice(0, 10)
-                  .map((cat: Category) => {
-                    return (
-                      <Link
-                        key={cat.id}
-                        to={`/category/${cat.slug}`}
-                        className="flex shrink-0 items-center gap-3 rounded-2xl border border-[color:var(--border)] bg-[var(--surface-muted)] px-4 py-3 text-sm font-semibold whitespace-nowrap text-[color:var(--text)] transition-all hover:-translate-y-0.5 hover:border-[color:var(--accent)] hover:bg-white hover:text-[color:var(--accent)]"
-                      >
-                        <div className="flex size-9 items-center justify-center rounded-xl bg-white text-[color:var(--accent)]">
-                          <CategoryIcon slug={cat.slug} size={18} />
-                        </div>
-                        {cat.name}
-                      </Link>
-                    );
-                  })}
+                  .map((cat: Category) => (
+                    <Link
+                      key={cat.id}
+                      to={`/category/${cat.slug}`}
+                      className="flex shrink-0 items-center gap-3 rounded-2xl border border-[color:var(--border)] bg-[var(--surface-muted)] px-4 py-3 text-sm font-semibold whitespace-nowrap text-[color:var(--text)] transition-all hover:-translate-y-0.5 hover:border-[color:var(--accent)] hover:bg-white hover:text-[color:var(--accent)]"
+                    >
+                      <div className="flex size-9 items-center justify-center rounded-xl bg-white text-[color:var(--accent)]">
+                        <CategoryIcon slug={cat.slug} size={18} />
+                      </div>
+                      {localizedCategoryName(cat, locale)}
+                    </Link>
+                  ))}
           </div>
         </div>
       </section>
 
       <div className="mx-auto max-w-7xl space-y-16 px-4 py-10">
         <ProductSection
-          title="Popular Products"
-          subtitle="High-interest items surfaced in a cleaner, faster shopping grid"
+          title={t("home.popular_title")}
+          subtitle={t("home.popular_subtitle")}
           products={featured}
           loading={featuredLoading}
           seeAllLink="/search?sort=most_viewed"
+          seeAllLabel={t("home.see_all")}
+          emptyLabel={t("home.no_products")}
         />
 
         <ProductSection
-          title="Just Added"
-          subtitle="Fresh listings from shops that recently updated their catalog"
+          title={t("home.just_added_title")}
+          subtitle={t("home.just_added_subtitle")}
           products={newest}
           loading={newestLoading}
           seeAllLink="/search?sort=newest"
+          seeAllLabel={t("home.see_all")}
+          emptyLabel={t("home.no_products")}
         />
 
         {!catLoading && categories.length > 0 && (
           <section>
-            <SectionHeader title="Browse by Category" subtitle="Jump directly into the departments shoppers use most." />
+            <SectionHeader
+              title={t("home.by_category_title")}
+              subtitle={t("home.by_category_subtitle")}
+            />
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
               {categories
                 .filter((c: Category) => !c.parent)
                 .slice(0, 12)
-                .map((cat: Category) => {
-                  return (
-                    <Link
-                      key={cat.id}
-                      to={`/category/${cat.slug}`}
-                      className="group flex flex-col items-start gap-4 rounded-[1.75rem] border border-[color:var(--border)] bg-white p-5 text-left shadow-[0_16px_40px_rgba(23,32,51,0.05)] transition-all hover:-translate-y-1 hover:border-[color:var(--accent)]"
-                    >
-                      <div className="flex size-12 items-center justify-center rounded-2xl bg-[var(--surface-accent)] text-[color:var(--accent)]">
-                        <CategoryIcon slug={cat.slug} size={22} />
-                      </div>
-                      <span className="text-sm font-semibold" style={{ color: "var(--text-h)" }}>
-                        {cat.name}
-                      </span>
-                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-[color:var(--accent)]">
-                        Shop now
-                        <ArrowRightIcon size={13} />
-                      </span>
-                    </Link>
-                  );
-                })}
+                .map((cat: Category) => (
+                  <Link
+                    key={cat.id}
+                    to={`/category/${cat.slug}`}
+                    className="group flex flex-col items-start gap-4 rounded-[1.75rem] border border-[color:var(--border)] bg-white p-5 text-left shadow-[0_16px_40px_rgba(23,32,51,0.05)] transition-all hover:-translate-y-1 hover:border-[color:var(--accent)]"
+                  >
+                    <div className="flex size-12 items-center justify-center rounded-2xl bg-[var(--surface-accent)] text-[color:var(--accent)]">
+                      <CategoryIcon slug={cat.slug} size={22} />
+                    </div>
+                    <span className="text-sm font-semibold" style={{ color: "var(--text-h)" }}>
+                      {localizedCategoryName(cat, locale)}
+                    </span>
+                    <span className="inline-flex items-center gap-1 text-xs font-semibold text-[color:var(--accent)]">
+                      {t("home.shop_now")}
+                      <ArrowRightIcon size={13} />
+                    </span>
+                  </Link>
+                ))}
             </div>
           </section>
         )}
@@ -255,10 +268,12 @@ function SectionHeader({
   title,
   subtitle,
   seeAllLink,
+  seeAllLabel = "See all",
 }: {
   title: string;
   subtitle?: string;
   seeAllLink?: string;
+  seeAllLabel?: string;
 }) {
   return (
     <div className="flex flex-wrap items-end justify-between gap-3 mb-6">
@@ -281,7 +296,7 @@ function SectionHeader({
           className="inline-flex items-center gap-2 rounded-full bg-[var(--surface-accent)] px-4 py-2 text-sm font-semibold transition-colors hover:opacity-90"
           style={{ color: "var(--accent)" }}
         >
-          See all
+          {seeAllLabel}
           <ArrowRightIcon size={14} />
         </Link>
       )}
@@ -295,16 +310,20 @@ function ProductSection({
   products,
   loading,
   seeAllLink,
+  seeAllLabel,
+  emptyLabel,
 }: {
   title: string;
   subtitle?: string;
   products: Product[];
   loading: boolean;
   seeAllLink?: string;
+  seeAllLabel?: string;
+  emptyLabel?: string;
 }) {
   return (
     <section>
-      <SectionHeader title={title} subtitle={subtitle} seeAllLink={seeAllLink} />
+      <SectionHeader title={title} subtitle={subtitle} seeAllLink={seeAllLink} seeAllLabel={seeAllLabel} />
       {loading ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {Array.from({ length: 8 }).map((_, i) => (
@@ -315,7 +334,7 @@ function ProductSection({
         <div
           className="rounded-[1.75rem] border border-[color:var(--border)] bg-white p-10 text-center shadow-[0_18px_46px_rgba(23,32,51,0.05)]"
         >
-          <p style={{ color: "var(--text-soft)" }}>No products available yet.</p>
+          <p style={{ color: "var(--text-soft)" }}>{emptyLabel}</p>
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
@@ -332,10 +351,14 @@ function FeaturedShowcaseCard({
   product,
   large = false,
   compact = false,
+  locale,
+  featuredFallback,
 }: {
   product?: Product;
   large?: boolean;
   compact?: boolean;
+  locale: Locale;
+  featuredFallback: string;
 }) {
   const img = product ? getProductImage(product) : null;
   const price = product ? parseFloat(product.discount_price ?? product.price) : null;
@@ -349,6 +372,10 @@ function FeaturedShowcaseCard({
       />
     );
   }
+
+  const catName = product.category
+    ? localizedCategoryName(product.category, locale)
+    : featuredFallback;
 
   return (
     <Link
@@ -369,7 +396,7 @@ function FeaturedShowcaseCard({
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(17,24,39,0.02),rgba(17,24,39,0.68))]" />
       <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
         <div className="inline-flex rounded-full bg-white/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-[color:var(--accent)]">
-          {product.category?.name ?? "Featured"}
+          {catName}
         </div>
         <div className={`${large ? "mt-3 max-w-md text-2xl sm:text-3xl" : compact ? "mt-2 text-base" : "mt-3 text-lg"} font-bold leading-tight text-white`}>
           {product.name}

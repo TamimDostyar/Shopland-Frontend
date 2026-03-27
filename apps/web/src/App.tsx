@@ -5,6 +5,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { setApiBaseUrl } from "@shopland/shared";
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
+import { LanguageProvider } from "./context/LanguageContext";
 import { router } from "./router";
 
 setApiBaseUrl(
@@ -32,6 +33,7 @@ const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID as string ?? "";
 
 export default function App() {
   return (
+    <LanguageProvider>
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
@@ -54,5 +56,6 @@ export default function App() {
       </AuthProvider>
     </QueryClientProvider>
     </GoogleOAuthProvider>
+    </LanguageProvider>
   );
 }

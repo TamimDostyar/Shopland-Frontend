@@ -7,6 +7,8 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import RegisterBuyer from "../pages/RegisterBuyer";
 import RegisterSeller from "../pages/RegisterSeller";
+import ForgotPassword from "../pages/ForgotPassword";
+import ResetPassword from "../pages/ResetPassword";
 import PrivacyPolicy from "../pages/PrivacyPolicy";
 import TermsConditions from "../pages/TermsConditions";
 
@@ -94,6 +96,8 @@ export const router = createBrowserRouter([
   { path: "/register", element: <Register /> },
   { path: "/register/buyer", element: <RegisterBuyer /> },
   { path: "/register/seller", element: <RegisterSeller /> },
+  { path: "/forgot-password", element: <ForgotPassword /> },
+  { path: "/reset-password", element: <ResetPassword /> },
   { path: "/privacy", element: <PrivacyPolicy /> },
   { path: "/terms", element: <TermsConditions /> },
 

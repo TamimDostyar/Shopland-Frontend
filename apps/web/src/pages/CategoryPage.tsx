@@ -7,6 +7,7 @@ import ProductCard from "../components/catalog/ProductCard";
 import SkeletonCard from "../components/catalog/SkeletonCard";
 import BackButton from "../components/ui/BackButton";
 import { ArrowLeftIcon, ArrowRightIcon, CategoryIcon } from "../components/ui/icons";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function CategoryPage() {
   const { slug } = useParams<{ slug: string }>();

@@ -6,6 +6,7 @@ import OtpInput from "../components/forms/OtpInput";
 import Button from "../components/ui/Button";
 import Alert from "../components/ui/Alert";
 import { useAuth } from "../hooks/useAuth";
+import { useLanguage } from "../context/LanguageContext";
 
 const RESEND_COOLDOWN = 60;
 
@@ -13,6 +14,7 @@ export default function VerifyPhone() {
   const location = useLocation();
   const navigate = useNavigate();
   const { refreshUser } = useAuth();
+  const { t } = useLanguage();
 
   const phoneNumber: string = (location.state as { phone_number?: string })?.phone_number ?? "";
 
@@ -35,7 +37,7 @@ export default function VerifyPhone() {
 
   async function handleVerify() {
     if (code.length < 6) {
-      setError("Please enter the 6-digit code.");
+      setError(t("verify_phone.error_required"));
       return;
     }
     setError("");
@@ -46,7 +48,7 @@ export default function VerifyPhone() {
       setSuccess(true);
       setTimeout(() => navigate("/app/profile"), 1500);
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Verification failed.");
+      setError(err instanceof ApiError ? err.message : t("verify_phone.error_failed"));
     } finally {
       setLoading(false);
     }
@@ -59,7 +61,7 @@ export default function VerifyPhone() {
       await resendPhoneCode(phoneNumber);
       startCooldown();
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Could not resend code.");
+      setError(err instanceof ApiError ? err.message : t("verify_phone.error_resend"));
     } finally {
       setResendLoading(false);
     }
@@ -67,14 +69,14 @@ export default function VerifyPhone() {
 
   return (
     <AuthLayout
-      title="Verify your phone"
-      subtitle={phoneNumber ? `We sent a 6-digit code to ${phoneNumber}` : "Enter the code sent to your phone"}
+      title={t("verify_phone.title")}
+      subtitle={phoneNumber ? `${t("verify_phone.subtitle_sent")} ${phoneNumber}` : t("verify_phone.subtitle_default")}
       backTo="/app/profile"
-      backLabel="Back to Profile"
+      backLabel={t("verify_phone.back")}
     >
       <div className="flex flex-col gap-5">
         {success && (
-          <Alert kind="success">Phone verified! Redirecting…</Alert>
+          <Alert kind="success">{t("verify_phone.success")}</Alert>
         )}
 
         {error && <Alert kind="error">{error}</Alert>}
@@ -87,20 +89,20 @@ export default function VerifyPhone() {
           disabled={code.length < 6 || success}
           className="w-full"
         >
-          Verify
+          {t("verify_phone.submit")}
         </Button>
 
         <div className="text-center text-sm text-muted">
-          Didn't receive it?{" "}
+          {t("verify_phone.no_code")}{" "}
           {cooldown > 0 ? (
-            <span className="text-muted">Resend in {cooldown}s</span>
+            <span className="text-muted">{t("verify_phone.resend_in")} {cooldown}s</span>
           ) : (
             <button
               onClick={() => { void handleResend(); }}
               disabled={resendLoading}
               className="text-accent hover:underline disabled:opacity-50"
             >
-              {resendLoading ? "Sending…" : "Resend code"}
+              {resendLoading ? t("verify_phone.sending") : t("verify_phone.resend")}
             </button>
           )}
         </div>

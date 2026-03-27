@@ -4,6 +4,8 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import RegisterBuyer from "../pages/RegisterBuyer";
 import RegisterSeller from "../pages/RegisterSeller";
+import ForgotPassword from "../pages/ForgotPassword";
+import ResetPassword from "../pages/ResetPassword";
 import VerifyPhone from "../pages/VerifyPhone";
 import VerifyEmail from "../pages/VerifyEmail";
 import Profile from "../pages/app/Profile";
@@ -29,6 +31,8 @@ export const router = createHashRouter([
   { path: "/register", element: <Register /> },
   { path: "/register/buyer", element: <RegisterBuyer /> },
   { path: "/register/seller", element: <RegisterSeller /> },
+  { path: "/forgot-password", element: <ForgotPassword /> },
+  { path: "/reset-password", element: <ResetPassword /> },
   { path: "/verify-phone", element: <VerifyPhone /> },
   { path: "/verify-email", element: <VerifyEmail /> },
   {

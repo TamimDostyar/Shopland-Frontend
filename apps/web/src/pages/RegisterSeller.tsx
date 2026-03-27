@@ -90,7 +90,10 @@ export default function RegisterSeller() {
   }
 
   async function handleSubmit() {
-    if (!form.profile_photo) return;
+    if (!form.profile_photo) {
+      setApiError("Profile photo is required. Please go back to step 2 and upload a photo.");
+      return;
+    }
     setApiError("");
     setSubmitting(true);
     try {
@@ -99,7 +102,11 @@ export default function RegisterSeller() {
       await setTokensAndUser(res.access, res.refresh, res.user);
       navigate("/profile");
     } catch (err) {
-      setApiError(err instanceof ApiError ? err.message : "Registration failed.");
+      if (err instanceof ApiError) {
+        setApiError(err.message || `Registration failed (HTTP ${err.status}). Please try again.`);
+      } else {
+        setApiError("Registration failed. Please try again.");
+      }
     } finally {
       setSubmitting(false);
     }

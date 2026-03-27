@@ -16,3 +16,27 @@ export function refreshAccessToken(
     refresh,
   });
 }
+
+export function requestPasswordReset(email: string): Promise<{ detail: string }> {
+  return http.post<{ detail: string }>("/api/users/password/reset/", { email });
+}
+
+export function requestPasswordResetViaGoogle(
+  credential: string,
+): Promise<{ reset_token: string }> {
+  return http.post<{ reset_token: string }>("/api/users/password/reset/google-verify/", {
+    credential,
+  });
+}
+
+export function confirmPasswordReset(
+  token: string,
+  newPassword: string,
+  confirmPassword: string,
+): Promise<{ detail: string }> {
+  return http.post<{ detail: string }>("/api/users/password/reset/confirm/", {
+    token,
+    new_password: newPassword,
+    confirm_password: confirmPassword,
+  });
+}

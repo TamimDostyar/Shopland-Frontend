@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import LegalLinks from "../legal/LegalLinks";
+import { useLanguage } from "../../context/LanguageContext";
 import { ArrowLeftIcon, ShieldIcon, SparklesIcon, StoreIcon } from "../ui/icons";
 
 interface Props {
@@ -13,6 +14,7 @@ interface Props {
 
 export default function AuthLayout({ title, subtitle, children, backTo, backLabel = "Back" }: Props) {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   return (
     <div className="min-h-screen bg-bg px-4 py-8">
@@ -30,7 +32,7 @@ export default function AuthLayout({ title, subtitle, children, backTo, backLabe
           <div className="max-w-xl">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-2 text-sm font-semibold text-[color:var(--accent)] shadow-[0_14px_36px_rgba(23,32,51,0.06)]">
               <SparklesIcon size={16} />
-              Refined for modern marketplace flows
+              {t("auth.tagline")}
             </div>
             <Link to="/" className="mb-8 flex w-fit items-center gap-4">
               <div className="flex size-14 items-center justify-center rounded-full bg-[linear-gradient(135deg,#ff6a3d,#ff9e62)] text-white shadow-[0_14px_34px_rgba(255,106,61,0.28)]">
@@ -47,10 +49,10 @@ export default function AuthLayout({ title, subtitle, children, backTo, backLabe
             </Link>
 
             <h1 className="max-w-lg text-5xl font-bold leading-[1.05] text-[color:var(--text-h)]" style={{ fontFamily: "var(--font-heading)" }}>
-              Fresh storefront design with fast, trusted account flows.
+              {t("auth.headline")}
             </h1>
             <p className="mt-5 max-w-lg text-lg text-[color:var(--text-soft)]">
-              Create an account, verify your identity, and move straight into buying or selling with a cleaner interface built for commerce.
+              {t("auth.subtitle")}
             </p>
 
             <div className="mt-10">
@@ -60,8 +62,8 @@ export default function AuthLayout({ title, subtitle, children, backTo, backLabe
                 <div className="mb-4 flex size-11 items-center justify-center rounded-2xl bg-[var(--surface-accent)] text-[color:var(--accent)]">
                   <ShieldIcon size={18} />
                 </div>
-                <div className="text-base font-semibold text-[color:var(--text-h)]">Trusted onboarding</div>
-                <p className="mt-2 text-sm text-[color:var(--text-soft)]">Verification-first flows help buyers and sellers move safely.</p>
+                <div className="text-base font-semibold text-[color:var(--text-h)]">{t("auth.trusted_onboarding")}</div>
+                <p className="mt-2 text-sm text-[color:var(--text-soft)]">{t("auth.trusted_desc")}</p>
               </div>
             </div>
           </div>
@@ -91,7 +93,7 @@ export default function AuthLayout({ title, subtitle, children, backTo, backLabe
 
             <div className="inline-flex items-center gap-2 rounded-full bg-[var(--surface-muted)] px-3 py-2 text-xs font-semibold text-[color:var(--text-soft)]">
               <ShieldIcon size={14} />
-              Secure access
+              {t("auth.secure_access")}
             </div>
           </div>
 
@@ -116,10 +118,7 @@ export default function AuthLayout({ title, subtitle, children, backTo, backLabe
 
           <div className="mt-6 rounded-[1.4rem] border border-[color:var(--border)] bg-[var(--surface-muted)] px-4 py-4">
             <p className="text-xs leading-6 text-[color:var(--text-soft)]">
-              By continuing, you agree to the Shopland Terms &amp; Conditions and Privacy Policy.
-              We use account, contact, and verification data to operate your account, protect the marketplace,
-              and in emergencies or safety incidents help verify who you are. We do not sell personal data or
-              use personal data to train general-purpose AI or unrelated software models.
+              {t("auth.legal_text")}
             </p>
             <LegalLinks className="mt-3 gap-2" linkClassName="text-xs font-semibold" separatorClassName="text-xs" />
           </div>

@@ -1,12 +1,16 @@
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import type { Locale } from "@shopland/shared";
+import { LOCALES } from "@shopland/shared";
 import { useAuth } from "../../hooks/useAuth";
 import { useCart } from "../../hooks/useCart";
+import { useLanguage } from "../../context/LanguageContext";
 import LegalLinks from "../legal/LegalLinks";
 import {
   CartIcon,
   CategoryIcon,
   ChevronDownIcon,
+  GlobeIcon,
   SearchIcon,
   ShieldIcon,
   SparklesIcon,
@@ -19,31 +23,17 @@ interface Props {
   children: ReactNode;
 }
 
-const NAV_LINKS = [
-  { to: "/search?sort=most_viewed", label: "Best Sellers" },
-  { to: "/search?sort=newest", label: "New Arrivals" },
-  { to: "/category/electronics", label: "Electronics" },
-  { to: "/category/home-kitchen", label: "Home" },
-  { to: "/category/clothing-fashion", label: "Fashion" },
-];
-
-const CATEGORY_PILLS = [
-  { to: "/category/electronics", label: "Electronics", slug: "electronics" },
-  { to: "/category/clothing-fashion", label: "Fashion", slug: "clothing-fashion" },
-  { to: "/category/grocery-food", label: "Groceries", slug: "grocery-food" },
-  { to: "/category/home-kitchen", label: "Home", slug: "home-kitchen" },
-  { to: "/category/books-music-movies", label: "Books", slug: "books-music-movies" },
-  { to: "/search", label: "All departments", slug: "all" },
-];
-
 export default function MainLayout({ children }: Props) {
   const { user, logout } = useAuth();
   const { itemsCount } = useCart();
+  const { locale, setLocale, t, dir } = useLanguage();
   const navigate = useNavigate();
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
   const [profileOpen, setProfileOpen] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
+  const langRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -55,8 +45,10 @@ export default function MainLayout({ children }: Props) {
       if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
         setProfileOpen(false);
       }
+      if (langRef.current && !langRef.current.contains(e.target as Node)) {
+        setLangOpen(false);
+      }
     }
-
     document.addEventListener("mousedown", handle);
     return () => document.removeEventListener("mousedown", handle);
   }, []);
@@ -73,17 +65,68 @@ export default function MainLayout({ children }: Props) {
   }
 
   const accountLinks = [
-    { label: "My profile", to: "/profile" },
-    { label: "My orders", to: "/orders" },
-    { label: "Saved addresses", to: "/profile/addresses" },
+    { label: t("account.profile"), to: "/profile" },
+    { label: t("account.orders"), to: "/orders" },
+    { label: t("account.addresses"), to: "/profile/addresses" },
     ...(user?.role === "seller" || user?.role === "admin"
-      ? [{ label: "Seller dashboard", to: "/seller" }]
+      ? [{ label: t("account.seller_dashboard"), to: "/seller" }]
       : []),
-    ...(user?.role === "admin" ? [{ label: "Admin panel", to: "/admin" }] : []),
+    ...(user?.role === "admin" ? [{ label: t("account.admin_panel"), to: "/admin" }] : []),
+  ];
+
+  const navLinks = [
+    { to: "/search?sort=most_viewed", label: t("nav.best_sellers") },
+    { to: "/search?sort=newest", label: t("nav.new_arrivals") },
+    { to: "/category/electronics", label: t("nav.electronics") },
+    { to: "/category/home-kitchen", label: t("nav.home") },
+    { to: "/category/clothing-fashion", label: t("nav.fashion") },
+  ];
+
+  const categoryPills = [
+    { to: "/category/electronics", label: t("category.electronics"), slug: "electronics" },
+    { to: "/category/clothing-fashion", label: t("category.fashion"), slug: "clothing-fashion" },
+    { to: "/category/grocery-food", label: t("category.groceries"), slug: "grocery-food" },
+    { to: "/category/home-kitchen", label: t("category.home"), slug: "home-kitchen" },
+    { to: "/category/books-music-movies", label: t("category.books"), slug: "books-music-movies" },
+    { to: "/search", label: t("category.all"), slug: "all" },
+  ];
+
+  const footerColumns = [
+    {
+      title: t("footer.shop"),
+      links: [
+        { label: t("footer.browse_products"), to: "/search" },
+        { label: t("footer.new_arrivals"), to: "/search?sort=newest" },
+        { label: t("footer.best_sellers"), to: "/search?sort=most_viewed" },
+      ],
+    },
+    {
+      title: t("footer.sell"),
+      links: [
+        { label: t("footer.open_shop"), to: "/register/seller" },
+        { label: t("footer.seller_dashboard"), to: "/seller" },
+        { label: t("footer.manage_inventory"), to: "/seller/inventory" },
+      ],
+    },
+    {
+      title: t("footer.account"),
+      links: [
+        { label: t("footer.profile"), to: "/profile" },
+        { label: t("footer.orders"), to: "/orders" },
+        { label: t("footer.addresses"), to: "/profile/addresses" },
+      ],
+    },
+    {
+      title: t("footer.legal"),
+      links: [
+        { label: t("footer.privacy"), to: "/privacy" },
+        { label: t("footer.terms"), to: "/terms" },
+      ],
+    },
   ];
 
   return (
-    <div className="min-h-screen flex flex-col text-[color:var(--text)]">
+    <div dir={dir} className="min-h-screen flex flex-col text-[color:var(--text)]">
       {/* Top Banner */}
       <div
         className="border-b"
@@ -95,16 +138,16 @@ export default function MainLayout({ children }: Props) {
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-2 text-xs font-semibold text-[color:var(--text)]">
           <div className="flex items-center gap-2">
             <SparklesIcon size={14} className="text-[color:var(--accent)]" />
-            Bright deals, verified sellers, cash on delivery.
+            {t("banner.tagline")}
           </div>
           <div className="hidden sm:flex items-center gap-4 text-[color:var(--text-soft)]">
             <span className="inline-flex items-center gap-1.5">
               <TruckIcon size={14} />
-              Nationwide delivery
+              {t("banner.delivery")}
             </span>
             <span className="inline-flex items-center gap-1.5">
               <ShieldIcon size={14} />
-              Protected checkout
+              {t("banner.checkout")}
             </span>
           </div>
         </div>
@@ -147,14 +190,14 @@ export default function MainLayout({ children }: Props) {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search by product, category, or seller"
+                  placeholder={t("search.placeholder")}
                   className="h-11 flex-1 border-0 bg-transparent px-1 text-sm text-[color:var(--text-h)] outline-none placeholder:text-[color:var(--text-soft)]"
                 />
                 <button
                   type="submit"
                   className="rounded-full bg-[var(--accent)] px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(255,106,61,0.24)] transition-transform hover:-translate-y-0.5"
                 >
-                  Search
+                  {t("search.button")}
                 </button>
               </div>
             </form>
@@ -162,14 +205,48 @@ export default function MainLayout({ children }: Props) {
             {/* Mobile spacer — pushes actions to the right */}
             <div className="flex-1 md:hidden" />
 
-            {/* Cart + Auth */}
+            {/* Language switcher + Cart + Auth */}
             <div className="flex shrink-0 items-center gap-2">
+
+              {/* Language switcher */}
+              <div className="relative" ref={langRef}>
+                <button
+                  onClick={() => setLangOpen((o) => !o)}
+                  aria-label="Switch language"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-[color:var(--border)] bg-white px-2.5 py-2.5 text-sm font-semibold text-[color:var(--text-h)] shadow-[0_12px_28px_rgba(23,32,51,0.05)] transition-all hover:-translate-y-0.5 md:px-3 md:py-3"
+                >
+                  <GlobeIcon size={16} />
+                  <span className="hidden sm:inline text-xs">{LOCALES[locale].label}</span>
+                </button>
+
+                {langOpen && (
+                  <div className="absolute end-0 top-full mt-2 w-36 rounded-2xl border border-[color:var(--border)] bg-white p-1.5 shadow-[0_22px_60px_rgba(23,32,51,0.12)]">
+                    {(Object.keys(LOCALES) as Locale[]).map((key) => (
+                      <button
+                        key={key}
+                        onClick={() => {
+                          setLocale(key);
+                          setLangOpen(false);
+                        }}
+                        className={`w-full rounded-xl px-3 py-2 text-start text-sm font-medium transition-colors ${
+                          key === locale
+                            ? "bg-[var(--surface-muted)] text-[color:var(--accent)]"
+                            : "text-[color:var(--text)] hover:bg-[var(--surface-muted)]"
+                        }`}
+                      >
+                        {LOCALES[key].label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               <Link
                 to="/cart"
                 className="relative inline-flex items-center gap-1.5 rounded-full border border-[color:var(--border)] bg-white px-3 py-2.5 text-sm font-semibold text-[color:var(--text-h)] shadow-[0_12px_28px_rgba(23,32,51,0.05)] transition-all hover:-translate-y-0.5 md:gap-2 md:px-4 md:py-3"
               >
                 <CartIcon size={18} />
-                <span className="hidden sm:inline">Cart</span>
+                <span className="hidden sm:inline">{t("nav.cart")}</span>
                 {itemsCount > 0 && (
                   <span className="absolute -right-1 -top-1 min-w-[22px] rounded-full bg-[var(--accent)] px-1.5 py-1 text-center text-[11px] font-bold text-white">
                     {itemsCount}
@@ -198,7 +275,7 @@ export default function MainLayout({ children }: Props) {
                   </button>
 
                   {profileOpen && (
-                    <div className="absolute right-0 top-full mt-3 w-64 rounded-[1.6rem] border border-[color:var(--border)] bg-white p-3 shadow-[0_22px_60px_rgba(23,32,51,0.12)]">
+                    <div className="absolute end-0 top-full mt-3 w-64 rounded-[1.6rem] border border-[color:var(--border)] bg-white p-3 shadow-[0_22px_60px_rgba(23,32,51,0.12)]">
                       <div className="rounded-2xl bg-[var(--surface-muted)] px-4 py-3">
                         <div className="text-sm font-semibold text-[color:var(--text-h)]">
                           {user.first_name} {user.last_name}
@@ -224,7 +301,7 @@ export default function MainLayout({ children }: Props) {
                         }}
                         className="mt-2 w-full rounded-xl bg-[var(--danger-soft)] px-3 py-2 text-left text-sm font-semibold text-[color:var(--error)] transition-colors hover:bg-[#fde3e3]"
                       >
-                        Sign out
+                        {t("nav.signout")}
                       </button>
                     </div>
                   )}
@@ -235,14 +312,14 @@ export default function MainLayout({ children }: Props) {
                     to="/login"
                     className="rounded-full border border-[color:var(--border)] bg-white px-3 py-2.5 text-sm font-semibold text-[color:var(--text-h)] shadow-[0_12px_28px_rgba(23,32,51,0.05)] md:px-4 md:py-3"
                   >
-                    Sign in
+                    {t("nav.signin")}
                   </Link>
                   <Link
                     to="/register"
                     className="rounded-full bg-[var(--accent)] px-3 py-2.5 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(255,106,61,0.24)] md:px-5 md:py-3"
                   >
-                    <span className="hidden sm:inline">Create account</span>
-                    <span className="sm:hidden">Join</span>
+                    <span className="hidden sm:inline">{t("nav.create_account")}</span>
+                    <span className="sm:hidden">{t("nav.join")}</span>
                   </Link>
                 </div>
               )}
@@ -259,14 +336,14 @@ export default function MainLayout({ children }: Props) {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search products..."
+                placeholder={t("search.placeholder_mobile")}
                 className="h-9 flex-1 border-0 bg-transparent px-1 text-sm text-[color:var(--text-h)] outline-none placeholder:text-[color:var(--text-soft)]"
               />
               <button
                 type="submit"
                 className="rounded-full bg-[var(--accent)] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(255,106,61,0.24)] transition-transform hover:-translate-y-0.5"
               >
-                Search
+                {t("search.button")}
               </button>
             </div>
           </form>
@@ -274,7 +351,7 @@ export default function MainLayout({ children }: Props) {
           {/* Category pills + secondary nav */}
           <div className="mt-3 flex items-center justify-between gap-3">
             <nav className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              {CATEGORY_PILLS.map((item) => (
+              {categoryPills.map((item) => (
                 <Link
                   key={item.to}
                   to={item.to}
@@ -286,7 +363,7 @@ export default function MainLayout({ children }: Props) {
               ))}
             </nav>
             <nav className="hidden shrink-0 items-center gap-4 text-sm font-semibold text-[color:var(--text-soft)] md:flex">
-              {NAV_LINKS.map((item) => (
+              {navLinks.map((item) => (
                 <Link
                   key={item.to}
                   to={item.to}
@@ -315,48 +392,16 @@ export default function MainLayout({ children }: Props) {
                     Shopland
                   </div>
                   <div className="text-xs uppercase tracking-[0.18em] text-white/70">
-                    Modern marketplace
+                    {t("footer.tagline")}
                   </div>
                 </div>
               </div>
               <p className="max-w-sm text-sm text-white/76">
-                Built for fast browsing, trusted storefronts, and a cleaner way to shop from local sellers across Afghanistan.
+                {t("footer.description")}
               </p>
             </div>
 
-            {[
-              {
-                title: "Shop",
-                links: [
-                  { label: "Browse products", to: "/search" },
-                  { label: "New arrivals", to: "/search?sort=newest" },
-                  { label: "Best sellers", to: "/search?sort=most_viewed" },
-                ],
-              },
-              {
-                title: "Sell",
-                links: [
-                  { label: "Open your shop", to: "/register/seller" },
-                  { label: "Seller dashboard", to: "/seller" },
-                  { label: "Manage inventory", to: "/seller/inventory" },
-                ],
-              },
-              {
-                title: "Account",
-                links: [
-                  { label: "Profile", to: "/profile" },
-                  { label: "Orders", to: "/orders" },
-                  { label: "Saved addresses", to: "/profile/addresses" },
-                ],
-              },
-              {
-                title: "Legal",
-                links: [
-                  { label: "Privacy Policy", to: "/privacy" },
-                  { label: "Terms & Conditions", to: "/terms" },
-                ],
-              },
-            ].map((column) => (
+            {footerColumns.map((column) => (
               <div key={column.title}>
                 <div className="mb-4 text-sm font-bold uppercase tracking-[0.16em] text-[color:var(--text-soft)]">
                   {column.title}
@@ -377,11 +422,11 @@ export default function MainLayout({ children }: Props) {
           </div>
 
           <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-[color:var(--border)] pt-6 text-sm text-[color:var(--text-soft)]">
-            <p>© 2026 Shopland. Designed for modern commerce.</p>
+            <p>{t("footer.copyright")}</p>
             <div className="flex flex-wrap items-center gap-4">
-              <span>Secure checkout</span>
-              <span>Verified sellers</span>
-              <span>Cash on delivery</span>
+              <span>{t("footer.secure_checkout")}</span>
+              <span>{t("footer.verified_sellers")}</span>
+              <span>{t("footer.cash_on_delivery")}</span>
             </div>
             <LegalLinks />
           </div>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ApiError } from "@shopland/shared";
 import AuthLayout from "../components/layout/AuthLayout";
 import Input from "../components/ui/Input";
@@ -10,6 +10,8 @@ import { useAuth } from "../hooks/useAuth";
 export default function Login() {
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const passwordReset = (location.state as { passwordReset?: boolean } | null)?.passwordReset;
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,6 +40,7 @@ export default function Login() {
   return (
     <AuthLayout title="Welcome back" subtitle="Sign in to your Shopland account">
       <form onSubmit={(e) => { void handleSubmit(e); }} className="flex flex-col gap-4">
+        {passwordReset && <Alert kind="success">Password reset successfully. Please sign in.</Alert>}
         {error && <Alert kind="error">{error}</Alert>}
 
         <Input
@@ -49,14 +52,21 @@ export default function Login() {
           required
         />
 
-        <Input
-          label="Password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          autoComplete="current-password"
-          required
-        />
+        <div className="flex flex-col gap-1">
+          <Input
+            label="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
+            required
+          />
+          <div className="text-right">
+            <Link to="/forgot-password" className="text-xs text-[color:var(--text-soft)] hover:underline">
+              Forgot password?
+            </Link>
+          </div>
+        </div>
 
         <Button type="submit" loading={loading} className="w-full mt-2">
           Sign in
