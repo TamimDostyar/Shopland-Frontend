@@ -8,6 +8,7 @@ import {
 } from "@shopland/shared";
 import SellerLayout from "../../components/layout/SellerLayout";
 import { useAuth } from "../../hooks/useAuth";
+import { useLanguage } from "../../context/LanguageContext";
 import {
   AlertTriangleIcon,
   CheckCircleIcon,
@@ -19,6 +20,7 @@ import {
 
 export default function SellerDashboard() {
   const { accessToken, user } = useAuth();
+  const { t } = useLanguage();
 
   const { data: pendingOrders } = useQuery({
     queryKey: ["seller-orders", "pending"],
@@ -57,6 +59,55 @@ export default function SellerDashboard() {
   const lowStockCount = lowStock?.count ?? 0;
   const pendingProductsCount = pendingProducts?.count ?? 0;
 
+  const stats = [
+    {
+      label: t("seller.stat_new_orders"),
+      value: pendingCount,
+      icon: ClockIcon,
+      color: pendingCount > 0 ? "#fbbf24" : undefined,
+      link: "/seller/orders",
+      urgent: pendingCount > 0,
+    },
+    {
+      label: t("seller.stat_active_orders"),
+      value: activeCount,
+      icon: TruckIcon,
+      link: "/seller/orders",
+    },
+    {
+      label: t("seller.stat_low_stock"),
+      value: lowStockCount,
+      icon: AlertTriangleIcon,
+      color: lowStockCount > 0 ? "#f87171" : undefined,
+      link: "/seller/inventory",
+    },
+    {
+      label: t("seller.stat_pending_approval"),
+      value: pendingProductsCount,
+      icon: DashboardIcon,
+      link: "/seller/products",
+    },
+    {
+      label: t("seller.stat_monthly_net"),
+      value: earnings?.total_net ? `؋${parseFloat(earnings.total_net).toLocaleString()}` : "—",
+      icon: WalletIcon,
+      link: "/seller/earnings",
+    },
+    {
+      label: t("seller.stat_pending_settlement"),
+      value: earnings?.total_pending ? `؋${parseFloat(earnings.total_pending).toLocaleString()}` : "—",
+      icon: CheckCircleIcon,
+      link: "/seller/earnings",
+    },
+  ];
+
+  const quickActions = [
+    { label: t("seller.action_add_product"), to: "/seller/products/new", accent: true },
+    { label: t("seller.action_manage_orders"), to: "/seller/orders" },
+    { label: t("seller.action_update_stock"), to: "/seller/inventory" },
+    { label: t("seller.action_view_earnings"), to: "/seller/earnings" },
+  ];
+
   return (
     <SellerLayout>
       <div className="max-w-4xl">
@@ -65,56 +116,16 @@ export default function SellerDashboard() {
             className="text-3xl font-bold"
             style={{ fontFamily: "var(--heading)", color: "var(--text-h)" }}
           >
-            Welcome back, {user?.first_name}
+            {t("seller.dashboard_welcome").replace("{name}", user?.first_name ?? "")}
           </h1>
           <p className="text-sm mt-1" style={{ color: "var(--text-soft)" }}>
-            Here&apos;s what&apos;s happening with your store today.
+            {t("seller.dashboard_subtitle")}
           </p>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-          {[
-            {
-              label: "New Orders",
-              value: pendingCount,
-              icon: ClockIcon,
-              color: pendingCount > 0 ? "#fbbf24" : undefined,
-              link: "/seller/orders",
-              urgent: pendingCount > 0,
-            },
-            {
-              label: "Active Orders",
-              value: activeCount,
-              icon: TruckIcon,
-              link: "/seller/orders",
-            },
-            {
-              label: "Low Stock Alerts",
-              value: lowStockCount,
-              icon: AlertTriangleIcon,
-              color: lowStockCount > 0 ? "#f87171" : undefined,
-              link: "/seller/inventory",
-            },
-            {
-              label: "Pending Approval",
-              value: pendingProductsCount,
-              icon: DashboardIcon,
-              link: "/seller/products",
-            },
-            {
-              label: "This Month (Net)",
-              value: earnings?.total_net ? `؋${parseFloat(earnings.total_net).toLocaleString()}` : "—",
-              icon: WalletIcon,
-              link: "/seller/earnings",
-            },
-            {
-              label: "Pending Settlement",
-              value: earnings?.total_pending ? `؋${parseFloat(earnings.total_pending).toLocaleString()}` : "—",
-              icon: CheckCircleIcon,
-              link: "/seller/earnings",
-            },
-          ].map((stat) => (
+          {stats.map((stat) => (
             <Link
               key={stat.label}
               to={stat.link}
@@ -155,15 +166,10 @@ export default function SellerDashboard() {
           className="rounded-[1.75rem] border border-[color:var(--border)] bg-white p-6 shadow-[0_18px_46px_rgba(23,32,51,0.06)]"
         >
           <h2 className="font-semibold mb-4" style={{ color: "var(--text-h)" }}>
-            Quick Actions
+            {t("seller.quick_actions")}
           </h2>
           <div className="flex flex-wrap gap-3">
-            {[
-              { label: "Add Product", to: "/seller/products/new", accent: true },
-              { label: "Manage Orders", to: "/seller/orders" },
-              { label: "Update Stock", to: "/seller/inventory" },
-              { label: "View Earnings", to: "/seller/earnings" },
-            ].map((a) => (
+            {quickActions.map((a) => (
               <Link
                 key={a.label}
                 to={a.to}

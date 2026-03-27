@@ -147,7 +147,7 @@ export default function Cart() {
         ) : (
           <div className="grid md:grid-cols-3 gap-8">
             {/* Items */}
-            <div className="md:col-span-2 space-y-4">
+            <div className="order-2 md:order-1 md:col-span-2 space-y-4">
               {items.map((item) => (
                 <CartItemRow
                   key={item.id}
@@ -195,7 +195,7 @@ export default function Cart() {
             </div>
 
             {/* Summary */}
-            <div className="rounded-[2rem] border border-[color:var(--border)] bg-white p-6 h-fit sticky top-24 space-y-4 shadow-[0_18px_46px_rgba(23,32,51,0.06)]">
+            <div className="order-1 md:order-2 rounded-[2rem] border border-[color:var(--border)] bg-white p-6 h-fit md:sticky md:top-24 space-y-4 shadow-[0_18px_46px_rgba(23,32,51,0.06)]">
               <h2 className="font-semibold" style={{ color: "var(--text-h)" }}>
                 {t("cart.order_summary")}
               </h2>

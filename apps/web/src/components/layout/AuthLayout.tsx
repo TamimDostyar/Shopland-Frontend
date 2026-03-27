@@ -73,7 +73,7 @@ export default function AuthLayout({ title, subtitle, children, backTo, backLabe
         </div>
 
         <div
-          className="relative mx-auto w-full max-w-lg rounded-[2rem] border border-[color:var(--border)] bg-[rgba(255,255,255,0.88)] p-8 shadow-[0_28px_70px_rgba(23,32,51,0.12)] backdrop-blur-xl"
+          className="relative mx-auto w-full max-w-lg rounded-[2rem] border border-[color:var(--border)] bg-[rgba(255,255,255,0.88)] p-5 sm:p-8 shadow-[0_28px_70px_rgba(23,32,51,0.12)] backdrop-blur-xl"
           style={{
             backgroundImage:
               "linear-gradient(180deg, rgba(255,255,255,0.92), rgba(250,251,255,0.85))",

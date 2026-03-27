@@ -104,7 +104,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-4 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
               {showcaseProducts.slice(3, 6).map((product) => (
                 <FeaturedShowcaseCard key={product.id} product={product} compact locale={locale} featuredFallback={t("home.featured_fallback")} />
               ))}
@@ -123,7 +123,7 @@ export default function Home() {
               Array.from({ length: 8 - showcaseProducts.length }).map((_, index) => (
                 <FeaturedShowcaseCard key={`placeholder-side-${index}`} locale={locale} featuredFallback={t("home.featured_fallback")} />
               ))}
-            <div className="rounded-[1.75rem] border border-[color:var(--border)] bg-[linear-gradient(135deg,#fff4ec,#eef5ff)] p-6 shadow-[0_18px_46px_rgba(23,32,51,0.06)]">
+            <div className="sm:col-span-2 lg:col-span-1 rounded-[1.75rem] border border-[color:var(--border)] bg-[linear-gradient(135deg,#fff4ec,#eef5ff)] p-6 shadow-[0_18px_46px_rgba(23,32,51,0.06)]">
               <div className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent)]">
                 {t("home.shop_more_label")}
               </div>
@@ -367,7 +367,7 @@ function FeaturedShowcaseCard({
     return (
       <div
         className={`overflow-hidden rounded-[1.6rem] bg-[var(--surface-muted)] animate-pulse ${
-          large ? "min-h-[220px] sm:min-h-[360px]" : compact ? "min-h-[120px] sm:min-h-[140px]" : "min-h-[160px] sm:min-h-[172px]"
+          large ? "min-h-[220px] lg:min-h-[360px]" : compact ? "min-h-[120px] sm:min-h-[140px]" : "min-h-[160px] sm:min-h-[172px]"
         }`}
       />
     );
@@ -381,7 +381,7 @@ function FeaturedShowcaseCard({
     <Link
       to={`/product/${product.slug}`}
       className={`group relative overflow-hidden rounded-[1.6rem] border border-[color:var(--border)] bg-[var(--surface-muted)] shadow-[0_16px_40px_rgba(23,32,51,0.06)] ${
-        large ? "min-h-[220px] sm:min-h-[360px]" : compact ? "min-h-[120px] sm:min-h-[140px]" : "min-h-[160px] sm:min-h-[172px]"
+        large ? "min-h-[220px] lg:min-h-[360px]" : compact ? "min-h-[120px] sm:min-h-[140px]" : "min-h-[160px] sm:min-h-[172px]"
       }`}
     >
       {img ? (

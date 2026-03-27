@@ -126,7 +126,7 @@ export default function ProductDetail() {
           </nav>
         </div>
 
-        <div className="mb-16 grid gap-10 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="mb-16 grid gap-10 md:grid-cols-[1.05fr_0.95fr]">
           <div className="space-y-4">
             <div
               className="aspect-square overflow-hidden rounded-[2rem] border border-[color:var(--border)] bg-[linear-gradient(180deg,#f6f8fc,#eef3f8)] shadow-[0_22px_56px_rgba(23,32,51,0.08)]"

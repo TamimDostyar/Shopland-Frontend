@@ -9,6 +9,7 @@ import {
 import SellerLayout from "../../components/layout/SellerLayout";
 import BackButton from "../../components/ui/BackButton";
 import { useAuth } from "../../hooks/useAuth";
+import { useLanguage } from "../../context/LanguageContext";
 
 const EARNING_STATUS: Record<string, { bg: string; text: string }> = {
   pending: { bg: "rgba(251,191,36,0.12)", text: "#fbbf24" },
@@ -18,6 +19,7 @@ const EARNING_STATUS: Record<string, { bg: string; text: string }> = {
 
 export default function Earnings() {
   const { accessToken } = useAuth();
+  const { t } = useLanguage();
 
   const { data: summary } = useQuery({
     queryKey: ["earnings", "summary"],
@@ -43,24 +45,24 @@ export default function Earnings() {
   return (
     <SellerLayout>
       <div className="max-w-5xl">
-        <BackButton to="/seller" label="Dashboard" className="mb-5" />
+        <BackButton to="/seller" label={t("seller.orders_back_dashboard")} className="mb-5" />
 
         <h1
           className="text-2xl font-bold mb-8"
           style={{ fontFamily: "var(--heading)", color: "var(--text-h)" }}
         >
-          Earnings & Settlements
+          {t("seller.earnings_title")}
         </h1>
 
         {/* Summary cards */}
         {summary && (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-10">
             {[
-              { label: "Total Gross", value: summary.total_gross, icon: "💰" },
-              { label: "Total Commission", value: summary.total_commission, icon: "📊" },
-              { label: "Net Earnings", value: summary.total_net, icon: "✅", accent: true },
-              { label: "Pending Settlement", value: summary.total_pending, icon: "⏳" },
-              { label: "Total Settled", value: summary.total_settled, icon: "🏦" },
+              { label: t("seller.earnings_total_gross"), value: summary.total_gross, icon: "💰" },
+              { label: t("seller.earnings_commission"), value: summary.total_commission, icon: "📊" },
+              { label: t("seller.earnings_net"), value: summary.total_net, icon: "✅", accent: true },
+              { label: t("seller.earnings_pending"), value: summary.total_pending, icon: "⏳" },
+              { label: t("seller.earnings_settled"), value: summary.total_settled, icon: "🏦" },
             ].map((s) => (
               <div
                 key={s.label}
@@ -88,7 +90,7 @@ export default function Earnings() {
         {/* Earnings table */}
         <section className="mb-10">
           <h2 className="font-semibold mb-4" style={{ color: "var(--text-h)" }}>
-            Earning History
+            {t("seller.earning_history")}
           </h2>
           {earningsList.length === 0 ? (
             <div
@@ -96,7 +98,7 @@ export default function Earnings() {
               style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
             >
               <p className="text-4xl mb-3">💸</p>
-              <p style={{ color: "var(--text-soft)" }}>No earnings yet.</p>
+              <p style={{ color: "var(--text-soft)" }}>{t("seller.no_earnings")}</p>
             </div>
           ) : (
             <div
@@ -106,7 +108,14 @@ export default function Earnings() {
               <table className="w-full text-sm">
                 <thead>
                   <tr style={{ background: "var(--surface)", borderBottom: "1px solid var(--border)" }}>
-                    {["Order", "Product", "Gross", "Commission", "Net", "Status"].map((h) => (
+                    {[
+                      t("seller.th_order"),
+                      t("seller.th_product"),
+                      t("seller.th_gross"),
+                      t("seller.th_commission"),
+                      t("seller.th_net"),
+                      t("seller.th_status"),
+                    ].map((h) => (
                       <th
                         key={h}
                         className="text-left px-4 py-3 text-xs font-medium"
@@ -163,7 +172,7 @@ export default function Earnings() {
         {/* Settlements */}
         <section>
           <h2 className="font-semibold mb-4" style={{ color: "var(--text-h)" }}>
-            Settlement History
+            {t("seller.settlement_history")}
           </h2>
           {settlementsList.length === 0 ? (
             <div
@@ -171,7 +180,7 @@ export default function Earnings() {
               style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
             >
               <p className="text-4xl mb-3">🏦</p>
-              <p style={{ color: "var(--text-soft)" }}>No settlements yet.</p>
+              <p style={{ color: "var(--text-soft)" }}>{t("seller.no_settlements")}</p>
             </div>
           ) : (
             <div className="space-y-3">

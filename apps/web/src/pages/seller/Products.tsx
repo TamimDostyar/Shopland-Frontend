@@ -13,14 +13,20 @@ import { useAuth } from "../../hooks/useAuth";
 import { useLanguage } from "../../context/LanguageContext";
 import { ImageIcon, PackageIcon } from "../../components/ui/icons";
 
-const STATUS_FILTERS = ["All", "Active", "Pending", "Rejected", "Inactive"];
-
 export default function SellerProducts() {
   const { accessToken } = useAuth();
   const { t } = useLanguage();
   const qc = useQueryClient();
-  const [statusFilter, setStatusFilter] = useState("All");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+
+  const STATUS_FILTERS = [
+    { key: "all", label: t("seller.filter_all") },
+    { key: "active", label: t("seller.filter_active") },
+    { key: "pending", label: t("seller.filter_pending") },
+    { key: "rejected", label: t("seller.filter_rejected") },
+    { key: "inactive", label: t("seller.filter_inactive") },
+  ];
 
   const { data, isLoading } = useQuery({
     queryKey: ["seller-products", statusFilter],
@@ -43,38 +49,38 @@ export default function SellerProducts() {
 
   const allProducts: Product[] = data?.results ?? [];
   const products = allProducts.filter((p) => {
-    if (statusFilter === "All") return true;
-    if (statusFilter === "Active") return p.is_active && p.is_approved;
-    if (statusFilter === "Pending") return !p.is_approved && p.is_active;
-    if (statusFilter === "Rejected") return !!p.rejection_reason;
-    if (statusFilter === "Inactive") return !p.is_active;
+    if (statusFilter === "all") return true;
+    if (statusFilter === "active") return p.is_active && p.is_approved;
+    if (statusFilter === "pending") return !p.is_approved && p.is_active;
+    if (statusFilter === "rejected") return !!p.rejection_reason;
+    if (statusFilter === "inactive") return !p.is_active;
     return true;
   });
 
   function getProductBadge(p: Product) {
-    if (p.rejection_reason) return { label: "Rejected", bg: "rgba(248,113,113,0.12)", text: "#f87171" };
-    if (!p.is_approved) return { label: "Pending Approval", bg: "rgba(251,191,36,0.12)", text: "#fbbf24" };
-    if (!p.is_active) return { label: "Inactive", bg: "rgba(255,255,255,0.06)", text: "var(--text-soft)" };
-    return { label: "Active", bg: "rgba(74,222,128,0.12)", text: "#4ade80" };
+    if (p.rejection_reason) return { label: t("seller.badge_rejected"), bg: "rgba(248,113,113,0.12)", text: "#f87171" };
+    if (!p.is_approved) return { label: t("seller.badge_pending_approval"), bg: "rgba(251,191,36,0.12)", text: "#fbbf24" };
+    if (!p.is_active) return { label: t("seller.badge_inactive"), bg: "rgba(255,255,255,0.06)", text: "var(--text-soft)" };
+    return { label: t("seller.badge_active"), bg: "rgba(74,222,128,0.12)", text: "#4ade80" };
   }
 
   return (
     <SellerLayout>
       <div className="max-w-5xl">
-        <BackButton to="/seller" label="Dashboard" className="mb-5" />
+        <BackButton to="/seller" label={t("seller.orders_back_dashboard")} className="mb-5" />
 
         <div className="flex items-center justify-between mb-6">
           <h1
             className="text-2xl font-bold"
             style={{ fontFamily: "var(--heading)", color: "var(--text-h)" }}
           >
-            My Products
+            {t("seller.my_products")}
           </h1>
           <Link
             to="/seller/products/new"
             className="px-5 py-3 rounded-full text-sm font-semibold transition-opacity hover:opacity-90 bg-[var(--accent)] text-white shadow-[0_12px_28px_rgba(255,106,61,0.22)]"
           >
-            Add Product
+            {t("seller.add_product")}
           </Link>
         </div>
 
@@ -82,16 +88,16 @@ export default function SellerProducts() {
         <div className="flex gap-2 mb-6 flex-wrap">
           {STATUS_FILTERS.map((f) => (
             <button
-              key={f}
-              onClick={() => setStatusFilter(f)}
+              key={f.key}
+              onClick={() => setStatusFilter(f.key)}
               className="px-4 py-2 rounded-full text-xs font-semibold transition-all"
               style={{
-                background: statusFilter === f ? "rgba(255,125,72,0.12)" : "white",
-                border: `1px solid ${statusFilter === f ? "rgba(255,125,72,0.3)" : "var(--border)"}`,
-                color: statusFilter === f ? "var(--accent)" : "var(--text-soft)",
+                background: statusFilter === f.key ? "rgba(255,125,72,0.12)" : "white",
+                border: `1px solid ${statusFilter === f.key ? "rgba(255,125,72,0.3)" : "var(--border)"}`,
+                color: statusFilter === f.key ? "var(--accent)" : "var(--text-soft)",
               }}
             >
-              {f}
+              {f.label}
             </button>
           ))}
         </div>
@@ -108,14 +114,14 @@ export default function SellerProducts() {
               <PackageIcon size={28} />
             </div>
             <p className="font-medium mb-2" style={{ color: "var(--text-h)" }}>
-              No products yet
+              {t("seller.no_products")}
             </p>
             <Link
               to="/seller/products/new"
               className="px-5 py-2.5 rounded-xl font-medium text-sm inline-block mt-2"
               style={{ background: "var(--accent)", color: "white" }}
             >
-              Add Your First Product
+              {t("seller.add_first_product")}
             </Link>
           </div>
         ) : (
@@ -126,7 +132,7 @@ export default function SellerProducts() {
               const img =
                 (typeof primaryImageUnknown === "string"
                   ? primaryImageUnknown
-                  : (primaryImageUnknown as any)?.image) ??
+                  : (primaryImageUnknown as { image?: string } | null)?.image) ??
                 p.images?.[0]?.image;
               return (
                 <div
@@ -157,7 +163,7 @@ export default function SellerProducts() {
                       </p>
                       {p.rejection_reason && (
                         <p className="text-xs mt-1" style={{ color: "#f87171" }}>
-                          Rejected: {p.rejection_reason}
+                          {t("seller.badge_rejected")}: {p.rejection_reason}
                         </p>
                       )}
                     </div>
@@ -178,7 +184,7 @@ export default function SellerProducts() {
                       className="px-3 py-1.5 rounded-lg text-xs transition-all hover:bg-white/5"
                       style={{ border: "1px solid var(--border)", color: "var(--text)" }}
                     >
-                      Edit
+                      {t("addresses.edit")}
                     </Link>
                     {deleteConfirm === p.id ? (
                       <div className="flex gap-1">
@@ -187,14 +193,14 @@ export default function SellerProducts() {
                           className="px-2 py-1.5 rounded-lg text-xs"
                           style={{ background: "#f87171", color: "white" }}
                         >
-                          Delete
+                          {t("addresses.delete")}
                         </button>
                         <button
                           onClick={() => setDeleteConfirm(null)}
                           className="px-2 py-1.5 rounded-lg text-xs"
                           style={{ border: "1px solid var(--border)", color: "var(--text)" }}
                         >
-                          Cancel
+                          {t("common.cancel")}
                         </button>
                       </div>
                     ) : (
@@ -203,7 +209,7 @@ export default function SellerProducts() {
                         className="px-3 py-1.5 rounded-lg text-xs transition-all hover:bg-white/5"
                         style={{ border: "1px solid rgba(248,113,113,0.3)", color: "#f87171" }}
                       >
-                        Delete
+                        {t("addresses.delete")}
                       </button>
                     )}
                   </div>

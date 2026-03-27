@@ -168,13 +168,13 @@ export default function AddEditProduct() {
   return (
     <SellerLayout>
       <div className="max-w-2xl">
-        <BackButton to="/seller/products" label="Back to Products" className="mb-5" />
+        <BackButton to="/seller/products" label={t("seller.back_to_products")} className="mb-5" />
 
         <h1
           className="text-3xl font-bold mb-8"
           style={{ fontFamily: "var(--heading)", color: "var(--text-h)" }}
         >
-          {isEdit ? "Edit Product" : "Add New Product"}
+          {isEdit ? t("seller.edit_product") : t("seller.add_new_product")}
         </h1>
 
         <form onSubmit={(e) => { void handleSubmit(e); }} className="space-y-6">
@@ -182,17 +182,17 @@ export default function AddEditProduct() {
           <section
             className="rounded-[1.75rem] border border-[color:var(--border)] bg-white p-6 space-y-4 shadow-[0_18px_46px_rgba(23,32,51,0.06)]"
           >
-            <h2 className="font-semibold" style={{ color: "var(--text-h)" }}>Product Details</h2>
+            <h2 className="font-semibold" style={{ color: "var(--text-h)" }}>{t("seller.product_details")}</h2>
 
             <Input
-              label="Product Name"
+              label={t("seller.product_name_label")}
               value={form.name}
               onChange={(e) => f("name", e.target.value)}
               required
             />
             <div>
               <label className="block text-sm mb-1.5" style={{ color: "var(--text-soft)" }}>
-                Description
+                {t("seller.description")}
               </label>
               <textarea
                 value={form.description}
@@ -210,7 +210,7 @@ export default function AddEditProduct() {
 
             <div className="grid grid-cols-2 gap-4">
               <Input
-                label="Price (AFN)"
+                label={t("seller.price_afn")}
                 type="number"
                 min="1"
                 value={form.price}
@@ -218,7 +218,7 @@ export default function AddEditProduct() {
                 required
               />
               <Input
-                label="Discount Price (optional)"
+                label={t("seller.discount_price_opt")}
                 type="number"
                 min="0"
                 value={form.discount_price}
@@ -228,7 +228,7 @@ export default function AddEditProduct() {
 
             <div>
               <label className="block text-sm mb-1.5" style={{ color: "var(--text-soft)" }}>
-                Condition
+                {t("seller.condition")}
               </label>
               <div className="flex gap-3">
                 {CONDITIONS.map((c) => (
@@ -258,14 +258,14 @@ export default function AddEditProduct() {
             {/* Category — two-step hierarchical picker */}
             <div>
               <label className="block text-sm mb-2" style={{ color: "var(--text-soft)" }}>
-                Category <span style={{ color: "var(--accent)" }}>*</span>
+                {t("seller.category_label")} <span style={{ color: "var(--accent)" }}>*</span>
               </label>
 
               {/* State: loading */}
               {categoriesLoading && (
                 <div className="flex items-center gap-2 py-3 text-sm" style={{ color: "var(--text-soft)" }}>
                   <div className="size-4 border-2 border-accent border-t-transparent rounded-full animate-spin" />
-                  Loading categories…
+                  {t("seller.loading_categories")}
                 </div>
               )}
 
@@ -279,7 +279,7 @@ export default function AddEditProduct() {
                     color: "#ffc107",
                   }}
                 >
-                  No categories found. Run this command on the backend first:
+                  {t("seller.no_categories")}
                   <code
                     className="block mt-1.5 px-3 py-2 rounded-lg text-xs font-mono"
                     style={{ background: "rgba(0,0,0,0.3)", color: "#e0e0e0" }}
@@ -336,7 +336,7 @@ export default function AddEditProduct() {
                       }}
                     >
                       <option value="">
-                        Select from {categoryTree.find((p) => p.slug === selectedParentSlug)?.name}…
+                        {categoryTree.find((p) => p.slug === selectedParentSlug)?.name}…
                       </option>
                       {subCategories.map((c) => (
                         <option key={c.id} value={c.id}>
@@ -346,7 +346,7 @@ export default function AddEditProduct() {
                     </select>
                   ) : (
                     <p className="text-xs" style={{ color: "var(--text-soft)" }}>
-                      Pick a department above, then choose the sub-category.
+                      {t("seller.pick_department")}
                     </p>
                   )}
                 </>
@@ -356,7 +356,7 @@ export default function AddEditProduct() {
             {/* Brand */}
             <div>
               <label className="block text-sm mb-1.5" style={{ color: "var(--text-soft)" }}>
-                Brand (optional)
+                {t("seller.brand_optional")}
               </label>
               <select
                 value={form.brand}
@@ -368,7 +368,7 @@ export default function AddEditProduct() {
                   color: "var(--text)",
                 }}
               >
-                <option value="">No brand</option>
+                <option value="">{t("seller.no_brand")}</option>
                 {brands?.map((b) => (
                   <option key={b.id} value={b.id}>{b.name}</option>
                 ))}
@@ -377,13 +377,13 @@ export default function AddEditProduct() {
 
             <div className="grid grid-cols-2 gap-4">
               <Input
-                label="City"
+                label={t("seller.city")}
                 value={form.city}
                 onChange={(e) => f("city", e.target.value)}
                 required
               />
               <Input
-                label="Province"
+                label={t("seller.province")}
                 value={form.province}
                 onChange={(e) => f("province", e.target.value)}
                 required
@@ -391,7 +391,7 @@ export default function AddEditProduct() {
             </div>
 
             <Input
-              label={isEdit ? "Stock Quantity (available)" : "Initial Stock (available)"}
+              label={isEdit ? t("seller.stock_qty_edit") : t("seller.stock_qty_initial")}
               type="number"
               min="0"
               value={form.stock_quantity}
@@ -403,7 +403,7 @@ export default function AddEditProduct() {
           <section
             className="rounded-[1.75rem] border border-[color:var(--border)] bg-white p-6 space-y-4 shadow-[0_18px_46px_rgba(23,32,51,0.06)]"
           >
-            <h2 className="font-semibold" style={{ color: "var(--text-h)" }}>Product Images</h2>
+            <h2 className="font-semibold" style={{ color: "var(--text-h)" }}>{t("seller.product_images")}</h2>
             <div>
               <label
                 className="flex flex-col items-center justify-center gap-3 rounded-xl p-8 cursor-pointer transition-all hover:border-accent"
@@ -422,7 +422,7 @@ export default function AddEditProduct() {
                   <CameraIcon size={24} />
                 </span>
                 <span className="text-sm" style={{ color: "var(--text-soft)" }}>
-                  Click to upload images (JPG, PNG, max 5MB each)
+                  {t("seller.upload_images_hint")}
                 </span>
               </label>
               {images.length > 0 && (
@@ -447,14 +447,14 @@ export default function AddEditProduct() {
 
           <div className="flex gap-3">
             <Button type="submit" loading={submitting} disabled={!categoriesReady} className="flex-1">
-              {isEdit ? "Save Changes" : "Submit for Review"}
+              {isEdit ? t("seller.save_changes") : t("seller.submit_review")}
             </Button>
             <Button
               type="button"
               variant="ghost"
               onClick={() => navigate("/seller/products")}
             >
-              Cancel
+              {t("common.cancel")}
             </Button>
           </div>
         </form>

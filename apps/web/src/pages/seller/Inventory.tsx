@@ -35,11 +35,11 @@ export default function Inventory() {
       restockProduct(accessToken!, id, qty),
     onSuccess: async () => {
       await qc.invalidateQueries({ queryKey: ["inventory"] });
-      toast.success("Stock updated");
+      toast.success(t("seller.toast_stock_updated"));
       setRestockModal(null);
       setRestockQty("");
     },
-    onError: () => toast.error("Failed to update stock"),
+    onError: () => toast.error(t("seller.toast_stock_failed")),
   });
 
   const adjustMutation = useMutation({
@@ -67,14 +67,14 @@ export default function Inventory() {
   return (
     <SellerLayout>
       <div className="max-w-4xl">
-        <BackButton to="/seller" label="Dashboard" className="mb-5" />
+        <BackButton to="/seller" label={t("seller.orders_back_dashboard")} className="mb-5" />
 
         <div className="flex items-center justify-between mb-6">
           <h1
             className="text-2xl font-bold"
             style={{ fontFamily: "var(--heading)", color: "var(--text-h)" }}
           >
-            Inventory
+            {t("seller.inventory_title")}
           </h1>
           <label className="flex items-center gap-2 cursor-pointer">
             <input
@@ -84,7 +84,7 @@ export default function Inventory() {
               style={{ accentColor: "var(--accent)" }}
             />
             <span className="text-sm" style={{ color: "var(--text-soft)" }}>
-              Low stock only
+              {t("seller.low_stock_only")}
             </span>
           </label>
         </div>
@@ -101,7 +101,7 @@ export default function Inventory() {
               <PackageIcon size={28} />
             </div>
             <p style={{ color: "var(--text-soft)" }}>
-              {showLowOnly ? "No low stock products." : "No stock data yet."}
+              {showLowOnly ? t("seller.no_low_stock") : t("seller.no_stock_data")}
             </p>
           </div>
         ) : (
@@ -112,7 +112,15 @@ export default function Inventory() {
             <table className="w-full min-w-[640px] text-sm">
               <thead>
                 <tr style={{ background: "var(--surface)", borderBottom: "1px solid var(--border)" }}>
-                  {["Product", "Total", "Reserved", "Available", "Threshold", "Status", "Actions"].map((h) => (
+                  {[
+                    t("seller.th_product"),
+                    t("seller.th_total"),
+                    t("seller.th_reserved"),
+                    t("seller.th_available"),
+                    t("seller.th_threshold"),
+                    t("seller.th_status"),
+                    t("seller.th_actions"),
+                  ].map((h) => (
                     <th
                       key={h}
                       className="text-left px-4 py-3 font-medium text-xs"
@@ -150,7 +158,11 @@ export default function Inventory() {
                           className="px-2 py-0.5 rounded-full text-xs font-medium"
                           style={{ background: color.bg, color: color.text }}
                         >
-                          {s.available === 0 ? "Out of Stock" : s.is_low_stock ? "Low" : "OK"}
+                          {s.available === 0
+                            ? t("seller.stock_out_of_stock")
+                            : s.is_low_stock
+                            ? t("seller.stock_low")
+                            : t("seller.stock_ok")}
                         </span>
                       </td>
                       <td className="px-4 py-3">
@@ -163,7 +175,7 @@ export default function Inventory() {
                             className="px-2.5 py-1 rounded-lg text-xs transition-all hover:opacity-90"
                             style={{ background: "rgba(255,125,72,0.12)", color: "var(--accent)" }}
                           >
-                            Restock
+                            {t("seller.restock")}
                           </button>
                           <button
                             onClick={() => {
@@ -173,7 +185,7 @@ export default function Inventory() {
                             className="px-2.5 py-1 rounded-lg text-xs transition-all hover:bg-white/5"
                             style={{ border: "1px solid var(--border)", color: "var(--text)" }}
                           >
-                            Adjust
+                            {t("seller.adjust")}
                           </button>
                         </div>
                       </td>
@@ -189,17 +201,17 @@ export default function Inventory() {
       {/* Restock Modal */}
       {restockModal && (
         <Modal
-          title={`Restock: ${restockModal.product_name}`}
+          title={`${t("seller.restock_modal_prefix")} ${restockModal.product_name}`}
           onClose={() => setRestockModal(null)}
         >
           <p className="text-sm mb-3" style={{ color: "var(--text-soft)" }}>
-            Current: {restockModal.available} available
+            {t("seller.restock_current_label")} {restockModal.available} {t("seller.restock_available_suffix")}
           </p>
           <input
             type="number"
             value={restockQty}
             onChange={(e) => setRestockQty(e.target.value)}
-            placeholder="Quantity to add"
+            placeholder={t("seller.restock_placeholder")}
             min="1"
             className="w-full px-4 py-2.5 rounded-xl text-sm outline-none mb-4"
             style={{
@@ -215,14 +227,14 @@ export default function Inventory() {
               className="flex-1 py-2.5 rounded-xl text-sm font-medium disabled:opacity-40"
               style={{ background: "var(--accent)", color: "white" }}
             >
-              Add Stock
+              {t("seller.add_stock")}
             </button>
             <button
               onClick={() => setRestockModal(null)}
               className="flex-1 py-2.5 rounded-xl text-sm"
               style={{ border: "1px solid var(--border)", color: "var(--text)" }}
             >
-              Cancel
+              {t("common.cancel")}
             </button>
           </div>
         </Modal>
@@ -231,17 +243,17 @@ export default function Inventory() {
       {/* Adjust Modal */}
       {adjustModal && (
         <Modal
-          title={`Adjust Stock: ${adjustModal.product_name}`}
+          title={`${t("seller.adjust_modal_prefix")} ${adjustModal.product_name}`}
           onClose={() => setAdjustModal(null)}
         >
           <p className="text-sm mb-3" style={{ color: "var(--text-soft)" }}>
-            Set exact stock quantity.
+            {t("seller.adjust_subtitle")}
           </p>
           <input
             type="number"
             value={adjustQty}
             onChange={(e) => setAdjustQty(e.target.value)}
-            placeholder="New stock quantity"
+            placeholder={t("seller.adjust_qty_placeholder")}
             min="0"
             className="w-full px-4 py-2.5 rounded-xl text-sm outline-none mb-3"
             style={{
@@ -254,7 +266,7 @@ export default function Inventory() {
             type="text"
             value={adjustReason}
             onChange={(e) => setAdjustReason(e.target.value)}
-            placeholder="Reason (optional)"
+            placeholder={t("seller.adjust_reason_placeholder")}
             className="w-full px-4 py-2.5 rounded-xl text-sm outline-none mb-4"
             style={{
               background: "rgba(255,255,255,0.04)",
@@ -269,14 +281,14 @@ export default function Inventory() {
               className="flex-1 py-2.5 rounded-xl text-sm font-medium disabled:opacity-40"
               style={{ background: "var(--accent)", color: "white" }}
             >
-              Set Stock
+              {t("seller.set_stock")}
             </button>
             <button
               onClick={() => setAdjustModal(null)}
               className="flex-1 py-2.5 rounded-xl text-sm"
               style={{ border: "1px solid var(--border)", color: "var(--text)" }}
             >
-              Cancel
+              {t("common.cancel")}
             </button>
           </div>
         </Modal>

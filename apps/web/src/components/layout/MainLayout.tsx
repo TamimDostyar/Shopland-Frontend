@@ -127,9 +127,9 @@ export default function MainLayout({ children }: Props) {
 
   return (
     <div dir={dir} className="min-h-screen flex flex-col text-[color:var(--text)]">
-      {/* Top Banner */}
+      {/* Top Banner — hidden on short viewports (landscape phones) */}
       <div
-        className="border-b"
+        className="[@media(max-height:500px)]:hidden border-b"
         style={{
           background: "linear-gradient(90deg, rgba(255,106,61,0.12), rgba(31,122,255,0.09))",
           borderColor: "rgba(23,32,51,0.08)",
@@ -154,48 +154,48 @@ export default function MainLayout({ children }: Props) {
       </div>
 
       <header className="sticky top-0 z-50 border-b border-[color:var(--border)] bg-[rgba(247,248,251,0.86)] backdrop-blur-xl">
-        <div className="mx-auto max-w-7xl px-4 py-3 md:py-4">
+        <div className="mx-auto max-w-7xl px-4 py-3 md:py-4 [@media(max-height:500px)]:py-2">
 
           {/* Primary row: Logo + desktop search + actions */}
-          <div className="flex items-center gap-3 md:gap-4">
+          <div className="flex items-center gap-3 lg:gap-4">
 
-            {/* Logo */}
+            {/* Logo — compact until lg */}
             <Link
               to="/"
-              className="flex shrink-0 items-center gap-2 rounded-full bg-white px-3 py-2 shadow-[0_14px_36px_rgba(23,32,51,0.06)] md:gap-3 md:px-4"
+              className="flex shrink-0 items-center gap-2 rounded-full bg-white px-3 py-2 shadow-[0_14px_36px_rgba(23,32,51,0.06)] lg:gap-3 lg:px-4"
             >
-              <div className="flex size-9 items-center justify-center rounded-full bg-[linear-gradient(135deg,#ff6a3d,#ff9e62)] text-white shadow-[0_10px_24px_rgba(255,106,61,0.28)] md:size-11">
+              <div className="flex size-9 items-center justify-center rounded-full bg-[linear-gradient(135deg,#ff6a3d,#ff9e62)] text-white shadow-[0_10px_24px_rgba(255,106,61,0.28)] lg:size-11">
                 <StoreIcon size={20} />
               </div>
               <div>
                 <div
-                  className="text-base font-bold leading-none text-[color:var(--text-h)] md:text-lg"
+                  className="text-base font-bold leading-none text-[color:var(--text-h)] lg:text-lg"
                   style={{ fontFamily: "var(--heading)" }}
                 >
                   {APP_NAME}
                 </div>
-                <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[color:var(--text-soft)] md:text-[11px]">
+                <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[color:var(--text-soft)] lg:text-[11px]">
                   {t("auth.logo_marketplace")}
                 </div>
               </div>
             </Link>
 
-            {/* Desktop search — hidden on mobile */}
+            {/* Desktop search — hidden on mobile, compact at md, full at lg */}
             <form onSubmit={handleSearch} className="hidden flex-1 md:block">
-              <div className="flex items-center gap-2 rounded-full border border-[color:var(--border)] bg-white p-2 shadow-[0_12px_32px_rgba(23,32,51,0.06)]">
-                <div className="flex size-10 items-center justify-center rounded-full bg-[var(--surface-muted)] text-[color:var(--text-soft)]">
-                  <SearchIcon size={18} />
+              <div className="flex items-center gap-2 rounded-full border border-[color:var(--border)] bg-white p-1.5 shadow-[0_12px_32px_rgba(23,32,51,0.06)] lg:p-2">
+                <div className="flex size-8 items-center justify-center rounded-full bg-[var(--surface-muted)] text-[color:var(--text-soft)] lg:size-10">
+                  <SearchIcon size={16} />
                 </div>
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder={t("search.placeholder")}
-                  className="h-11 flex-1 border-0 bg-transparent px-1 text-sm text-[color:var(--text-h)] outline-none placeholder:text-[color:var(--text-soft)]"
+                  className="h-9 flex-1 border-0 bg-transparent px-1 text-sm text-[color:var(--text-h)] outline-none placeholder:text-[color:var(--text-soft)] lg:h-11"
                 />
                 <button
                   type="submit"
-                  className="rounded-full bg-[var(--accent)] px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(255,106,61,0.24)] transition-transform hover:-translate-y-0.5"
+                  className="rounded-full bg-[var(--accent)] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(255,106,61,0.24)] transition-transform hover:-translate-y-0.5 lg:px-5 lg:py-3"
                 >
                   {t("search.button")}
                 </button>
@@ -208,15 +208,15 @@ export default function MainLayout({ children }: Props) {
             {/* Language switcher + Cart + Auth */}
             <div className="flex shrink-0 items-center gap-2">
 
-              {/* Language switcher */}
+              {/* Language switcher — icon-only until lg */}
               <div className="relative" ref={langRef}>
                 <button
                   onClick={() => setLangOpen((o) => !o)}
                   aria-label={t("nav.switch_language_aria")}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-[color:var(--border)] bg-white px-2.5 py-2.5 text-sm font-semibold text-[color:var(--text-h)] shadow-[0_12px_28px_rgba(23,32,51,0.05)] transition-all hover:-translate-y-0.5 md:px-3 md:py-3"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-[color:var(--border)] bg-white px-2.5 py-2.5 text-sm font-semibold text-[color:var(--text-h)] shadow-[0_12px_28px_rgba(23,32,51,0.05)] transition-all hover:-translate-y-0.5"
                 >
                   <GlobeIcon size={16} />
-                  <span className="hidden sm:inline text-xs">{LOCALES[locale].label}</span>
+                  <span className="hidden lg:inline text-xs">{LOCALES[locale].label}</span>
                 </button>
 
                 {langOpen && (
@@ -241,12 +241,13 @@ export default function MainLayout({ children }: Props) {
                 )}
               </div>
 
+              {/* Cart — icon-only until lg */}
               <Link
                 to="/cart"
-                className="relative inline-flex items-center gap-1.5 rounded-full border border-[color:var(--border)] bg-white px-3 py-2.5 text-sm font-semibold text-[color:var(--text-h)] shadow-[0_12px_28px_rgba(23,32,51,0.05)] transition-all hover:-translate-y-0.5 md:gap-2 md:px-4 md:py-3"
+                className="relative inline-flex items-center gap-1.5 rounded-full border border-[color:var(--border)] bg-white px-3 py-2.5 text-sm font-semibold text-[color:var(--text-h)] shadow-[0_12px_28px_rgba(23,32,51,0.05)] transition-all hover:-translate-y-0.5 lg:gap-2 lg:px-4 lg:py-3"
               >
                 <CartIcon size={18} />
-                <span className="hidden sm:inline">{t("nav.cart")}</span>
+                <span className="hidden lg:inline">{t("nav.cart")}</span>
                 {itemsCount > 0 && (
                   <span className="absolute -right-1 -top-1 min-w-[22px] rounded-full bg-[var(--accent)] px-1.5 py-1 text-center text-[11px] font-bold text-white">
                     {itemsCount}
@@ -256,14 +257,15 @@ export default function MainLayout({ children }: Props) {
 
               {user ? (
                 <div className="relative" ref={profileRef}>
+                  {/* Profile — avatar-only until lg */}
                   <button
                     onClick={() => setProfileOpen((open) => !open)}
-                    className="inline-flex items-center gap-2 rounded-full border border-[color:var(--border)] bg-white px-2 py-2 text-left shadow-[0_12px_28px_rgba(23,32,51,0.05)] transition-all hover:-translate-y-0.5 md:gap-3 md:px-3 md:py-2.5"
+                    className="inline-flex items-center gap-2 rounded-full border border-[color:var(--border)] bg-white px-2 py-2 text-left shadow-[0_12px_28px_rgba(23,32,51,0.05)] transition-all hover:-translate-y-0.5 lg:gap-3 lg:px-3 lg:py-2.5"
                   >
-                    <div className="flex size-8 items-center justify-center rounded-full bg-[linear-gradient(135deg,#1f7aff,#5ba0ff)] text-sm font-bold text-white md:size-10">
+                    <div className="flex size-8 items-center justify-center rounded-full bg-[linear-gradient(135deg,#1f7aff,#5ba0ff)] text-sm font-bold text-white lg:size-10">
                       {user.first_name?.[0]?.toUpperCase() ?? <UserIcon size={16} />}
                     </div>
-                    <div className="hidden md:block">
+                    <div className="hidden lg:block">
                       <div className="text-sm font-semibold text-[color:var(--text-h)]">
                         {user.first_name || user.email.split("@")[0]}
                       </div>
@@ -271,7 +273,7 @@ export default function MainLayout({ children }: Props) {
                         {user.role}
                       </div>
                     </div>
-                    <ChevronDownIcon size={16} className="hidden text-[color:var(--text-soft)] md:block" />
+                    <ChevronDownIcon size={16} className="hidden text-[color:var(--text-soft)] lg:block" />
                   </button>
 
                   {profileOpen && (
@@ -308,20 +310,21 @@ export default function MainLayout({ children }: Props) {
                 </div>
               ) : (
                 <div className="flex items-center gap-2">
-                  {/* Sign in: icon-only on mobile, text on sm+ — prevents header overflow on narrow screens */}
+                  {/* Sign in — icon-only until lg */}
                   <Link
                     to="/login"
-                    className="inline-flex items-center justify-center gap-1.5 rounded-full border border-[color:var(--border)] bg-white px-2.5 py-2.5 text-sm font-semibold text-[color:var(--text-h)] shadow-[0_12px_28px_rgba(23,32,51,0.05)] transition-all hover:-translate-y-0.5 sm:px-3 md:px-4 md:py-3"
+                    className="inline-flex items-center justify-center gap-1.5 rounded-full border border-[color:var(--border)] bg-white px-2.5 py-2.5 text-sm font-semibold text-[color:var(--text-h)] shadow-[0_12px_28px_rgba(23,32,51,0.05)] transition-all hover:-translate-y-0.5 lg:px-4 lg:py-3"
                   >
                     <UserIcon size={16} />
-                    <span className="hidden sm:inline">{t("nav.signin")}</span>
+                    <span className="hidden lg:inline">{t("nav.signin")}</span>
                   </Link>
+                  {/* Create account — short label until lg */}
                   <Link
                     to="/register"
-                    className="rounded-full bg-[var(--accent)] px-3 py-2.5 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(255,106,61,0.24)] transition-all hover:-translate-y-0.5 md:px-5 md:py-3"
+                    className="rounded-full bg-[var(--accent)] px-3 py-2.5 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(255,106,61,0.24)] transition-all hover:-translate-y-0.5 lg:px-5 lg:py-3"
                   >
-                    <span className="hidden sm:inline">{t("nav.create_account")}</span>
-                    <span className="sm:hidden">{t("nav.join")}</span>
+                    <span className="hidden lg:inline">{t("nav.create_account")}</span>
+                    <span className="lg:hidden">{t("nav.join")}</span>
                   </Link>
                 </div>
               )}
@@ -352,7 +355,7 @@ export default function MainLayout({ children }: Props) {
 
           {/* Category pills + secondary nav */}
           <div className="mt-3 flex items-center justify-between gap-3">
-            <nav className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <nav className="flex flex-1 min-w-0 gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {categoryPills.map((item) => (
                 <Link
                   key={item.to}
@@ -383,8 +386,8 @@ export default function MainLayout({ children }: Props) {
 
       <footer className="mt-20 border-t border-[color:var(--border)] bg-[rgba(255,255,255,0.72)] backdrop-blur-xl">
         <div className="mx-auto max-w-7xl px-4 py-14">
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-[1.4fr_repeat(4,1fr)]">
-            <div className="rounded-[1.75rem] bg-[linear-gradient(135deg,#172033,#243457)] p-6 text-white shadow-[0_24px_60px_rgba(23,32,51,0.18)] sm:col-span-2 lg:col-span-1">
+          <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-[1.4fr_repeat(4,1fr)]">
+            <div className="rounded-[1.75rem] bg-[linear-gradient(135deg,#172033,#243457)] p-6 text-white shadow-[0_24px_60px_rgba(23,32,51,0.18)] sm:col-span-2 md:col-span-4 lg:col-span-1">
               <div className="mb-4 flex items-center gap-3">
                 <div className="flex size-12 items-center justify-center rounded-full bg-white/12">
                   <StoreIcon size={22} />

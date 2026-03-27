@@ -290,7 +290,7 @@ export default function Checkout() {
           </div>
 
           <div className="md:col-span-2">
-            <div className="rounded-[2rem] border border-[color:var(--border)] bg-white p-6 sticky top-24 space-y-4 shadow-[0_18px_46px_rgba(23,32,51,0.06)]">
+            <div className="rounded-[2rem] border border-[color:var(--border)] bg-white p-6 md:sticky md:top-24 space-y-4 shadow-[0_18px_46px_rgba(23,32,51,0.06)]">
               <h2 className="font-semibold" style={{ color: "var(--text-h)" }}>
                 {t("checkout.order_summary")}
               </h2>
