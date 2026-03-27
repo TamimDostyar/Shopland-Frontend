@@ -1,6 +1,7 @@
 import { http } from "../http";
 import type {
   Product,
+  ProductColor,
   Category,
   Brand,
   PaginatedResponse,
@@ -38,6 +39,10 @@ export function getCategory(slug: string): Promise<Category> {
 
 export function getBrands(): Promise<Brand[]> {
   return http.get<Brand[]>("/api/catalog/brands/");
+}
+
+export function getColors(): Promise<ProductColor[]> {
+  return http.get<ProductColor[]>("/api/catalog/colors/");
 }
 
 export function searchProducts(

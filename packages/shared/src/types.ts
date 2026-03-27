@@ -33,6 +33,12 @@ export type ProductImage = {
   is_primary: boolean;
 };
 
+export type ProductColor = {
+  id: string;
+  name: string;
+  hex_code: string;
+};
+
 export type Product = {
   id: string;
   slug: string;
@@ -54,6 +60,7 @@ export type Product = {
   is_approved: boolean;
   rejection_reason?: string | null;
   views_count: number;
+  colors: ProductColor[];
   images: ProductImage[];
   primary_image?: string | null;
   in_stock?: boolean;

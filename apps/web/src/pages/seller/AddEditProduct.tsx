@@ -9,6 +9,7 @@ import {
   updateProduct,
   getSellerProducts,
   uploadProductImage,
+  localizedCategoryName,
   type Category,
 } from "@shopland/shared";
 import SellerLayout from "../../components/layout/SellerLayout";
@@ -22,7 +23,7 @@ import { CameraIcon, CategoryIcon } from "../../components/ui/icons";
 const CONDITIONS = ["new", "used", "refurbished"] as const;
 
 export default function AddEditProduct() {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const { id } = useParams<{ id?: string }>();
   const isEdit = !!id;
   const { accessToken } = useAuth();
@@ -63,6 +64,8 @@ export default function AddEditProduct() {
       id: p.id,
       slug: p.slug,
       name: p.name,
+      name_fa: p.name_fa,
+      name_ps: p.name_ps,
       children: p.children ?? [],
     }));
   }, [categories]);
@@ -234,7 +237,7 @@ export default function AddEditProduct() {
                 {CONDITIONS.map((c) => (
                   <label
                     key={c}
-                    className="flex items-center gap-2 cursor-pointer px-3 py-2 rounded-xl text-sm capitalize"
+                    className="flex items-center gap-2 cursor-pointer px-3 py-2 rounded-xl text-sm"
                     style={{
                       border: `1px solid ${form.condition === c ? "var(--accent)" : "var(--border)"}`,
                       background: form.condition === c ? "rgba(255,125,72,0.06)" : "transparent",
@@ -249,7 +252,7 @@ export default function AddEditProduct() {
                       onChange={() => f("condition", c)}
                       style={{ accentColor: "var(--accent)" }}
                     />
-                    {c}
+                    {t(`product.condition_${c}`)}
                   </label>
                 ))}
               </div>
@@ -315,7 +318,7 @@ export default function AddEditProduct() {
                         >
                           <span className="inline-flex items-center gap-2">
                             <CategoryIcon slug={parent.slug} size={14} />
-                            {parent.name}
+                            {localizedCategoryName(parent, locale)}
                           </span>
                         </button>
                       );
@@ -336,11 +339,11 @@ export default function AddEditProduct() {
                       }}
                     >
                       <option value="">
-                        {categoryTree.find((p) => p.slug === selectedParentSlug)?.name}…
+                        {localizedCategoryName(categoryTree.find((p) => p.slug === selectedParentSlug), locale)}…
                       </option>
                       {subCategories.map((c) => (
                         <option key={c.id} value={c.id}>
-                          {c.name}
+                          {localizedCategoryName(c, locale)}
                         </option>
                       ))}
                     </select>
