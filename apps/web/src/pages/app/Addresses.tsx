@@ -6,6 +6,7 @@ import {
   deleteAddress,
   ApiError,
   type Address,
+  type TranslationKey,
 } from "@shopland/shared";
 import MainLayout from "../../components/layout/MainLayout";
 import Button from "../../components/ui/Button";

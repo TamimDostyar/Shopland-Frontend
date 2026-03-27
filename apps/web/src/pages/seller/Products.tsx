@@ -17,6 +17,7 @@ const STATUS_FILTERS = ["All", "Active", "Pending", "Rejected", "Inactive"];
 
 export default function SellerProducts() {
   const { accessToken } = useAuth();
+  const { t } = useLanguage();
   const qc = useQueryClient();
   const [statusFilter, setStatusFilter] = useState("All");
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
