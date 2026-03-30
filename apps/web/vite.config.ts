@@ -12,8 +12,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.png', 'favicon.svg', 'icons.svg'],
       manifest: {
-        name: 'Amazebid',
-        short_name: 'Amazebid',
+        name: 'AmazeBid',
+        short_name: 'AmazeBid',
         description: 'Online Shopping is easier and faster now!',
         theme_color: '#0b0f1f',
         background_color: '#060816',

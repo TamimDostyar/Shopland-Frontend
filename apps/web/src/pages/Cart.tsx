@@ -19,7 +19,7 @@ import { AlertTriangleIcon, CartIcon, ImageIcon, TruckIcon } from "../components
 
 export default function Cart() {
   const { t } = useLanguage();
-  const { accessToken, isAuthenticated } = useAuth();
+  const { accessToken, isAuthenticated, user } = useAuth();
   const { refreshCart } = useCart();
   const navigate = useNavigate();
   const qc = useQueryClient();
@@ -28,7 +28,7 @@ export default function Cart() {
   const { data: cart, isLoading } = useQuery<CartType>({
     queryKey: ["cart"],
     queryFn: () => getCart(accessToken!),
-    enabled: !!accessToken,
+    enabled: !!accessToken && user?.role === "buyer",
   });
 
   const updateMutation = useMutation({

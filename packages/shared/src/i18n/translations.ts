@@ -88,7 +88,7 @@ const en = {
 
   // Admin shell
   "admin.panel_badge": "Admin Panel",
-  "admin.control_title": "Amazebid Control",
+  "admin.control_title": "AmazeBid Control",
   "admin.control_subtitle": "Review catalog quality, seller onboarding, and identity verification from one place.",
   "admin.nav_product_approvals": "Product approvals",
   "admin.nav_pending_sellers": "Pending sellers",
@@ -158,7 +158,7 @@ const en = {
   "footer.addresses": "Saved addresses",
   "footer.privacy": "Privacy Policy",
   "footer.terms": "Terms & Conditions",
-  "footer.copyright": "© 2026 Amazebid. Designed for modern commerce.",
+  "footer.copyright": "© 2026 AmazeBid. Designed for modern commerce.",
   "footer.secure_checkout": "Secure checkout",
   "footer.verified_sellers": "Verified sellers",
   "footer.cash_on_delivery": "Cash on delivery",
@@ -170,20 +170,20 @@ const en = {
   "auth.trusted_onboarding": "Trusted onboarding",
   "auth.trusted_desc": "Verification-first flows help buyers and sellers move safely.",
   "auth.secure_access": "Secure access",
-  "auth.legal_text": "By continuing, you agree to the Amazebid Terms & Conditions and Privacy Policy. We use account, contact, and verification data to operate your account, protect the marketplace, and in emergencies or safety incidents help verify who you are. We do not sell personal data or use personal data to train general-purpose AI or unrelated software models.",
+  "auth.legal_text": "By continuing, you agree to the AmazeBid Terms & Conditions and Privacy Policy. We use account, contact, and verification data to operate your account, protect the marketplace, and in emergencies or safety incidents help verify who you are. We do not sell personal data or use personal data to train general-purpose AI or unrelated software models.",
   "auth.logo_marketplace": "Marketplace",
   "auth.logo_accounts": "Accounts",
 
   // Login
   "login.title": "Welcome back",
-  "login.subtitle": "Sign in to your Amazebid account",
+  "login.subtitle": "Sign in to your AmazeBid account",
   "login.back_home": "Back to Home",
   "login.email": "Email",
   "login.password": "Password",
   "login.forgot_password": "Forgot password?",
   "login.submit": "Sign in",
   "login.or": "or",
-  "login.gmail_note": "Use a Gmail address for Amazebid sign-in and registration. Other email providers are not accepted.",
+  "login.gmail_note": "Use a Gmail address for AmazeBid sign-in and registration. Other email providers are not accepted.",
   "login.no_account": "No account?",
   "login.register": "Register",
   "login.password_reset_success": "Password reset successfully. Please sign in.",
@@ -255,7 +255,7 @@ const en = {
   "reg.buyer_title": "Buyer Registration",
   "reg.buyer_subtitle": "Step by step — takes about 2 minutes",
   "reg.seller_title": "Seller Registration",
-  "reg.seller_subtitle": "Open your shop on Amazebid",
+  "reg.seller_subtitle": "Open your shop on AmazeBid",
 
   // Verify phone
   "verify_phone.title": "Verify your phone",
@@ -363,7 +363,7 @@ const en = {
   "product.back_home": "Back to home",
   "product.home": "Home",
   "product.off": "OFF",
-  "product.seller_fallback": "Amazebid Seller",
+  "product.seller_fallback": "AmazeBid Seller",
   "product.view_item": "View item",
   "product.category_fallback": "Product",
   "product.condition_new": "New",
@@ -520,12 +520,12 @@ const en = {
   // Legal pages
   "legal.label": "Legal",
   "legal.privacy_title": "Privacy Policy",
-  "legal.privacy_subtitle": "This policy explains how Amazebid collects, uses, shares, and protects personal information across account registration, login, buying, selling, verification, and customer support.",
+  "legal.privacy_subtitle": "This policy explains how AmazeBid collects, uses, shares, and protects personal information across account registration, login, buying, selling, verification, and customer support.",
   "legal.privacy_s1_title": "Information We Collect",
   "legal.privacy_s1_p1":
     "We collect the information you provide when you create an account, place an order, open a seller profile, contact support, or complete verification steps. This may include your name, email address, phone number, delivery address, shop details, payment-related references, and identity records required for platform safety.",
   "legal.privacy_s1_p2":
-    "We also collect technical and usage information such as device details, browser data, IP address, session activity, and marketplace interactions so we can operate, secure, and improve Amazebid.",
+    "We also collect technical and usage information such as device details, browser data, IP address, session activity, and marketplace interactions so we can operate, secure, and improve AmazeBid.",
   "legal.privacy_s2_title": "How We Use Your Information",
   "legal.privacy_s2_p1":
     "We use personal data to create and manage accounts, authenticate logins, process orders, support deliveries, communicate about purchases, review seller applications, prevent fraud, enforce marketplace rules, and comply with legal obligations.",
@@ -533,7 +533,7 @@ const en = {
     "Where safety, fraud prevention, or emergency response requires it, we may use account and verification data to confirm who you are, protect users, investigate harmful activity, or assist lawful authorities when legally required.",
   "legal.privacy_s3_title": "Emergency and Safety Use",
   "legal.privacy_s3_p1":
-    "If we reasonably believe there is an emergency involving risk of harm, fraud, abuse, or a serious safety issue, Amazebid may use the identity and contact information connected to your account to verify your identity, contact you, or support protective action.",
+    "If we reasonably believe there is an emergency involving risk of harm, fraud, abuse, or a serious safety issue, AmazeBid may use the identity and contact information connected to your account to verify your identity, contact you, or support protective action.",
   "legal.privacy_s3_p2":
     "This emergency and safety use is limited to protecting people, the platform, and lawful investigations. It is not a permission to use your data for unrelated commercial profiling.",
   "legal.privacy_s4_title": "What We Do Not Do",
@@ -552,43 +552,43 @@ const en = {
     "We use reasonable administrative, technical, and organizational safeguards, but no method of storage or transmission is completely secure.",
   "legal.privacy_s7_title": "Your Choices",
   "legal.privacy_s7_p1":
-    "You may request updates or corrections to inaccurate account information. You may also contact Amazebid regarding account closure or privacy questions, subject to any recordkeeping or legal obligations that require us to retain certain information.",
+    "You may request updates or corrections to inaccurate account information. You may also contact AmazeBid regarding account closure or privacy questions, subject to any recordkeeping or legal obligations that require us to retain certain information.",
   "legal.terms_title": "Terms & Conditions",
-  "legal.terms_subtitle": "These terms govern the use of Amazebid for account registration, login, marketplace participation, buying, selling, and related support services.",
+  "legal.terms_subtitle": "These terms govern the use of AmazeBid for account registration, login, marketplace participation, buying, selling, and related support services.",
   "legal.terms_s1_title": "Acceptance of Terms",
   "legal.terms_s1_p1":
-    "By accessing, registering for, or using Amazebid, you agree to these Terms & Conditions and the Amazebid Privacy Policy. If you do not agree, you must not use the platform.",
+    "By accessing, registering for, or using AmazeBid, you agree to these Terms & Conditions and the AmazeBid Privacy Policy. If you do not agree, you must not use the platform.",
   "legal.terms_s2_title": "Eligibility and Account Accuracy",
   "legal.terms_s2_p1":
     "You must provide accurate, current, and complete information when creating or maintaining an account. You are responsible for protecting your login credentials and for activity carried out through your account.",
   "legal.terms_s2_p2":
-    "Amazebid may request verification information where reasonably necessary to confirm identity, reduce fraud, protect users, or satisfy legal and marketplace requirements.",
+    "AmazeBid may request verification information where reasonably necessary to confirm identity, reduce fraud, protect users, or satisfy legal and marketplace requirements.",
   "legal.terms_s3_title": "Marketplace Use",
   "legal.terms_s3_p1":
     "Buyers may use the platform to browse, order, and communicate regarding products and deliveries. Sellers may list and sell products only if those listings are lawful, accurate, and consistent with marketplace standards.",
   "legal.terms_s3_p2":
-    "You must not use Amazebid for fraud, impersonation, unlawful trade, abusive conduct, interference with the platform, or any activity that harms users, Amazebid, or third parties.",
+    "You must not use AmazeBid for fraud, impersonation, unlawful trade, abusive conduct, interference with the platform, or any activity that harms users, AmazeBid, or third parties.",
   "legal.terms_s4_title": "Orders, Pricing, and Fulfillment",
   "legal.terms_s4_p1":
-    "Product availability, pricing, and fulfillment are subject to seller inventory, operational limits, and marketplace review. Amazebid may cancel, suspend, or investigate transactions that appear inaccurate, fraudulent, unsafe, or unlawful.",
+    "Product availability, pricing, and fulfillment are subject to seller inventory, operational limits, and marketplace review. AmazeBid may cancel, suspend, or investigate transactions that appear inaccurate, fraudulent, unsafe, or unlawful.",
   "legal.terms_s4_p2":
-    "Delivery times, seller performance, and third-party service availability may vary. Amazebid may facilitate orders and support, but marketplace transactions can involve independent seller responsibility.",
+    "Delivery times, seller performance, and third-party service availability may vary. AmazeBid may facilitate orders and support, but marketplace transactions can involve independent seller responsibility.",
   "legal.terms_s5_title": "Emergency, Safety, and Verification",
   "legal.terms_s5_p1":
-    "Where Amazebid reasonably believes an account, transaction, or user activity creates a safety issue, emergency risk, fraud concern, or serious policy violation, we may use account and verification data to identify the person involved, contact affected users, restrict access, or support lawful protective action.",
+    "Where AmazeBid reasonably believes an account, transaction, or user activity creates a safety issue, emergency risk, fraud concern, or serious policy violation, we may use account and verification data to identify the person involved, contact affected users, restrict access, or support lawful protective action.",
   "legal.terms_s5_p2":
-    "You agree that Amazebid may take proportionate action to protect people, property, platform integrity, and legal compliance.",
+    "You agree that AmazeBid may take proportionate action to protect people, property, platform integrity, and legal compliance.",
   "legal.terms_s6_title": "Data Use Restriction",
   "legal.terms_s6_p1":
-    "Amazebid uses personal information to operate the marketplace, verify identities, process transactions, provide support, enforce these terms, and meet legal obligations.",
+    "AmazeBid uses personal information to operate the marketplace, verify identities, process transactions, provide support, enforce these terms, and meet legal obligations.",
   "legal.terms_s6_p2":
-    "Amazebid does not sell your personal data and does not use your personal data for unrelated software-training purposes or to train general-purpose AI systems.",
+    "AmazeBid does not sell your personal data and does not use your personal data for unrelated software-training purposes or to train general-purpose AI systems.",
   "legal.terms_s7_title": "Suspension and Termination",
   "legal.terms_s7_p1":
-    "Amazebid may suspend, limit, or terminate access to any account or listing that violates these terms, creates risk, fails verification, or exposes the marketplace or its users to legal or operational harm.",
+    "AmazeBid may suspend, limit, or terminate access to any account or listing that violates these terms, creates risk, fails verification, or exposes the marketplace or its users to legal or operational harm.",
   "legal.terms_s8_title": "Disclaimers and Liability",
   "legal.terms_s8_p1":
-    "The platform is provided on an as-available basis. To the maximum extent permitted by applicable law, Amazebid disclaims implied warranties and is not liable for indirect, incidental, special, or consequential damages arising from platform use, third-party services, or seller conduct.",
+    "The platform is provided on an as-available basis. To the maximum extent permitted by applicable law, AmazeBid disclaims implied warranties and is not liable for indirect, incidental, special, or consequential damages arising from platform use, third-party services, or seller conduct.",
   "legal.terms_s8_p2":
     "Nothing in these terms excludes liability that cannot lawfully be excluded under applicable law.",
 

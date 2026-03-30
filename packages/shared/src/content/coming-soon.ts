@@ -4,7 +4,7 @@ const en: ComingSoonContent = {
   badge: "Coming soon",
   title: "Afghanistan's online marketplace.",
   subtitle:
-    "Amazebid connects local sellers with buyers across the country — with cash on delivery, fast shipping, and easy returns.",
+    "AmazeBid connects local sellers with buyers across the country — with cash on delivery, fast shipping, and easy returns.",
   goals: [
     { title: "Empower local sellers", detail: "Give every shop a nationwide storefront." },
     { title: "Cash on delivery", detail: "Pay the driver when your order arrives." },
@@ -15,7 +15,7 @@ const en: ComingSoonContent = {
   usernamePlaceholder: "Your email",
   ctaLabel: "Join waitlist",
   privacyNote: "No spam. Only launch updates.",
-  successMessage: "You're added on the list. We'll let you know when Amazebid goes live.",
+  successMessage: "You're added on the list. We'll let you know when AmazeBid goes live.",
   duplicateMessage: "You're already on the list — we'll keep you posted.",
   errorMessage: "Something went wrong. Please try again.",
   footerEmail: "a.tamimdostyar@gmail.com",

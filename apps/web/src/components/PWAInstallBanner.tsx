@@ -14,9 +14,9 @@ export function PWAInstallBanner() {
         style={{ background: '#0b0f1f', borderTop: '1px solid rgba(255,255,255,0.08)' }}
       >
         <div className="flex items-center gap-3 min-w-0">
-          <img src="/favicon.png" alt="Amazebid" className="w-10 h-10 rounded-xl flex-shrink-0" />
+          <img src="/favicon.png" alt="AmazeBid" className="w-10 h-10 rounded-xl flex-shrink-0" />
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-white truncate">نصب برنامه Amazebid</p>
+            <p className="text-sm font-semibold text-white truncate">نصب برنامه AmazeBid</p>
             <p className="text-xs truncate" style={{ color: '#8892b0' }}>
               {isIOS ? 'افزودن به صفحه اصلی' : 'دسترسی سریع‌تر، آفلاین هم کار می‌کند'}
             </p>
