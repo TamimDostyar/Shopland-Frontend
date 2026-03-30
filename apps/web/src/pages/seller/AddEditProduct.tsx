@@ -13,7 +13,7 @@ import {
   localizedCategoryName,
   type Category,
   type ProductColor,
-} from "@shopland/shared";
+} from "@amazebid/shared";
 import SellerLayout from "../../components/layout/SellerLayout";
 import BackButton from "../../components/ui/BackButton";
 import { useAuth } from "../../hooks/useAuth";

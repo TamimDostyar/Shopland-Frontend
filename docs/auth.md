@@ -35,7 +35,7 @@ The entry point for unauthenticated users.
 
 | Element | Details |
 |---------|---------|
-| App logo + name | "Shopland" branding |
+| App logo + name | "Amazebid" branding |
 | Tagline | Short marketplace description |
 | "Create Account" button | Routes to account type selection |
 | "Log In" button | Routes to login screen |
@@ -146,7 +146,7 @@ This is not a screen the user fills out -- they click a link in their email.
 **In-app behavior:**
 - Show a banner/card on the home screen: "Please verify your email. Check your inbox."
 - "Resend email" button (calls `POST /api/users/verify-email/resend/`)
-- When the user clicks the email link, it opens `https://shopland.com/verify-email?token=...`
+- When the user clicks the email link, it opens `https://amazebid.com/verify-email?token=...`
 - The frontend calls `GET /api/users/verify-email/?token=<token>`
 - On success: show "Email verified!" confirmation screen, update `verification_status.email = true`
 
@@ -307,7 +307,7 @@ interface AuthState {
 
 ## Shared Package Updates Needed
 
-The `@shopland/shared` types need to be updated to match the backend:
+The `@amazebid/shared` types need to be updated to match the backend:
 
 ```typescript
 // packages/shared/src/types.ts additions

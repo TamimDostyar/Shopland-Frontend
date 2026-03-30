@@ -11,7 +11,7 @@ import {
   ShieldIcon,
   UserIcon,
 } from "../ui/icons";
-import type { TranslationKey } from "@shopland/shared";
+import type { TranslationKey } from "@amazebid/shared";
 
 
 interface Props {

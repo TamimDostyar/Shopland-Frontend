@@ -1,12 +1,12 @@
-# Gap Analysis: Shopland vs Amazon
+# Gap Analysis: Amazebid vs Amazon
 
 ## Purpose
 
-This document identifies features and pages present in Amazon's marketplace that are currently missing from Shopland's design. Each gap is categorized by priority: must-have for launch, should-have soon after, and nice-to-have for later.
+This document identifies features and pages present in Amazon's marketplace that are currently missing from Amazebid's design. Each gap is categorized by priority: must-have for launch, should-have soon after, and nice-to-have for later.
 
 ---
 
-## Key UX Principle Shopland Was Missing
+## Key UX Principle Amazebid Was Missing
 
 **Amazon does NOT require login to browse.** A visitor can:
 - View the homepage, categories, and products
@@ -17,7 +17,7 @@ This document identifies features and pages present in Amazon's marketplace that
 
 Login is only required at **checkout**. This is critical for conversion -- forcing login upfront kills browsing traffic.
 
-**Shopland must follow this pattern.** All catalog, search, product detail, and review pages must be fully accessible without authentication.
+**Amazebid must follow this pattern.** All catalog, search, product detail, and review pages must be fully accessible without authentication.
 
 ---
 
@@ -26,7 +26,7 @@ Login is only required at **checkout**. This is critical for conversion -- forci
 ### 1. Guest Browsing & Session Cart
 **What Amazon does:** Unauthenticated users can browse everything and even add items to a temporary cart. When they log in, the session cart merges with their account cart.
 
-**Impact:** Without this, every visitor must create an account before they can even see if Shopland has what they want. Most will leave.
+**Impact:** Without this, every visitor must create an account before they can even see if Amazebid has what they want. Most will leave.
 
 **Action:** Update cart system to support anonymous session carts (cookie/localStorage based) that merge on login.
 
@@ -118,7 +118,7 @@ Login is only required at **checkout**. This is critical for conversion -- forci
 ### 11. Order Returns & Refunds
 **What Amazon does:** Full return flow -- request return, print label, ship back, get refund.
 
-**In Shopland's context:** COD means no refund to process (cash was paid to driver). But the buyer needs a way to request a return if the product is wrong/damaged. Driver picks up the item, cash is refunded in person or credited to future orders.
+**In Amazebid's context:** COD means no refund to process (cash was paid to driver). But the buyer needs a way to request a return if the product is wrong/damaged. Driver picks up the item, cash is refunded in person or credited to future orders.
 
 **Action:** Add return request flow to orders system.
 

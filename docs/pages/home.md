@@ -18,7 +18,7 @@ Public -- no login required. This is the first page every visitor sees.
 
 | Element | Details |
 |---------|---------|
-| Logo | "Shopland" logo, taps to reload home |
+| Logo | "Amazebid" logo, taps to reload home |
 | Search bar | Placeholder: "Search products..." Click to expand with autocomplete |
 | Notification bell (🔔) | Badge with unread count. Logged-in only (hidden for guests) |
 | Wishlist heart (❤️) | Routes to wishlist. Logged-in only (hidden for guests) |
@@ -157,10 +157,10 @@ Larger visual category cards for exploration.
 
 ```
 ┌────────────────────────────────────────────────────────────┐
-│  About Shopland  │  Help & FAQ   │  Sell on Shopland       │
+│  About Amazebid  │  Help & FAQ   │  Sell on Amazebid       │
 │  Terms of Service│  Contact Us   │  Privacy Policy          │
 │                                                             │
-│  Language: [Dari ▼]                          © 2026 Shopland│
+│  Language: [Dari ▼]                          © 2026 Amazebid│
 └────────────────────────────────────────────────────────────┘
 ```
 

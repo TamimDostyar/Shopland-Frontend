@@ -5,7 +5,7 @@ import {
   getLowStock,
   getEarningsSummary,
   getSellerProducts,
-} from "@shopland/shared";
+} from "@amazebid/shared";
 import SellerLayout from "../../components/layout/SellerLayout";
 import { useAuth } from "../../hooks/useAuth";
 import { useLanguage } from "../../context/LanguageContext";

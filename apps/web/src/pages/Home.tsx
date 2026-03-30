@@ -9,7 +9,7 @@ import {
   type Category,
   type Locale,
   type Product,
-} from "@shopland/shared";
+} from "@amazebid/shared";
 import MainLayout from "../components/layout/MainLayout";
 import ProductCard from "../components/catalog/ProductCard";
 import SkeletonCard from "../components/catalog/SkeletonCard";
@@ -178,27 +178,27 @@ export default function Home() {
           <div className="flex items-center gap-3 overflow-x-auto pb-1">
             {catLoading
               ? Array.from({ length: 6 }).map((_, i) => (
-                  <div
-                    key={i}
-                    className="h-14 w-36 shrink-0 animate-pulse rounded-2xl"
-                    style={{ background: "var(--surface-muted)" }}
-                  />
-                ))
+                <div
+                  key={i}
+                  className="h-14 w-36 shrink-0 animate-pulse rounded-2xl"
+                  style={{ background: "var(--surface-muted)" }}
+                />
+              ))
               : categories
-                  .filter((c: Category) => !c.parent)
-                  .slice(0, 10)
-                  .map((cat: Category) => (
-                    <Link
-                      key={cat.id}
-                      to={`/category/${cat.slug}`}
-                      className="flex shrink-0 items-center gap-3 rounded-2xl border border-[color:var(--border)] bg-[var(--surface-muted)] px-4 py-3 text-sm font-semibold whitespace-nowrap text-[color:var(--text)] transition-all hover:-translate-y-0.5 hover:border-[color:var(--accent)] hover:bg-white hover:text-[color:var(--accent)]"
-                    >
-                      <div className="flex size-9 items-center justify-center rounded-xl bg-white text-[color:var(--accent)]">
-                        <CategoryIcon slug={cat.slug} size={18} />
-                      </div>
-                      {localizedCategoryName(cat, locale)}
-                    </Link>
-                  ))}
+                .filter((c: Category) => !c.parent)
+                .slice(0, 10)
+                .map((cat: Category) => (
+                  <Link
+                    key={cat.id}
+                    to={`/category/${cat.slug}`}
+                    className="flex shrink-0 items-center gap-3 rounded-2xl border border-[color:var(--border)] bg-[var(--surface-muted)] px-4 py-3 text-sm font-semibold whitespace-nowrap text-[color:var(--text)] transition-all hover:-translate-y-0.5 hover:border-[color:var(--accent)] hover:bg-white hover:text-[color:var(--accent)]"
+                  >
+                    <div className="flex size-9 items-center justify-center rounded-xl bg-white text-[color:var(--accent)]">
+                      <CategoryIcon slug={cat.slug} size={18} />
+                    </div>
+                    {localizedCategoryName(cat, locale)}
+                  </Link>
+                ))}
           </div>
         </div>
       </section>
@@ -366,9 +366,8 @@ function FeaturedShowcaseCard({
   if (!product) {
     return (
       <div
-        className={`overflow-hidden rounded-[1.6rem] bg-[var(--surface-muted)] animate-pulse ${
-          large ? "min-h-[220px] lg:min-h-[360px]" : compact ? "min-h-[120px] sm:min-h-[140px]" : "min-h-[160px] sm:min-h-[172px]"
-        }`}
+        className={`overflow-hidden rounded-[1.6rem] bg-[var(--surface-muted)] animate-pulse ${large ? "min-h-[220px] lg:min-h-[360px]" : compact ? "min-h-[120px] sm:min-h-[140px]" : "min-h-[160px] sm:min-h-[172px]"
+          }`}
       />
     );
   }
@@ -380,9 +379,8 @@ function FeaturedShowcaseCard({
   return (
     <Link
       to={`/product/${product.slug}`}
-      className={`group relative overflow-hidden rounded-[1.6rem] border border-[color:var(--border)] bg-[var(--surface-muted)] shadow-[0_16px_40px_rgba(23,32,51,0.06)] ${
-        large ? "min-h-[220px] lg:min-h-[360px]" : compact ? "min-h-[120px] sm:min-h-[140px]" : "min-h-[160px] sm:min-h-[172px]"
-      }`}
+      className={`group relative overflow-hidden rounded-[1.6rem] border border-[color:var(--border)] bg-[var(--surface-muted)] shadow-[0_16px_40px_rgba(23,32,51,0.06)] ${large ? "min-h-[220px] lg:min-h-[360px]" : compact ? "min-h-[120px] sm:min-h-[140px]" : "min-h-[160px] sm:min-h-[172px]"
+        }`}
     >
       {img ? (
         <img

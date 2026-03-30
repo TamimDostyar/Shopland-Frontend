@@ -1,7 +1,7 @@
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import type { Locale } from "@shopland/shared";
-import { APP_NAME, LOCALES } from "@shopland/shared";
+import type { Locale } from "@amazebid/shared";
+import { APP_NAME, LOCALES } from "@amazebid/shared";
 import { useAuth } from "../../hooks/useAuth";
 import { useCart } from "../../hooks/useCart";
 import { useLanguage } from "../../context/LanguageContext";

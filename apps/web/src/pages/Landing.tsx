@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { APP_NAME, COMING_SOON, LOCALES } from "@shopland/shared";
-import type { Locale } from "@shopland/shared";
+import { APP_NAME, COMING_SOON, LOCALES } from "@amazebid/shared";
+import type { Locale } from "@amazebid/shared";
 import "../App.css";
 import { useLanguage } from "../context/LanguageContext";
 

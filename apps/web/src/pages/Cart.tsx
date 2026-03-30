@@ -9,7 +9,7 @@ import {
   clearCart,
   type Cart as CartType,
   type CartItem,
-} from "@shopland/shared";
+} from "@amazebid/shared";
 import MainLayout from "../components/layout/MainLayout";
 import BackButton from "../components/ui/BackButton";
 import { useAuth } from "../hooks/useAuth";

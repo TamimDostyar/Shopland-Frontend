@@ -9,7 +9,7 @@ import {
   getProducts,
   localizedCategoryName,
   localizedProductName,
-} from "@shopland/shared";
+} from "@amazebid/shared";
 import MainLayout from "../components/layout/MainLayout";
 import ProductCard from "../components/catalog/ProductCard";
 import BackButton from "../components/ui/BackButton";

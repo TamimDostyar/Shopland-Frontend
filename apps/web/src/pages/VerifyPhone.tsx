@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { verifyPhone, resendPhoneCode, ApiError } from "@shopland/shared";
+import { verifyPhone, resendPhoneCode, ApiError } from "@amazebid/shared";
 import AuthLayout from "../components/layout/AuthLayout";
 import OtpInput from "../components/forms/OtpInput";
 import Button from "../components/ui/Button";

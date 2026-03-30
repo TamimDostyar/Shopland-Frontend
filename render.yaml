@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: shopland-web
+    name: amazebid-web
     runtime: static
     buildCommand: pnpm install && pnpm run build
     staticPublishPath: apps/web/dist

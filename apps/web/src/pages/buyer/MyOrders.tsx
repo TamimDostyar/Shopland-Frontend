@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { getMyOrders, type Order, type OrderStatus } from "@shopland/shared";
+import { getMyOrders, type Order, type OrderStatus } from "@amazebid/shared";
 import MainLayout from "../../components/layout/MainLayout";
 import BackButton from "../../components/ui/BackButton";
 import { useAuth } from "../../hooks/useAuth";

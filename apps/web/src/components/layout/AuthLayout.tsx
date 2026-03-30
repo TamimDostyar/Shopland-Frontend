@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { APP_NAME } from "@shopland/shared";
+import { APP_NAME } from "@amazebid/shared";
 import LegalLinks from "../legal/LegalLinks";
 import { useLanguage } from "../../context/LanguageContext";
 import { ArrowLeftIcon, ShieldIcon, SparklesIcon, StoreIcon } from "../ui/icons";

@@ -6,10 +6,10 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import type { Locale } from "@shopland/shared";
-import { DEFAULT_LOCALE, LOCALES, UI_TRANSLATIONS, type TranslationKey } from "@shopland/shared";
+import type { Locale } from "@amazebid/shared";
+import { DEFAULT_LOCALE, LOCALES, UI_TRANSLATIONS, type TranslationKey } from "@amazebid/shared";
 
-const STORAGE_KEY = "shopland_locale";
+const STORAGE_KEY = "amazebid_locale";
 
 interface LanguageContextValue {
   locale: Locale;

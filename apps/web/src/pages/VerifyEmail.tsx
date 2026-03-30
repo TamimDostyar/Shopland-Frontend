@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { verifyEmail, resendEmailVerification, ApiError } from "@shopland/shared";
+import { verifyEmail, resendEmailVerification, ApiError } from "@amazebid/shared";
 import AuthLayout from "../components/layout/AuthLayout";
 import Button from "../components/ui/Button";
 import Alert from "../components/ui/Alert";

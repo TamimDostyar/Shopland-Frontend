@@ -98,7 +98,7 @@ Every important event generates a notification. Notifications are delivered thro
 │  ┌────────────────────────────────────────────────────────────┐│
 │  │ ✅ Identity Verified                            Yesterday  ││
 │  │ Your identity has been verified. You now have               ││
-│  │ full access to Shopland.                                   ││
+│  │ full access to Amazebid.                                   ││
 │  └────────────────────────────────────────────────────────────┘│
 │                                                                │
 │  Earlier                                                       │

@@ -1,4 +1,4 @@
-import type { TranslationKey } from "@shopland/shared";
+import type { TranslationKey } from "@amazebid/shared";
 import MainLayout from "../components/layout/MainLayout";
 import { useLanguage } from "../context/LanguageContext";
 

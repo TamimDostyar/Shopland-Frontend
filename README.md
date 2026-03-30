@@ -1,6 +1,6 @@
-# Shopland Frontend
+# Amazebid Frontend
 
-Shopland Frontend is a cross-platform TypeScript monorepo designed to support:
+Amazebid Frontend is a cross-platform TypeScript monorepo designed to support:
 
 - Web in the browser with React, Vite, HTML, and CSS
 - Mobile with React Native and Expo for iOS and Android
@@ -14,7 +14,7 @@ The repository is organized as a monorepo so product logic, UI direction, typing
 - Task orchestration: `Turborepo`
 - Web: `React` + `Vite` + `TypeScript`
 - Mobile: `Expo` + `React Native` + `TypeScript`
-- Shared package: `@shopland/shared`
+- Shared package: `@amazebid/shared`
 
 ## Repository Layout
 
@@ -146,8 +146,8 @@ The long-term design is to keep business rules and platform-neutral frontend cod
 
 Today:
 
-- `apps/web` consumes `@shopland/shared`
-- `apps/mobile` is scaffolded and functional, but not yet wired to import `@shopland/shared` directly
+- `apps/web` consumes `@amazebid/shared`
+- `apps/mobile` is scaffolded and functional, but not yet wired to import `@amazebid/shared` directly
 
 That mobile limitation is normal for an early monorepo scaffold. Expo and Metro usually need explicit workspace configuration before shared package imports are fully reliable.
 

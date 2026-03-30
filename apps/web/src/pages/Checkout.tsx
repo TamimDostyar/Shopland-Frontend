@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { getCart, listAddresses, checkout, ApiError } from "@shopland/shared";
+import { getCart, listAddresses, checkout, ApiError } from "@amazebid/shared";
 import MainLayout from "../components/layout/MainLayout";
 import BackButton from "../components/ui/BackButton";
 import { useAuth } from "../hooks/useAuth";
@@ -18,7 +18,7 @@ import {
   ShieldIcon,
   TruckIcon,
 } from "../components/ui/icons";
-import type { TranslationKey } from "@shopland/shared";
+import type { TranslationKey } from "@amazebid/shared";
 
 const CHECKOUT_ITEM_REASONS: Record<string, TranslationKey> = {
   no_stock_record: "checkout.item_error_no_stock_record",

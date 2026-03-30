@@ -10,7 +10,7 @@ This document defines how the frontend communicates with the backend. It covers 
 
 ```
 Development:  http://localhost:8000/api
-Production:   https://api.shopland.com/api   (future)
+Production:   https://api.amazebid.com/api   (future)
 ```
 
 The base URL should be configured via environment variables per platform:

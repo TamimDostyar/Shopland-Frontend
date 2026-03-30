@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSearchParams, useNavigate, Link } from "react-router-dom";
-import { confirmPasswordReset, ApiError } from "@shopland/shared";
+import { confirmPasswordReset, ApiError } from "@amazebid/shared";
 import AuthLayout from "../components/layout/AuthLayout";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";

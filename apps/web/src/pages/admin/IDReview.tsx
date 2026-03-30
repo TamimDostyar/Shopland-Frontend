@@ -5,7 +5,7 @@ import {
   rejectSelfie,
   ApiError,
   type AdminUser,
-} from "@shopland/shared";
+} from "@amazebid/shared";
 import AdminLayout from "../../components/layout/AdminLayout";
 import Alert from "../../components/ui/Alert";
 import Button from "../../components/ui/Button";

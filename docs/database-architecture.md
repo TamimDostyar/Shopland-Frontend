@@ -4,7 +4,7 @@
 
 This document maps out the entire backend database schema so frontend developers understand the shape of the data they receive from the API, how entities relate to each other, and what fields exist on each model.
 
-> **This is the target architecture.** Not all models are implemented yet. Backend docs in `Shopland-Backend/docs/` describe the implementation status for each app.
+> **This is the target architecture.** Not all models are implemented yet. Backend docs in `Amazebid-Backend/docs/` describe the implementation status for each app.
 
 ---
 

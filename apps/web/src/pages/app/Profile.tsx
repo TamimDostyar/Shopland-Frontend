@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
-import { googleAuth, ApiError } from "@shopland/shared";
+import { googleAuth, ApiError } from "@amazebid/shared";
 import MainLayout from "../../components/layout/MainLayout";
 import Alert from "../../components/ui/Alert";
 import Button from "../../components/ui/Button";

@@ -6,7 +6,7 @@ import {
   rejectProduct,
   ApiError,
   type Product,
-} from "@shopland/shared";
+} from "@amazebid/shared";
 import AdminLayout from "../../components/layout/AdminLayout";
 import Button from "../../components/ui/Button";
 import Alert from "../../components/ui/Alert";

@@ -6,7 +6,7 @@ import {
   getSellerProducts,
   deleteProduct,
   type Product,
-} from "@shopland/shared";
+} from "@amazebid/shared";
 import SellerLayout from "../../components/layout/SellerLayout";
 import BackButton from "../../components/ui/BackButton";
 import { useAuth } from "../../hooks/useAuth";

@@ -5,7 +5,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { getCart, type Cart } from "@shopland/shared";
+import { getCart, type Cart } from "@amazebid/shared";
 import { useAuth } from "../hooks/useAuth";
 
 export type CartContextValue = {

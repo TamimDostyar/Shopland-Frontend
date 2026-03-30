@@ -13,9 +13,9 @@ All public, no login required.
 ```
 ┌────────────────────────────────────────────────────────────────┐
 │                                                                │
-│              About Shopland                                    │
+│              About Amazebid                                    │
 │                                                                │
-│  Shopland is Afghanistan's online marketplace connecting       │
+│  Amazebid is Afghanistan's online marketplace connecting       │
 │  local sellers with buyers across the country. We make it      │
 │  easy to buy and sell products with cash on delivery.          │
 │                                                                │
@@ -39,7 +39,7 @@ All public, no login required.
 │  ── Numbers ──────────────────────────────────────────────     │
 │  [X] Sellers  |  [X] Products  |  [X] Provinces Covered       │
 │                                                                │
-│  ── Want to sell on Shopland? ────────────────────────────     │
+│  ── Want to sell on Amazebid? ────────────────────────────     │
 │  [Create a Seller Account →]                                   │
 │                                                                │
 └────────────────────────────────────────────────────────────────┘
@@ -87,12 +87,12 @@ All public, no login required.
 │    and wait for admin approval (1-3 business days).            │
 │                                                                │
 │  ▼ What is the platform commission?                            │
-│    Shopland takes a 10% commission on each sale.               │
+│    Amazebid takes a 10% commission on each sale.               │
 │    Delivery fees are not subject to commission.                │
 │                                                                │
 │  ▼ Is my personal information safe?                            │
 │    Yes. Your national ID and photos are only visible to        │
-│    you and Shopland admins. They are never shared with         │
+│    you and Amazebid admins. They are never shared with         │
 │    sellers or other buyers.                                    │
 │                                                                │
 │  ── Still need help? ─────────────────────────────────────     │
@@ -150,7 +150,7 @@ All public, no login required.
 │                                                                │
 │  ── Or reach us directly ─────────────────────────────────     │
 │  📞 +93 XX XXX XXXX (Sat-Thu, 8 AM - 6 PM)                   │
-│  📧 support@shopland.com                                       │
+│  📧 support@amazebid.com                                       │
 │  💬 WhatsApp: +93 XX XXX XXXX                                  │
 │                                                                │
 └────────────────────────────────────────────────────────────────┘

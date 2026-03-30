@@ -15,7 +15,7 @@ import {
   refreshAccessToken,
   saveTokens,
   type User,
-} from "@shopland/shared";
+} from "@amazebid/shared";
 
 export type AuthContextValue = {
   user: User | null;

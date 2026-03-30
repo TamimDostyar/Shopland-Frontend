@@ -1,4 +1,4 @@
-export const APP_NAME = "Shopland";
+export const APP_NAME = "Amazebid";
 export const APP_VERSION = "1.0.0";
 
 // URL is injected at startup by each app via setApiBaseUrl().

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
-import { requestPasswordResetViaGoogle, ApiError } from "@shopland/shared";
+import { requestPasswordResetViaGoogle, ApiError } from "@amazebid/shared";
 import AuthLayout from "../components/layout/AuthLayout";
 import Alert from "../components/ui/Alert";
 import { useLanguage } from "../context/LanguageContext";

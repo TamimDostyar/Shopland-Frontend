@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { APP_NAME } from "@shopland/shared";
+import { APP_NAME } from "@amazebid/shared";
 import { useAuth } from "../../hooks/useAuth";
 import { useLanguage } from "../../context/LanguageContext";
 

@@ -7,7 +7,7 @@ import {
   ApiError,
   type Address,
   type TranslationKey,
-} from "@shopland/shared";
+} from "@amazebid/shared";
 import MainLayout from "../../components/layout/MainLayout";
 import Button from "../../components/ui/Button";
 import Input from "../../components/ui/Input";

@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { registerSeller, ApiError, type SellerRegistrationData } from "@shopland/shared";
+import { registerSeller, ApiError, type SellerRegistrationData } from "@amazebid/shared";
 import AuthLayout from "../components/layout/AuthLayout";
 import StepForm from "../components/forms/StepForm";
 import Input from "../components/ui/Input";

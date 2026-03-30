@@ -2,7 +2,7 @@
 
 ## Overview
 
-Shopland Frontend is structured as a cross-platform frontend monorepo. The architecture is centered on one idea:
+Amazebid Frontend is structured as a cross-platform frontend monorepo. The architecture is centered on one idea:
 
 shared product logic should live once, while platform-specific rendering and runtime capabilities stay inside each app.
 
@@ -48,7 +48,7 @@ Each application owns its own entry points, runtime environment, and platform AP
 ## System Layout
 
 ```text
-Shopland-Frontend
+Amazebid-Frontend
 ├── apps
 │   ├── web
 │   └── mobile

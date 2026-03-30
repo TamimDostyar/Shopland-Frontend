@@ -14,9 +14,9 @@ Public pages. If already logged in, redirect to home.
 
 ```
 ┌────────────────────────────────────┐
-│           [Shopland Logo]          │
+│           [Amazebid Logo]          │
 │                                    │
-│     Welcome back to Shopland       │
+│     Welcome back to Amazebid       │
 │                                    │
 │  ┌──────────────────────────────┐  │
 │  │  Email                       │  │
@@ -79,9 +79,9 @@ Always store the "intended URL" when redirecting to login (e.g., buyer was on `/
 
 ```
 ┌────────────────────────────────────────────────┐
-│              [Shopland Logo]                    │
+│              [Amazebid Logo]                    │
 │                                                 │
-│        How do you want to use Shopland?         │
+│        How do you want to use Amazebid?         │
 │                                                 │
 │  ┌──────────────────────┐  ┌──────────────────┐│
 │  │     🛒               │  │     🏪           ││

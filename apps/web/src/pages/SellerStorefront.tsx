@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { getProducts } from "@shopland/shared";
+import { getProducts } from "@amazebid/shared";
 import MainLayout from "../components/layout/MainLayout";
 import ProductCard from "../components/catalog/ProductCard";
 import SkeletonCard from "../components/catalog/SkeletonCard";

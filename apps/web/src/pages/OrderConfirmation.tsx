@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { getMyOrder } from "@shopland/shared";
+import { getMyOrder } from "@amazebid/shared";
 import MainLayout from "../components/layout/MainLayout";
 import { useAuth } from "../hooks/useAuth";
 import { useLanguage } from "../context/LanguageContext";

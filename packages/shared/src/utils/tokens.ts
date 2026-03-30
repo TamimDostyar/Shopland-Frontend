@@ -4,8 +4,8 @@ export type TokenStorage = {
   removeItem(key: string): void | Promise<void>;
 };
 
-const ACCESS_KEY = "shopland_access";
-const REFRESH_KEY = "shopland_refresh";
+const ACCESS_KEY = "amazebid_access";
+const REFRESH_KEY = "amazebid_refresh";
 
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 

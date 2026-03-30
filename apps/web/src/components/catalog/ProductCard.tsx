@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { getApiBaseUrl, localizedCategoryName, localizedProductName, type Product } from "@shopland/shared";
+import { getApiBaseUrl, localizedCategoryName, localizedProductName, type Product } from "@amazebid/shared";
 import { useLanguage } from "../../context/LanguageContext";
 import { ImageIcon, LocationIcon, StarIcon } from "../ui/icons";
 
