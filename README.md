@@ -3,7 +3,6 @@
 Shopland Frontend is a cross-platform TypeScript monorepo designed to support:
 
 - Web in the browser with React, Vite, HTML, and CSS
-- Desktop with Electron, React, and TypeScript
 - Mobile with React Native and Expo for iOS and Android
 - Shared frontend domain code through reusable packages
 
@@ -14,7 +13,6 @@ The repository is organized as a monorepo so product logic, UI direction, typing
 - Monorepo: `pnpm` workspaces
 - Task orchestration: `Turborepo`
 - Web: `React` + `Vite` + `TypeScript`
-- Desktop: `Electron` + `electron-vite` + `React` + `TypeScript`
 - Mobile: `Expo` + `React Native` + `TypeScript`
 - Shared package: `@shopland/shared`
 
@@ -23,7 +21,6 @@ The repository is organized as a monorepo so product logic, UI direction, typing
 ```text
 .
 ├── apps
-│   ├── desktop
 │   ├── mobile
 │   └── web
 ├── docs
@@ -48,16 +45,6 @@ Primary use cases:
 - Marketplace browsing
 - Seller and buyer dashboards in the browser
 - SEO-friendly or browser-first flows
-
-### `apps/desktop`
-
-The desktop application powered by Electron. It uses a web renderer built with React, plus Electron main and preload processes for native desktop capabilities.
-
-Primary use cases:
-
-- Desktop-first internal tooling
-- Power-user workflows
-- OS integrations such as file system access, notifications, and future offline support
 
 ### `apps/mobile`
 
@@ -96,7 +83,7 @@ pnpm install
 
 Notes:
 
-- The web and desktop apps participate in the workspace install flow.
+- The web and shared packages participate in the workspace install flow.
 - The mobile app was scaffolded with Expo and currently keeps its own local install footprint.
 
 ## Run the Apps
@@ -105,12 +92,6 @@ Notes:
 
 ```bash
 pnpm --filter web dev
-```
-
-### Run desktop
-
-```bash
-pnpm --filter desktop dev
 ```
 
 ### Run mobile
@@ -141,26 +122,6 @@ pnpm build
 pnpm --filter web build
 ```
 
-### Build desktop only
-
-```bash
-pnpm --filter desktop build
-```
-
-### Start desktop preview build
-
-```bash
-pnpm --filter desktop start
-```
-
-### Package desktop by platform
-
-```bash
-pnpm --filter desktop build:mac
-pnpm --filter desktop build:win
-pnpm --filter desktop build:linux
-```
-
 ## Workspace Scripts
 
 At the repository root:
@@ -186,7 +147,6 @@ The long-term design is to keep business rules and platform-neutral frontend cod
 Today:
 
 - `apps/web` consumes `@shopland/shared`
-- `apps/desktop` consumes `@shopland/shared`
 - `apps/mobile` is scaffolded and functional, but not yet wired to import `@shopland/shared` directly
 
 That mobile limitation is normal for an early monorepo scaffold. Expo and Metro usually need explicit workspace configuration before shared package imports are fully reliable.
@@ -197,9 +157,8 @@ What is already in place:
 
 - Cross-platform monorepo foundation
 - Working web build
-- Working desktop build
 - Shared package for reusable frontend logic
-- Initial demo screens for web, desktop, and mobile
+- Initial demo screens for web and mobile
 
 What still needs implementation:
 

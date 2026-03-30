@@ -1,5 +1,3 @@
-// ─── Catalog ──────────────────────────────────────────────────────────────────
-
 export type ProductCondition = "new" | "used" | "refurbished";
 
 export type CategorySummary = {
@@ -308,7 +306,6 @@ export type UserRole = "buyer" | "seller" | "admin";
 export type VerificationStatus = {
   phone: boolean;
   email: boolean;
-  selfie: boolean;
   id: boolean;
   seller_approved?: boolean;
 };

@@ -4,9 +4,9 @@
 
 Shopland Frontend is structured as a cross-platform frontend monorepo. The architecture is centered on one idea:
 
-shared product logic should live once, while platform-specific rendering and native capabilities stay inside each app.
+shared product logic should live once, while platform-specific rendering and runtime capabilities stay inside each app.
 
-This keeps the business layer aligned across browser, desktop, and mobile without forcing the UI layer to be identical everywhere.
+This keeps the business layer aligned across browser and mobile without forcing the UI layer to be identical everywhere.
 
 ## Architectural Principles
 
@@ -16,7 +16,7 @@ All frontend targets are based on TypeScript to keep domain contracts, shared ut
 
 ### 2. Monorepo over multi-repo
 
-The web, desktop, mobile, and shared packages live in one repository to simplify:
+The web, mobile, and shared packages live in one repository to simplify:
 
 - cross-platform feature delivery
 - dependency management
@@ -51,7 +51,6 @@ Each application owns its own entry points, runtime environment, and platform AP
 Shopland-Frontend
 ├── apps
 │   ├── web
-│   ├── desktop
 │   └── mobile
 └── packages
     └── shared
@@ -75,29 +74,6 @@ Technical notes:
 - Built with React and Vite
 - Uses the workspace shared package
 - Best for public-facing and standard browser experiences
-
-### Desktop
-
-Path: `apps/desktop`
-
-Responsibilities:
-
-- Desktop application shell
-- Native desktop integrations through Electron
-- Packaging for macOS, Windows, and Linux
-
-Technical notes:
-
-- Uses Electron main, preload, and renderer process separation
-- Renderer is React-based
-- Build tooling is handled by `electron-vite`
-- Uses the workspace shared package
-
-Process model:
-
-- Main process: application lifecycle, native desktop control
-- Preload: secure bridge layer between renderer and Electron APIs
-- Renderer: React UI
 
 ### Mobile
 
@@ -139,7 +115,6 @@ This package is currently suitable for:
 This package should avoid:
 
 - browser-only globals
-- Electron-only APIs
 - React Native-only APIs
 - direct DOM usage
 - direct file system or Node runtime assumptions
@@ -190,22 +165,6 @@ TypeScript compile
 Vite bundle
    ↓
 Static web assets
-```
-
-### Desktop flow
-
-```text
-Main process source
-   ↓
-Preload source
-   ↓
-Renderer source
-   ↓
-electron-vite build
-   ↓
-Electron output
-   ↓
-Optional platform packaging
 ```
 
 ### Mobile flow
