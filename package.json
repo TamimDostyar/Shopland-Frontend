@@ -6,7 +6,9 @@
     "dev": "turbo run dev",
     "build": "turbo run build",
     "lint": "turbo run lint",
-    "clean": "turbo run clean"
+    "clean": "turbo run clean",
+    "i18n:crowdin:extract": "node scripts/i18n/extract-for-crowdin.mjs",
+    "i18n:crowdin:apply": "node scripts/i18n/apply-crowdin-to-translations.mjs"
   },
   "devDependencies": {
     "turbo": "^2.8.20"

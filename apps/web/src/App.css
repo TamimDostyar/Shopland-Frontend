@@ -376,6 +376,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .cta,
   .input-row input {
     transition: none;
