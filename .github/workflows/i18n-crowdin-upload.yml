@@ -1,0 +1,36 @@
+name: i18n Crowdin Upload
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [master, main]
+    paths:
+      - packages/shared/src/i18n/translations.ts
+      - scripts/i18n/extract-for-crowdin.mjs
+      - crowdin.yml
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Generate Crowdin JSON
+        run: node scripts/i18n/extract-for-crowdin.mjs
+
+      - name: Upload source strings to Crowdin
+        uses: crowdin/github-action@v2
+        with:
+          config: crowdin.yml
+          upload_sources: true
+          upload_translations: false
+        env:
+          CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}

@@ -1,0 +1,49 @@
+name: i18n Crowdin Download
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */6 * * *"
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Download translations from Crowdin
+        uses: crowdin/github-action@v2
+        with:
+          config: crowdin.yml
+          upload_sources: false
+          upload_translations: false
+          download_translations: true
+          localization_branch_name: crowdin-translations
+        env:
+          CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+
+      - name: Apply downloaded JSON to translations.ts
+        run: node scripts/i18n/apply-crowdin-to-translations.mjs
+
+      - name: Create translation sync PR
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: chore/crowdin-translation-sync
+          title: "chore(i18n): sync translations from Crowdin"
+          commit-message: "chore(i18n): sync translations from Crowdin"
+          body: |
+            Automated translation sync from Crowdin.
+
+            - Downloaded locale JSON via `crowdin.yml`
+            - Applied JSON updates to `packages/shared/src/i18n/translations.ts`
+          labels: |
+            i18n
+            automation
