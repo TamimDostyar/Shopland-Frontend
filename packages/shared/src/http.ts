@@ -15,6 +15,10 @@ export class ApiError extends Error {
   constructor(status: number, data: Record<string, unknown>) {
     const detail =
       (data["detail"] as string) ??
+      (data["error"] as string) ??
+      (Array.isArray(data["non_field_errors"]) && data["non_field_errors"].length > 0
+        ? String(data["non_field_errors"][0])
+        : undefined) ??
       Object.values(data).flat().join(" ") ??
       "Request failed";
     super(detail);
@@ -57,7 +61,11 @@ async function request(
     // non-JSON response (e.g. HTML error page from server)
   }
 
-  if (!res.ok) {
+  const hasExplicitErrorPayload =
+    typeof data["error"] === "string" ||
+    (Array.isArray(data["non_field_errors"]) && data["non_field_errors"].length > 0);
+
+  if (!res.ok || hasExplicitErrorPayload) {
     throw new ApiError(res.status, data);
   }
 

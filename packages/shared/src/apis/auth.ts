@@ -1,8 +1,45 @@
-import { http } from "../http";
+import { ApiError, http } from "../http";
 import type { AuthResponse, TokenRefreshResponse } from "../types";
 
-export function login(email: string, password: string): Promise<AuthResponse> {
-  return http.post<AuthResponse>("/api/users/login/", { email, password });
+function isAuthResponse(data: Record<string, unknown>): data is AuthResponse {
+  return (
+    typeof data.access === "string" &&
+    typeof data.refresh === "string" &&
+    typeof data.user === "object" &&
+    data.user !== null
+  );
+}
+
+function extractLoginErrorMessage(data: Record<string, unknown>): string {
+  if (typeof data.detail === "string" && data.detail.trim().length > 0) {
+    return data.detail;
+  }
+
+  if (typeof data.error === "string" && data.error.trim().length > 0) {
+    return data.error;
+  }
+
+  if (Array.isArray(data.non_field_errors) && data.non_field_errors.length > 0) {
+    return String(data.non_field_errors[0]);
+  }
+
+  return "Login failed.";
+}
+
+export async function login(email: string, password: string): Promise<AuthResponse> {
+  const data = await http.post<Record<string, unknown>>("/api/users/login/", {
+    email,
+    password,
+  });
+
+  if (isAuthResponse(data)) {
+    return data;
+  }
+
+  throw new ApiError(400, {
+    ...data,
+    detail: extractLoginErrorMessage(data),
+  });
 }
 
 export function logout(refresh: string): Promise<void> {
