@@ -124,7 +124,7 @@ export default function Profile() {
           <hr style={{ borderColor: "var(--border)" }} />
 
           <div className="flex gap-3 flex-wrap">
-            <VerBadge label={t("profile.badge_phone")} ok={vs.phone} />
+            <VerBadge label={t("profile.badge_phone")} ok={vs.phone ?? false} />
             <VerBadge label={t("profile.badge_email")} ok={vs.email} />
             <VerBadge label={t("profile.badge_id")} ok={vs.id} />
             {user.role === "seller" && (
