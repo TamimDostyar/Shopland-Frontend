@@ -304,6 +304,7 @@ export type WaitlistResponse = {
 export type UserRole = "buyer" | "seller" | "admin";
 
 export type VerificationStatus = {
+  phone?: boolean;
   email: boolean;
   id: boolean;
   seller_approved?: boolean;
@@ -381,7 +382,7 @@ export type AdminUser = {
   first_name: string;
   last_name: string;
   father_name: string;
-  phone_number: number;
+  phone_number: string | null;
   profile_photo: string | null;
   date_of_birth: string | null;
   role: UserRole;
@@ -399,7 +400,7 @@ export type AdminSeller = {
   shop_category: string;
   business_description: string;
   logo: string | null;
-  business_phone: number;
+  business_phone: string;
   shop_address_street: string;
   shop_address_district: string;
   shop_address_city: string;
