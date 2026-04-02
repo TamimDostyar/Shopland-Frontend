@@ -29,13 +29,15 @@ export default function Login() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
-    if (!isGmailAddress(email)) {
+    const normalizedEmail = email.trim().toLowerCase();
+    const normalizedPassword = password.trim();
+    if (!isGmailAddress(normalizedEmail)) {
       setError(t("login.error_gmail"));
       return;
     }
     setLoading(true);
     try {
-      await login(email, password);
+      await login(normalizedEmail, normalizedPassword);
       navigate("/", { replace: true });
     } catch (err) {
       setError(err instanceof ApiError ? err.message : t("login.error_failed"));

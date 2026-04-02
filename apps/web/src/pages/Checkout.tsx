@@ -27,6 +27,10 @@ const CHECKOUT_ITEM_REASONS: Record<string, TranslationKey> = {
   product_not_approved: "checkout.item_error_product_not_approved",
 };
 
+function digitsOnly(value: string): string {
+  return value.replace(/\D/g, "");
+}
+
 export default function Checkout() {
   const { t } = useLanguage();
   const { accessToken, user } = useAuth();
@@ -239,7 +243,7 @@ export default function Checkout() {
               <input
                 type="tel"
                 value={deliveryPhone}
-                onChange={(e) => setDeliveryPhone(e.target.value)}
+                onChange={(e) => setDeliveryPhone(digitsOnly(e.target.value))}
                 placeholder={t("checkout.phone_placeholder")}
                 className="w-full rounded-2xl border border-[color:var(--border)] bg-[var(--surface-muted)] px-4 py-3 text-sm outline-none"
                 style={{

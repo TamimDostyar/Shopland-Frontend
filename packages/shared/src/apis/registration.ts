@@ -13,12 +13,12 @@ function buildBuyerForm(data: BuyerRegistrationData): FormData {
   fd.append("first_name", data.first_name);
   fd.append("last_name", data.last_name);
   fd.append("father_name", data.father_name ?? "");
-  fd.append("phone_number", data.phone_number);
+  fd.append("phone_number", String(data.phone_number));
   if (data.profile_photo) fd.append("profile_photo", data.profile_photo);
   fd.append("date_of_birth", data.date_of_birth);
-  fd.append("address_label", data.address_label);
-  fd.append("address_full_name", data.address_full_name);
-  fd.append("address_phone_number", data.address_phone_number);
+  fd.append("address_label", data.address_label ?? "Home");
+  fd.append("address_full_name", String(data.address_full_name));
+  fd.append("address_phone_number", String(data.address_phone_number));
   fd.append("address_street", data.address_street);
   fd.append("address_district", data.address_district);
   fd.append("address_city", data.address_city);
@@ -36,14 +36,14 @@ function buildSellerForm(data: SellerRegistrationData): FormData {
   fd.append("first_name", data.first_name);
   fd.append("last_name", data.last_name);
   fd.append("father_name", data.father_name ?? "");
-  fd.append("phone_number", data.phone_number);
+  fd.append("phone_number", String(data.phone_number));
   if (data.profile_photo) fd.append("profile_photo", data.profile_photo);
   fd.append("date_of_birth", data.date_of_birth);
   fd.append("shop_name", data.shop_name);
   fd.append("shop_category", data.shop_category?.trim() || "Any");
   if (data.business_description)
     fd.append("business_description", data.business_description);
-  fd.append("business_phone", data.business_phone);
+  fd.append("business_phone", String(data.business_phone));
   fd.append("shop_address_street", data.shop_address_street);
   fd.append("shop_address_district", data.shop_address_district);
   fd.append("shop_address_city", data.shop_address_city);

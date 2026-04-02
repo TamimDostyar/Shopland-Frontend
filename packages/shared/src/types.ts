@@ -304,7 +304,6 @@ export type WaitlistResponse = {
 export type UserRole = "buyer" | "seller" | "admin";
 
 export type VerificationStatus = {
-  phone: boolean;
   email: boolean;
   id: boolean;
   seller_approved?: boolean;
@@ -321,7 +320,6 @@ export type User = {
   role: UserRole;
   is_active: boolean;
   is_email_verified: boolean;
-  is_phone_verified: boolean;
   is_selfie_verified: boolean;
   verification_status: VerificationStatus;
 };
@@ -361,13 +359,13 @@ export type BuyerRegistrationData = {
   first_name: string;
   last_name: string;
   father_name?: string;
-  phone_number: string;
+  phone_number: number;
   profile_photo: File;
   date_of_birth: string;
   // Address (field names match backend serializer exactly)
   address_label: string;
   address_full_name: string;
-  address_phone_number: string;
+  address_phone_number: number;
   address_street: string;
   address_district: string;
   address_city: string;
@@ -383,13 +381,12 @@ export type AdminUser = {
   first_name: string;
   last_name: string;
   father_name: string;
-  phone_number: string | null;
+  phone_number: number;
   profile_photo: string | null;
   date_of_birth: string | null;
   role: UserRole;
   is_active: boolean;
   is_email_verified: boolean;
-  is_phone_verified: boolean;
   is_selfie_verified: boolean;
   date_joined: string;
   verification_status: VerificationStatus;
@@ -402,7 +399,7 @@ export type AdminSeller = {
   shop_category: string;
   business_description: string;
   logo: string | null;
-  business_phone: string;
+  business_phone: number;
   shop_address_street: string;
   shop_address_district: string;
   shop_address_city: string;
@@ -425,14 +422,14 @@ export type SellerRegistrationData = {
   first_name: string;
   last_name: string;
   father_name?: string;
-  phone_number: string;
+  phone_number: number;
   profile_photo: File;
   date_of_birth: string;
   // Shop
   shop_name: string;
   shop_category?: string;
   business_description?: string;
-  business_phone: string;
+  business_phone: number;
   shop_address_street: string;
   shop_address_district: string;
   shop_address_city: string;

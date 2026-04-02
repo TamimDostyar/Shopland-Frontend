@@ -10,19 +10,28 @@ import { useAuth } from "../hooks/useAuth";
 import { isGmailAddress } from "../utils/email";
 import { useLanguage } from "../context/LanguageContext";
 
+
+function number(value: string): number {
+  const n = Number(value);
+  return Number.isNaN(n) ? -1 : n;
+}
+
+function digitsOnly(value: string): string {
+  return value.replace(/\D/g, "");
+}
 type FormState = {
   email: string;
   password: string;
   confirm_password: string;
   first_name: string;
   last_name: string;
-  phone_number: string;
+  phone_number: number;
   date_of_birth: string;
   profile_photo: File | null;
   shop_name: string;
   shop_category: string;
   business_description: string;
-  business_phone: string;
+  business_phone: number;
   shop_address_street: string;
   shop_address_district: string;
   shop_address_city: string;
@@ -32,10 +41,10 @@ type FormState = {
 const INITIAL: FormState = {
   email: "", password: "", confirm_password: "",
   first_name: "", last_name: "",
-  phone_number: "", date_of_birth: "",
+  phone_number: number(""), date_of_birth: "",
   profile_photo: null,
   shop_name: "", shop_category: "", business_description: "",
-  business_phone: "",
+  business_phone: number(""),
   shop_address_street: "", shop_address_district: "",
   shop_address_city: "", shop_address_province: "",
 };
@@ -74,6 +83,9 @@ export default function RegisterSeller() {
       if (!form.email) e.email = t("reg.error_required");
       else if (!isGmailAddress(form.email)) e.email = t("reg.error_gmail");
       if (!form.phone_number) e.phone_number = t("reg.error_required");
+      if (typeof form.phone_number !== "number" || Number.isNaN(form.phone_number)) {
+        e.phone_number = t("reg.error_phone_invalid");
+      }
       if (!form.date_of_birth) e.date_of_birth = t("reg.error_required");
       if (!form.password) e.password = t("reg.error_required");
       if (form.password !== form.confirm_password)
@@ -85,6 +97,9 @@ export default function RegisterSeller() {
     if (step === 2) {
       if (!form.shop_name) e.shop_name = t("reg.error_required");
       if (!form.business_phone) e.business_phone = t("reg.error_required");
+      if (typeof form.business_phone !== "number" || Number.isNaN(form.business_phone)) {
+        e.business_phone = t("reg.error_phone_invalid");
+      }
     }
     if (step === 3) {
       if (!form.shop_address_street) e.shop_address_street = t("reg.error_required");
@@ -105,10 +120,17 @@ export default function RegisterSeller() {
       setApiError(t("reg.error_profile_photo_seller"));
       return;
     }
+    const profilePhoto = form.profile_photo;
     setApiError("");
     setSubmitting(true);
     try {
-      const data = form as SellerRegistrationData;
+      const data: SellerRegistrationData = {
+        ...form,
+        profile_photo: profilePhoto,
+        email: form.email.trim().toLowerCase(),
+        password: form.password.trim(),
+        confirm_password: form.confirm_password.trim(),
+      };
       const res = await registerSeller(data);
       await setTokensAndUser(res.access, res.refresh, res.user);
       navigate("/profile");
@@ -147,7 +169,7 @@ export default function RegisterSeller() {
               <Input label={t("reg.last_name")} value={form.last_name} onChange={(e) => set("last_name", e.target.value)} error={errors.last_name} required />
             </div>
             <Input label={t("reg.email")} type="email" value={form.email} onChange={(e) => set("email", e.target.value)} error={errors.email} autoComplete="email" placeholder={t("reg.email_placeholder")} required />
-            <Input label={t("reg.phone")} type="tel" value={form.phone_number} onChange={(e) => set("phone_number", e.target.value)} error={errors.phone_number} required />
+            <Input label={t("reg.phone")} type="tel" value={form.phone_number || ""} onChange={(e) => set("phone_number", number(digitsOnly(e.target.value)))} error={errors.phone_number} required />
             <Input label={t("reg.dob")} type="date" value={form.date_of_birth} onChange={(e) => set("date_of_birth", e.target.value)} error={errors.date_of_birth} required />
             <Input label={t("reg.password")} type="password" value={form.password} onChange={(e) => set("password", e.target.value)} error={errors.password} autoComplete="new-password" required />
             <Input label={t("reg.confirm_password")} type="password" value={form.confirm_password} onChange={(e) => set("confirm_password", e.target.value)} error={errors.confirm_password} autoComplete="new-password" required />
@@ -165,7 +187,7 @@ export default function RegisterSeller() {
             <Input label={t("reg.shop_name")} value={form.shop_name} onChange={(e) => set("shop_name", e.target.value)} error={errors.shop_name} required />
             <Input label={t("reg.shop_category")} value={form.shop_category} onChange={(e) => set("shop_category", e.target.value)} error={errors.shop_category} placeholder={t("reg.shop_category_any")} />
             <Input label={t("reg.shop_desc")} value={form.business_description} onChange={(e) => set("business_description", e.target.value)} />
-            <Input label={t("reg.business_phone")} type="tel" value={form.business_phone} onChange={(e) => set("business_phone", e.target.value)} error={errors.business_phone} required />
+            <Input label={t("reg.business_phone")} type="tel" value={form.business_phone || ""} onChange={(e) => set("business_phone", number(digitsOnly(e.target.value)))} error={errors.business_phone} required />
           </>
         )}
 
@@ -201,7 +223,7 @@ export default function RegisterSeller() {
   );
 }
 
-function Row({ label, value }: { label: string; value: string }) {
+function Row({ label, value }: { label: string; value: number | string }) {
   return (
     <div className="flex justify-between gap-4">
       <span className="text-muted">{label}</span>

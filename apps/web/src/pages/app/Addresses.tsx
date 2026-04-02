@@ -30,6 +30,10 @@ const EMPTY_FORM: FormState = {
   nearby_landmark: "",
 };
 
+function digitsOnly(value: string): string {
+  return value.replace(/\D/g, "");
+}
+
 export default function Addresses() {
   const { t } = useLanguage();
   const { accessToken } = useAuth();
@@ -262,7 +266,7 @@ function AddressForm({
       <Input
         label={t("addresses.phone")}
         value={form.phone_number}
-        onChange={(e) => set("phone_number", e.target.value)}
+        onChange={(e) => set("phone_number", digitsOnly(e.target.value))}
         type="tel"
         required
       />
